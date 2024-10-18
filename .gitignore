@@ -1,0 +1,18 @@
+# Node.js
+node_modules/
+
+# Rails
+/log
+/tmp
+/vendor/bundle
+/.bundle
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/public/system
+/public/uploads
+/coverage/
+/spec/tmp
+*.rbc
+*.sass-cache
+.ruby-version
+.byebug_history
