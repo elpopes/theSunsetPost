@@ -16,3 +16,6 @@ node_modules/
 *.sass-cache
 .ruby-version
 .byebug_history
+
+# Environment files
+.env
