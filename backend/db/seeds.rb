@@ -14,3 +14,4 @@ Story.create([
   { title: '布鲁克林的历史', content: '布鲁克林拥有悠久的历史，可以追溯到 1600 年代由荷兰定居者建立的时代...', language: 'zh' },
   { title: '完美的早晨', content: '布鲁克林的完美早晨总是从海滨散步和一杯咖啡开始...', language: 'zh' }
 ])
+
