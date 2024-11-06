@@ -1,0 +1,78 @@
+=> 
+[[32m#<Story:0x00007f32bec41e48[0m
+  id: [34m[1m1[0m,
+  title: [31m[1m"[0m[31mA Walk in Sunset Park[0m[31m[1m"[0m,
+  content:
+   [31m[1m"[0m[31mIt was a sunny day in Sunset Park, where people gathered to enjoy the beautiful view of Manhattan...[0m[31m[1m"[0m,
+  language: [31m[1m"[0m[31men[0m[31m[1m"[0m,
+  created_at: Thu, 24 Oct 2024 20:12:02.283868000 UTC +00:00,
+  updated_at: Thu, 24 Oct 2024 20:12:02.283868000 UTC +00:00[32m>[0m,
+ [32m#<Story:0x00007f32bee67308[0m
+  id: [34m[1m2[0m,
+  title: [31m[1m"[0m[31mThe History of Brooklyn[0m[31m[1m"[0m,
+  content:
+   [31m[1m"[0m[31mBrooklyn has a rich history, dating back to its founding by Dutch settlers in the 1600s...[0m[31m[1m"[0m,
+  language: [31m[1m"[0m[31men[0m[31m[1m"[0m,
+  created_at: Thu, 24 Oct 2024 20:12:02.296053000 UTC +00:00,
+  updated_at: Thu, 24 Oct 2024 20:12:02.296053000 UTC +00:00[32m>[0m,
+ [32m#<Story:0x00007f32bee671c8[0m
+  id: [34m[1m3[0m,
+  title: [31m[1m"[0m[31mThe Perfect Morning[0m[31m[1m"[0m,
+  content:
+   [31m[1m"[0m[31mA perfect morning in Brooklyn always starts with a walk by the waterfront and a cup of coffee...[0m[31m[1m"[0m,
+  language: [31m[1m"[0m[31men[0m[31m[1m"[0m,
+  created_at: Thu, 24 Oct 2024 20:12:02.302846000 UTC +00:00,
+  updated_at: Thu, 24 Oct 2024 20:12:02.302846000 UTC +00:00[32m>[0m,
+ [32m#<Story:0x00007f32bee67088[0m
+  id: [34m[1m4[0m,
+  title: [31m[1m"[0m[31mUn Paseo por Sunset Park[0m[31m[1m"[0m,
+  content:
+   [31m[1m"[0m[31mEra un día soleado en Sunset Park, donde la gente se reunió para disfrutar de la hermosa vista de Manhattan...[0m[31m[1m"[0m,
+  language: [31m[1m"[0m[31mes[0m[31m[1m"[0m,
+  created_at: Thu, 24 Oct 2024 20:12:02.310379000 UTC +00:00,
+  updated_at: Thu, 24 Oct 2024 20:12:02.310379000 UTC +00:00[32m>[0m,
+ [32m#<Story:0x00007f32bee66f48[0m
+  id: [34m[1m5[0m,
+  title: [31m[1m"[0m[31mLa Historia de Brooklyn[0m[31m[1m"[0m,
+  content:
+   [31m[1m"[0m[31mBrooklyn tiene una rica historia, que se remonta a su fundación por colonos holandeses en el siglo XVII...[0m[31m[1m"[0m,
+  language: [31m[1m"[0m[31mes[0m[31m[1m"[0m,
+  created_at: Thu, 24 Oct 2024 20:12:02.317811000 UTC +00:00,
+  updated_at: Thu, 24 Oct 2024 20:12:02.317811000 UTC +00:00[32m>[0m,
+ [32m#<Story:0x00007f32bee66cc8[0m
+  id: [34m[1m6[0m,
+  title: [31m[1m"[0m[31mLa Mañana Perfecta[0m[31m[1m"[0m,
+  content:
+   [31m[1m"[0m[31mUna mañana perfecta en Brooklyn siempre comienza con un paseo por el paseo marítimo y una taza de café...[0m[31m[1m"[0m,
+  language: [31m[1m"[0m[31mes[0m[31m[1m"[0m,
+  created_at: Thu, 24 Oct 2024 20:12:02.324647000 UTC +00:00,
+  updated_at: Thu, 24 Oct 2024 20:12:02.324647000 UTC +00:00[32m>[0m,
+ [32m#<Story:0x00007f32bee66b88[0m
+  id: [34m[1m7[0m,
+  title: [31m[1m"[0m[31m在日落公园的散步[0m[31m[1m"[0m,
+  content: [31m[1m"[0m[31m那是日落公园的一个晴天，人们聚集在一起欣赏曼哈顿的美景...[0m[31m[1m"[0m,
+  language: [31m[1m"[0m[31mzh[0m[31m[1m"[0m,
+  created_at: Thu, 24 Oct 2024 20:12:02.331747000 UTC +00:00,
+  updated_at: Thu, 24 Oct 2024 20:12:02.331747000 UTC +00:00[32m>[0m,
+ [32m#<Story:0x00007f32bee66a48[0m
+  id: [34m[1m8[0m,
+  title: [31m[1m"[0m[31m布鲁克林的历史[0m[31m[1m"[0m,
+  content: [31m[1m"[0m[31m布鲁克林拥有悠久的历史，可以追溯到 1600 年代由荷兰定居者建立的时代...[0m[31m[1m"[0m,
+  language: [31m[1m"[0m[31mzh[0m[31m[1m"[0m,
+  created_at: Thu, 24 Oct 2024 20:12:02.340164000 UTC +00:00,
+  updated_at: Thu, 24 Oct 2024 20:12:02.340164000 UTC +00:00[32m>[0m,
+ [32m#<Story:0x00007f32bee66908[0m
+  id: [34m[1m9[0m,
+  title: [31m[1m"[0m[31m完美的早晨[0m[31m[1m"[0m,
+  content: [31m[1m"[0m[31m布鲁克林的完美早晨总是从海滨散步和一杯咖啡开始...[0m[31m[1m"[0m,
+  language: [31m[1m"[0m[31mzh[0m[31m[1m"[0m,
+  created_at: Thu, 24 Oct 2024 20:12:02.348766000 UTC +00:00,
+  updated_at: Thu, 24 Oct 2024 20:12:02.348766000 UTC +00:00[32m>[0m,
+ [32m#<Story:0x00007f32bee667c8[0m
+  id: [34m[1m10[0m,
+  title: [31m[1m"[0m[31mSunset Traffic[0m[31m[1m"[0m,
+  content: [31m[1m"[0m[31mTraffic is heavy[0m[31m[1m"[0m,
+  language: [31m[1m"[0m[31men[0m[31m[1m"[0m,
+  created_at: Thu, 31 Oct 2024 15:03:30.168787000 UTC +00:00,
+  updated_at: Thu, 31 Oct 2024 15:03:30.168787000 UTC +00:00[32m>[0m,
+ [31m[1m"[0m[31m...[0m[31m[1m"[0m]
