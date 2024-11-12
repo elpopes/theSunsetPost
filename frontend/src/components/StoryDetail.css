@@ -1,0 +1,27 @@
+.story-detail {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.story-detail__title {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.story-detail__image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.story-detail__content {
+  font-size: 1.1em;
+  color: #555;
+  line-height: 1.6;
+}

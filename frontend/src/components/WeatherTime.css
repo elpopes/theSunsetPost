@@ -1,0 +1,28 @@
+/* src/components/WeatherTime.css */
+
+.weather-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+  color: #555;
+}
+
+.weather-time__temp {
+  font-size: 18px;
+  font-weight: bold;
+  color: #771000;
+  margin: 0;
+}
+
+.weather-time__description {
+  text-transform: capitalize;
+  margin: 0;
+  color: #333;
+}
+
+.weather-time__time {
+  font-size: 14px;
+  color: #555;
+  margin-top: 5px;
+}

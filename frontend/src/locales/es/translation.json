@@ -1,6 +1,8 @@
 {
     "welcome": "Bienvenido a The Sunset Post",
     "stories": "Historias",
-    "loading": "Cargando historias..."
-  }
-  
+    "loading": "Cargando historias...",
+    "home": "Inicio",
+    "about": "Acerca de",
+    "contact": "Contacto"
+}

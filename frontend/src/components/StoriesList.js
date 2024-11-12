@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStories } from "../features/stories/storiesSlice";
 import { useTranslation } from "react-i18next";
-import "./StoriesList.css"; // Import the CSS file
+import { Link } from "react-router-dom";
+import "./StoriesList.css";
 
 const StoriesList = () => {
   const { t, i18n } = useTranslation();
@@ -17,31 +18,33 @@ const StoriesList = () => {
     if (status === "idle") {
       dispatch(fetchStories());
     }
-    console.log("Fetched stories:", stories); // Check if data is fetched
-  }, [status, dispatch, stories]);
+  }, [status, dispatch]);
 
-  // Update filtering to handle translations
+  // Filter and shorten story content
   const filteredStories = stories
     .map((story) => {
       const translation = story.translations.find(
         (t) => t.language === language
       );
-      return translation
-        ? {
-            ...story,
-            title: translation.title,
-            content: translation.content,
-          }
-        : null;
+      if (translation) {
+        const truncatedContent =
+          translation.content.split(" ").slice(0, 25).join(" ") + "…"; // Limit to first 25 words
+        return {
+          ...story,
+          title: translation.title,
+          content: truncatedContent,
+        };
+      }
+      return null;
     })
     .filter((story) => story !== null);
-
-  console.log("Filtered stories:", filteredStories); // Check if filtering is working
 
   const renderedStories = filteredStories.length ? (
     filteredStories.map((story) => (
       <li key={story.id} className="story-item">
-        <h3 className="story-title">{story.title}</h3>
+        <h3 className="story-title">
+          <Link to={`/stories/${story.id}`}>{story.title}</Link>
+        </h3>
         <p className="story-content">{story.content}</p>
         {story.image_url && (
           <img

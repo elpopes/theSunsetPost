@@ -1,0 +1,26 @@
+.main-layout {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.main-layout__content {
+  flex: 3;
+  padding-right: 20px;
+}
+
+.main-layout__sidebar {
+  flex: 1;
+  background-color: #f9f9f9;
+  border-left: 1px solid #ddd;
+  padding: 15px;
+}
+
+.ad-space {
+  background-color: #e6e6e6;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+}

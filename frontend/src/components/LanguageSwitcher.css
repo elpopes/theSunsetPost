@@ -1,0 +1,20 @@
+/* src/components/LanguageSwitcher.css */
+.language-switcher {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.language-switcher button {
+  padding: 8px 12px;
+  background-color: #771000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.language-switcher button:hover {
+  background-color: #a32800;
+}

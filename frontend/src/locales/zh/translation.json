@@ -1,6 +1,9 @@
 {
-    "welcome": "欢迎来到日落公园报",
+    "welcome": "欢迎来到 The Sunset Post",
     "stories": "故事",
-    "loading": "加载故事中..."
-  }
+    "loading": "加载故事...",
+    "home": "首页",
+    "about": "关于",
+    "contact": "联系"
+}
   

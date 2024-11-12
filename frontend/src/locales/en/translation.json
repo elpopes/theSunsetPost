@@ -1,6 +1,9 @@
 {
     "welcome": "Welcome to The Sunset Post",
     "stories": "Stories",
-    "loading": "Loading stories..."
-  }
+    "loading": "Loading stories...",
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact"
+}
   

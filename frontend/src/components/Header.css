@@ -1,0 +1,117 @@
+/* src/components/Header.css */
+
+/* Basic header styling */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #ffffff;
+  color: #000000;
+  text-align: center;
+  border-bottom: 2px solid #ddd;
+}
+
+.header__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  padding: 10px 20px;
+}
+
+/* Center section for title, language switcher, and nav */
+.header__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 2;
+}
+
+/* Logo styling */
+.header__logo h1 {
+  font-family: "Dancing Script", cursive;
+  font-size: 4.5rem;
+  color: #771000;
+  font-weight: bold;
+}
+
+/* Language switcher styling */
+.header__language-switcher {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.language-switcher button {
+  padding: 8px 12px;
+  background-color: #771000;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.language-switcher button:hover {
+  background-color: #a32800;
+}
+
+/* Navigation styling */
+.header__nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.header__nav li {
+  display: inline;
+}
+
+.header__nav a {
+  color: #771000;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.header__nav a:hover {
+  text-decoration: underline;
+}
+
+/* Weather and transit information styling */
+.weather-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+  color: #555;
+  text-align: left;
+}
+
+.transit-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 14px;
+  color: #555;
+  text-align: right;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .header__content {
+    flex-direction: column;
+    align-items: center;
+  }
+  .header__logo h1 {
+    font-size: 2rem;
+  }
+  .header__nav ul {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
