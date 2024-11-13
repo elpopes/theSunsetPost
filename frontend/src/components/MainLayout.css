@@ -1,4 +1,9 @@
+/* src/components/MainLayout.css */
 .main-layout {
+  width: 100%;
+}
+
+.main-layout__container {
   display: flex;
   max-width: 1200px;
   margin: 0 auto;
@@ -7,20 +12,28 @@
 
 .main-layout__content {
   flex: 3;
-  padding-right: 20px;
+  padding: 20px;
 }
 
 .main-layout__sidebar {
   flex: 1;
   background-color: #f9f9f9;
-  border-left: 1px solid #ddd;
+  border: 1px solid #ddd;
   padding: 15px;
+  margin: 0 10px;
 }
 
 .ad-space {
   background-color: #e6e6e6;
   padding: 10px;
-  margin-bottom: 20px;
   border-radius: 5px;
   text-align: center;
+}
+
+/* Full-width header styling */
+header {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 20px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
