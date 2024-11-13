@@ -20,7 +20,6 @@ const StoriesList = () => {
     }
   }, [status, dispatch]);
 
-  // Filter and shorten story content
   const filteredStories = stories
     .map((story) => {
       const translation = story.translations.find(
@@ -28,7 +27,7 @@ const StoriesList = () => {
       );
       if (translation) {
         const truncatedContent =
-          translation.content.split(" ").slice(0, 25).join(" ") + "…"; // Limit to first 25 words
+          translation.content.split(" ").slice(0, 25).join(" ") + "…";
         return {
           ...story,
           title: translation.title,
@@ -39,32 +38,26 @@ const StoriesList = () => {
     })
     .filter((story) => story !== null);
 
-  const renderedStories = filteredStories.length ? (
-    filteredStories.map((story) => (
-      <li key={story.id} className="story-item">
-        <h3 className="story-title">
-          <Link to={`/stories/${story.id}`}>{story.title}</Link>
-        </h3>
-        <p className="story-content">{story.content}</p>
-        {story.image_url && (
-          <img
-            src={story.image_url}
-            alt={story.title}
-            className="story-image"
-          />
-        )}
-      </li>
-    ))
-  ) : (
-    <p>{t("noStoriesAvailable")}</p>
-  );
-
   return (
     <section className="stories-section">
-      <h2>{t("stories")}</h2>
-      {status === "loading" ? <p>{t("loading")}</p> : null}
-      {status === "failed" ? <p>{error}</p> : null}
-      <ul className="stories-list">{renderedStories}</ul>
+      <h2>{t("Stories")}</h2>
+      <ul className="stories-list">
+        {filteredStories.map((story) => (
+          <li key={story.id} className="story-item">
+            <h3 className="story-title">
+              <Link to={`/stories/${story.id}`}>{story.title}</Link>
+            </h3>
+            {story.image_url && (
+              <img
+                src={story.image_url}
+                alt={story.title}
+                className="story-image"
+              />
+            )}
+            <p className="story-content">{story.content}</p>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 };

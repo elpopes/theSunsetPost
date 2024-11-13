@@ -1,4 +1,3 @@
-/* Container styling */
 .stories-section {
   padding: 20px;
   max-width: 800px;
@@ -10,50 +9,30 @@
   padding: 0;
 }
 
-/* Story item styling */
 .story-item {
   border: 1px solid #ddd;
   padding: 15px;
   margin-bottom: 20px;
   border-radius: 5px;
   background-color: #fff;
+  text-align: center;
 }
 
-/* Typography styling */
 .story-title {
   font-size: 1.5em;
   margin-bottom: 10px;
-  color: #333;
+  color: #771000;
+}
+
+.story-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 15px;
+  border-radius: 5px;
 }
 
 .story-content {
   font-size: 1em;
-  margin-bottom: 15px;
   color: #555;
-}
-
-/* Image styling */
-.story-image {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-  border-radius: 5px;
-}
-
-/* Additional styling */
-@media (min-width: 768px) {
-  .story-item {
-    display: flex;
-    align-items: flex-start;
-  }
-
-  .story-image {
-    max-width: 200px;
-    margin-right: 20px;
-  }
-
-  .story-content {
-    flex: 1;
-  }
+  line-height: 1.6;
 }
