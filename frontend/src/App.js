@@ -3,12 +3,13 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import MainLayout from "./components/MainLayout";
 import StoriesList from "./components/StoriesList";
 import StoryDetail from "./components/StoryDetail";
+import SignUpForm from "./components/SignUpForm";
+import LoginForm from "./components/LoginForm";
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Wrap StoriesList with MainLayout */}
         <Route
           path="/"
           element={
@@ -17,12 +18,27 @@ function App() {
             </MainLayout>
           }
         />
-        {/* Wrap StoryDetail with MainLayout */}
         <Route
           path="/stories/:id"
           element={
             <MainLayout>
               <StoryDetail />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <MainLayout>
+              <SignUpForm />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <MainLayout>
+              <LoginForm />
             </MainLayout>
           }
         />
