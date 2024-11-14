@@ -1,10 +1,23 @@
 class Api::StoriesController < ApplicationController
-    # GET /api/stories
+    before_action :require_login, only: [:create]
     def index
         Rails.logger.debug "Fetching all stories with translations"
         @stories = Story.includes(:story_translations).all
         Rails.logger.debug "Fetched #{@stories.size} stories with translations"
         render json: @stories.map { |story| story_json(story) }
+    end
+
+    def show
+		Rails.logger.debug "Fetching story with ID: #{params[:id]}"
+		@story = Story.includes(:story_translations).find_by(id: params[:id])
+
+		if @story
+			Rails.logger.debug "Story found: #{@story.title}"
+			render json: story_json(@story)
+		else
+			Rails.logger.error "Story not found with ID: #{params[:id]}"
+			render json: { error: "Story not found" }, status: :not_found
+		end
     end
   
     # POST /api/stories
@@ -63,6 +76,12 @@ class Api::StoriesController < ApplicationController
       
   
     private
+
+    def require_login
+		unless session[:user_id]
+			render json: { error: "Unauthorized access" }, status: :unauthorized
+		end
+	end
   
     def story_json(story)
         {

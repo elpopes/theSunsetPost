@@ -1,3 +1,4 @@
+/* src/components/StoryDetail.css */
 .story-detail {
   max-width: 800px;
   margin: 0 auto;
@@ -10,7 +11,8 @@
 .story-detail__title {
   font-size: 2em;
   margin-bottom: 20px;
-  color: #333;
+  color: #771000;
+  text-align: center;
 }
 
 .story-detail__image {
@@ -24,4 +26,23 @@
   font-size: 1.1em;
   color: #555;
   line-height: 1.6;
+}
+
+.story-detail__translations {
+  margin-top: 30px;
+}
+
+.story-detail__translations h3 {
+  font-size: 1.5em;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.story-detail__translations ul {
+  list-style: none;
+  padding: 0;
+}
+
+.story-detail__translations li {
+  margin-bottom: 15px;
 }

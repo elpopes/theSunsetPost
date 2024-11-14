@@ -41,23 +41,39 @@ const StoriesList = () => {
   return (
     <section className="stories-section">
       <h2>{t("Stories")}</h2>
-      <ul className="stories-list">
-        {filteredStories.map((story) => (
-          <li key={story.id} className="story-item">
-            <h3 className="story-title">
-              <Link to={`/stories/${story.id}`}>{story.title}</Link>
-            </h3>
-            {story.image_url && (
-              <img
-                src={story.image_url}
-                alt={story.title}
-                className="story-image"
-              />
-            )}
-            <p className="story-content">{story.content}</p>
-          </li>
-        ))}
-      </ul>
+
+      {/* Display error message if there is an error */}
+      {error && (
+        <p className="error-message">
+          {t("Error fetching stories")}: {error}
+        </p>
+      )}
+
+      {/* Display a loading message if the stories are being fetched */}
+      {status === "loading" && <p>{t("Loading stories...")}</p>}
+
+      {/* Display the stories list if available */}
+      {status === "succeeded" && filteredStories.length > 0 ? (
+        <ul className="stories-list">
+          {filteredStories.map((story) => (
+            <li key={story.id} className="story-item">
+              <h3 className="story-title">
+                <Link to={`/stories/${story.id}`}>{story.title}</Link>
+              </h3>
+              {story.image_url && (
+                <img
+                  src={story.image_url}
+                  alt={story.title}
+                  className="story-image"
+                />
+              )}
+              <p className="story-content">{story.content}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>{t("No stories available.")}</p>
+      )}
     </section>
   );
 };
