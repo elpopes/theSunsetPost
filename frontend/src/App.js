@@ -5,6 +5,7 @@ import StoriesList from "./components/StoriesList";
 import StoryDetail from "./components/StoryDetail";
 import SignUpForm from "./components/SignUpForm";
 import LoginForm from "./components/LoginForm";
+import PostForm from "./components/PostForm";
 
 function App() {
   return (
@@ -39,6 +40,14 @@ function App() {
           element={
             <MainLayout>
               <LoginForm />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/post"
+          element={
+            <MainLayout>
+              <PostForm />
             </MainLayout>
           }
         />

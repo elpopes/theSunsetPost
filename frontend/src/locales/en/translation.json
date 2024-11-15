@@ -4,6 +4,9 @@
     "loading": "Loading stories...",
     "home": "Home",
     "about": "About",
-    "contact": "Contact"
+    "contact": "Contact",
+    "sign_up": "Sign Up",
+	"login": "Login",
+	"logout": "Logout"
 }
   

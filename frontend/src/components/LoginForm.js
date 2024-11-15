@@ -8,21 +8,29 @@ const LoginForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("/api/login", {
+      console.log("Attempting login with:", { email, password });
+
+      const response = await fetch("http://localhost:3000/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
 
+      console.log("Login response data:", data);
+
       if (response.ok) {
-        setMessage("Login successful!");
-        window.location.reload();
+        // Save user data to localStorage
+        console.log("Saving user to localStorage:", data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        window.location.href = "/";
       } else {
         setMessage(data.error);
+        console.log("Login failed with error:", data.error);
       }
     } catch (error) {
       setMessage("Error during login. Please try again.");
+      console.error("Login error:", error);
     }
   };
 
@@ -30,24 +38,20 @@ const LoginForm = () => {
     <div>
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <button type="submit">Login</button>
       </form>
       <p>{message}</p>

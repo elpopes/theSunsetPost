@@ -4,5 +4,8 @@
     "loading": "Cargando historias...",
     "home": "Inicio",
     "about": "Acerca de",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "sign_up": "Registrarse",
+	"login": "Iniciar sesión",
+	"logout": "Cerrar sesión"
 }

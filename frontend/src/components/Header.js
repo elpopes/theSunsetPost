@@ -11,9 +11,14 @@ const Header = () => {
 
   // Check if the user is logged in by looking for user data in localStorage
   useEffect(() => {
-    const loggedInUser = JSON.parse(localStorage.getItem("user"));
+    const loggedInUser = localStorage.getItem("user");
     if (loggedInUser) {
-      setUser(loggedInUser);
+      try {
+        const parsedUser = JSON.parse(loggedInUser);
+        setUser(parsedUser);
+      } catch (error) {
+        console.error("Error parsing user data from localStorage:", error);
+      }
     }
   }, []);
 
@@ -21,7 +26,7 @@ const Header = () => {
   const handleLogout = () => {
     localStorage.removeItem("user");
     setUser(null);
-    window.location.reload(); // Reload the page to reflect logout state
+    window.location.reload();
   };
 
   return (
@@ -46,25 +51,37 @@ const Header = () => {
               <li>
                 <a href="/contact">{t("contact")}</a>
               </li>
+              {user && user.admin && (
+                <li>
+                  <a href="/post" className="header__auth-link">
+                    {t("post")}
+                  </a>
+                </li>
+              )}
+              {user ? (
+                <li>
+                  <button onClick={handleLogout} className="header__auth-link">
+                    {t("logout")}
+                  </button>
+                </li>
+              ) : (
+                <>
+                  <li>
+                    <a href="/signup" className="header__auth-link">
+                      {t("sign_up")}
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/login" className="header__auth-link">
+                      {t("login")}
+                    </a>
+                  </li>
+                </>
+              )}
             </ul>
           </nav>
         </div>
-        <div className="header__auth">
-          {user ? (
-            <>
-              <span>
-                {t("Welcome")}, {user.email}
-              </span>
-              <button onClick={handleLogout}>{t("Logout")}</button>
-            </>
-          ) : (
-            <>
-              <a href="/signup">{t("Sign Up")}</a>
-              <a href="/login">{t("Login")}</a>
-            </>
-          )}
-        </div>
-        <TransitInfo />
+        {/* <TransitInfo /> */}
       </div>
     </header>
   );

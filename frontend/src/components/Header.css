@@ -61,23 +61,29 @@
 
 /* Navigation styling */
 .header__nav ul {
-  list-style: none;
-  padding: 0;
   display: flex;
-  gap: 15px;
-  margin-top: 10px;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.header__nav li {
-  display: inline;
-}
-
-.header__nav a {
+.header__nav a,
+.header__auth-link {
   color: #771000;
   text-decoration: none;
-  font-size: 16px;
+  font-weight: bold;
 }
 
+.header__auth-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  color: #771000;
+}
+
+.header__auth-link:hover,
 .header__nav a:hover {
   text-decoration: underline;
 }
