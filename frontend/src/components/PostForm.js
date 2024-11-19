@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 
 const PostForm = () => {
-  const { t } = useTranslation();
+  const user = useSelector((state) => state.auth.user); // Get user from Redux
   const [titleEn, setTitleEn] = useState("");
   const [contentEn, setContentEn] = useState("");
   const [titleEs, setTitleEs] = useState("");
@@ -14,6 +14,12 @@ const PostForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!user?.token) {
+      setMessage("Unauthorized: Please log in to post a story.");
+      console.error("Authorization token is missing.");
+      return;
+    }
 
     // Create FormData for the request
     const formData = new FormData();
@@ -29,19 +35,24 @@ const PostForm = () => {
     formData.append("translations", JSON.stringify(translations));
 
     try {
-      // Send the POST request to the backend
-      const response = await fetch("/api/stories", {
+      console.log("Submitting the form...");
+      console.log("Translations to be sent:", translations);
+      console.log("Authorization Token:", user?.token);
+
+      const response = await fetch("http://localhost:3000/api/stories", {
         method: "POST",
         body: formData,
         headers: {
-          Authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("user")).token
-          }`,
+          Authorization: `Bearer ${user.token}`, // Include token
         },
       });
+
+      console.log("Response received. Status:", response.status);
+
       const data = await response.json();
 
       if (response.ok) {
+        console.log("Story posted successfully!", data);
         setMessage("Story posted successfully!");
         // Reset form fields
         setTitleEn("");
@@ -52,22 +63,23 @@ const PostForm = () => {
         setContentZh("");
         setImage(null);
       } else {
+        console.error("Failed to post story:", data.error);
         setMessage(data.error || "Failed to post the story.");
       }
     } catch (error) {
-      setMessage("Error posting the story. Please try again.");
       console.error("Post form error:", error);
+      setMessage("Error posting the story. Please try again.");
     }
   };
 
   return (
     <div>
-      <h2>{t("Create a New Story")}</h2>
+      <h2>Create a New Story</h2>
       <form onSubmit={handleSubmit}>
         {/* English Translation */}
-        <h3>{t("English")}</h3>
+        <h3>English</h3>
         <div>
-          <label>{t("Title")}:</label>
+          <label>Title:</label>
           <input
             type="text"
             value={titleEn}
@@ -76,7 +88,7 @@ const PostForm = () => {
           />
         </div>
         <div>
-          <label>{t("Content")}:</label>
+          <label>Content:</label>
           <textarea
             value={contentEn}
             onChange={(e) => setContentEn(e.target.value)}
@@ -85,9 +97,9 @@ const PostForm = () => {
         </div>
 
         {/* Spanish Translation */}
-        <h3>{t("Spanish")}</h3>
+        <h3>Spanish</h3>
         <div>
-          <label>{t("Title")}:</label>
+          <label>Title:</label>
           <input
             type="text"
             value={titleEs}
@@ -96,7 +108,7 @@ const PostForm = () => {
           />
         </div>
         <div>
-          <label>{t("Content")}:</label>
+          <label>Content:</label>
           <textarea
             value={contentEs}
             onChange={(e) => setContentEs(e.target.value)}
@@ -105,9 +117,9 @@ const PostForm = () => {
         </div>
 
         {/* Chinese Translation */}
-        <h3>{t("Chinese")}</h3>
+        <h3>Chinese</h3>
         <div>
-          <label>{t("Title")}:</label>
+          <label>Title:</label>
           <input
             type="text"
             value={titleZh}
@@ -116,7 +128,7 @@ const PostForm = () => {
           />
         </div>
         <div>
-          <label>{t("Content")}:</label>
+          <label>Content:</label>
           <textarea
             value={contentZh}
             onChange={(e) => setContentZh(e.target.value)}
@@ -126,11 +138,11 @@ const PostForm = () => {
 
         {/* Image Upload */}
         <div>
-          <label>{t("Image")}:</label>
+          <label>Image:</label>
           <input type="file" onChange={(e) => setImage(e.target.files[0])} />
         </div>
 
-        <button type="submit">{t("Post Story")}</button>
+        <button type="submit">Post Story</button>
       </form>
       <p>{message}</p>
     </div>

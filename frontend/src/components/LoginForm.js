@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux"; // Import useDispatch from Redux
+import { login } from "../features/auth/authSlice"; // Import login action
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const dispatch = useDispatch(); // Initialize dispatch
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,9 +23,11 @@ const LoginForm = () => {
       console.log("Login response data:", data);
 
       if (response.ok) {
-        // Save user data to localStorage
-        console.log("Saving user to localStorage:", data.user);
-        localStorage.setItem("user", JSON.stringify(data.user));
+        console.log("Saving user to Redux store:", data.user);
+        console.log("Dispatching login action with user:", data.user);
+        dispatch(login(data.user));
+        console.log("Login action dispatched.");
+        localStorage.setItem("user", JSON.stringify(data.user)); // Save to localStorage for persistence
         window.location.href = "/";
       } else {
         setMessage(data.error);

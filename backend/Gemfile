@@ -37,7 +37,7 @@ gem 'aws-sdk-s3', '~> 1.94'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 gem "rack-cors"
-
+gem 'jwt'
 gem 'dotenv-rails', groups: [:development, :test]
 
 gem 'ruby-vips'

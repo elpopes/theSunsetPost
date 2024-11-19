@@ -1,0 +1,37 @@
+=> 
+[[32m#<Story:0x00007f9720404d18[0m
+  id: [34m[1m31[0m,
+  title: [31m[1m"[0m[31mMeditation circles comes to the park[0m[31m[1m"[0m,
+  content:
+   [31m[1m"[0m[31mEvery Sunday, a new meditation circle meets at Sunset Park, led by a local resident who wants to share the benefits of mindfulness and community connection.[0m[31m[1m"[0m,
+  language: [31m[1m"[0m[31men[0m[31m[1m"[0m,
+  created_at: Thu, 07 Nov 2024 15:15:30.570885000 UTC +00:00,
+  updated_at: Thu, 07 Nov 2024 15:15:31.722634000 UTC +00:00[32m>[0m,
+ [32m#<Story:0x00007f9720726410[0m
+  id: [34m[1m32[0m,
+  title: [36m[1mnil[0m,
+  content: [36m[1mnil[0m,
+  language: [36m[1mnil[0m,
+  created_at: Tue, 19 Nov 2024 17:21:07.442513000 UTC +00:00,
+  updated_at: Tue, 19 Nov 2024 17:21:18.634077000 UTC +00:00[32m>[0m,
+ [32m#<Story:0x00007f97207262d0[0m
+  id: [34m[1m33[0m,
+  title: [36m[1mnil[0m,
+  content: [36m[1mnil[0m,
+  language: [36m[1mnil[0m,
+  created_at: Tue, 19 Nov 2024 21:15:57.978713000 UTC +00:00,
+  updated_at: Tue, 19 Nov 2024 21:16:11.282341000 UTC +00:00[32m>[0m,
+ [32m#<Story:0x00007f9720726190[0m
+  id: [34m[1m29[0m,
+  title: [36m[1mnil[0m,
+  content: [36m[1mnil[0m,
+  language: [36m[1mnil[0m,
+  created_at: Wed, 06 Nov 2024 22:32:49.791723000 UTC +00:00,
+  updated_at: Wed, 06 Nov 2024 22:32:51.475220000 UTC +00:00[32m>[0m,
+ [32m#<Story:0x00007f9720726050[0m
+  id: [34m[1m30[0m,
+  title: [36m[1mnil[0m,
+  content: [36m[1mnil[0m,
+  language: [36m[1mnil[0m,
+  created_at: Wed, 06 Nov 2024 23:19:08.675020000 UTC +00:00,
+  updated_at: Wed, 06 Nov 2024 23:19:09.269307000 UTC +00:00[32m>[0m]

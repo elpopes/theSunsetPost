@@ -2,31 +2,29 @@ import "./Header.css";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
 import WeatherTime from "./WeatherTime";
-import TransitInfo from "./TransitInfo";
-import { useState, useEffect } from "react";
+// import TransitInfo from "./TransitInfo";
+import { useDispatch, useSelector } from "react-redux"; // Import Redux hooks
+import { logout } from "../features/auth/authSlice"; // Import logout action
 
 const Header = () => {
   const { t } = useTranslation();
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user); // Get user from Redux store
 
-  // Check if the user is logged in by looking for user data in localStorage
-  useEffect(() => {
-    const loggedInUser = localStorage.getItem("user");
-    if (loggedInUser) {
-      try {
-        const parsedUser = JSON.parse(loggedInUser);
-        setUser(parsedUser);
-      } catch (error) {
-        console.error("Error parsing user data from localStorage:", error);
-      }
-    }
-  }, []);
+  // Debug logs to understand the user state
+  console.log("Redux User State in Header:", user);
+  if (user) {
+    console.log("User is logged in. Admin status:", user.admin);
+  } else {
+    console.log("No user logged in.");
+  }
 
   // Handle logout
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-    window.location.reload();
+    console.log("Logging out user:", user);
+    dispatch(logout()); // Clear user from Redux store
+    localStorage.removeItem("user"); // Remove from localStorage
+    window.location.reload(); // Reload to reflect logged-out state
   };
 
   return (
