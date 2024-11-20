@@ -3,19 +3,19 @@ class Api::StoriesController < ApplicationController
   
     # GET /api/stories
     def index
-      Rails.logger.debug "Fetching all stories with translations"
-      @stories = Story.includes(:story_translations).all
-      Rails.logger.debug "Fetched #{@stories.size} stories with translations"
+      Rails.logger.debug "Fetching all stories with translations and authors"
+      @stories = Story.includes(:story_translations, :authors).all
+      Rails.logger.info "Fetched #{@stories.size} stories"
       render json: @stories.map { |story| story_json(story) }
     end
   
     # GET /api/stories/:id
     def show
       Rails.logger.debug "Fetching story with ID: #{params[:id]}"
-      @story = Story.includes(:story_translations).find_by(id: params[:id])
+      @story = Story.includes(:story_translations, :authors).find_by(id: params[:id])
   
       if @story
-        Rails.logger.debug "Story found: #{@story.title}"
+        Rails.logger.info "Story found: #{@story.title}"
         render json: story_json(@story)
       else
         Rails.logger.error "Story not found with ID: #{params[:id]}"
@@ -25,59 +25,64 @@ class Api::StoriesController < ApplicationController
   
     # POST /api/stories
     def create
-        Rails.logger.debug "Params received: #{params.inspect}"
-      
-        @story = Story.new
-      
-        # Attach image if provided
-        if params[:image].present?
-          @story.image.attach(params[:image])
-          Rails.logger.debug "Image attachment status: #{@story.image.attached? ? 'Success' : 'Failure'}"
-        else
-          Rails.logger.debug "No image param found."
-        end
-      
-        # Parse translations from JSON string
-        begin
-          translations = JSON.parse(params[:translations])
-          Rails.logger.debug "Parsed translations: #{translations.inspect}"
-        rescue JSON::ParserError => e
-          Rails.logger.error "Failed to parse translations: #{e.message}"
-          return render json: { error: "Invalid translations format" }, status: :unprocessable_entity
-        end
-      
-        # Use the first translation as primary attributes for the story
-        primary_translation = translations.first
-        if primary_translation
-          @story.title = primary_translation["title"]
-          @story.content = primary_translation["content"]
-          @story.language = primary_translation["language"]
-          Rails.logger.debug "Primary attributes set: #{@story.title}, #{@story.content}, #{@story.language}"
-        else
-          Rails.logger.debug "No primary translation found. Skipping primary attribute assignment."
-        end
-      
-        # Add additional translations
-        translations.each do |translation|
-          Rails.logger.debug "Processing translation: #{translation.inspect}"
-          @story.story_translations.build(
-            title: translation["title"],
-            content: translation["content"],
-            language: translation["language"]
-          )
-        end
-      
-        # Save the story
-        if @story.save
-          Rails.logger.debug "Story saved successfully. ID: #{@story.id}"
-          render json: story_json(@story), status: :created
-        else
-          Rails.logger.error "Failed to save story: #{@story.errors.full_messages.join(', ')}"
-          render json: { errors: @story.errors.full_messages }, status: :unprocessable_entity
-        end
+      Rails.logger.debug "Creating a new story with params: #{params.inspect}"
+      @story = Story.new
+  
+      # Attach image if provided
+      if params[:image].present?
+        @story.image.attach(params[:image])
+        Rails.logger.debug "Image attachment status: #{@story.image.attached? ? 'Success' : 'Failure'}"
+      end
+  
+      # Parse translations from JSON string
+      begin
+        translations = JSON.parse(params[:translations])
+        Rails.logger.info "Parsed #{translations.size} translations"
+      rescue JSON::ParserError => e
+        Rails.logger.error "Failed to parse translations: #{e.message}"
+        return render json: { error: "Invalid translations format" }, status: :unprocessable_entity
+      end
+  
+      # Use the first translation as primary attributes for the story
+      primary_translation = translations.first
+      if primary_translation
+        @story.assign_attributes(
+          title: primary_translation["title"],
+          content: primary_translation["content"],
+          language: primary_translation["language"]
+        )
+        Rails.logger.debug "Primary attributes set: title=#{@story.title}, language=#{@story.language}"
+      else
+        Rails.logger.warn "No primary translation found; primary attributes not set."
+      end
+  
+      # Add additional translations
+      translations.each do |translation|
+        @story.story_translations.build(
+          title: translation["title"],
+          content: translation["content"],
+          language: translation["language"]
+        )
+      end
+  
+      # Assign authors if provided
+      if params[:author_ids].present?
+        author_ids = JSON.parse(params[:author_ids])
+        @story.authors = Author.where(id: author_ids)
+        Rails.logger.info "Assigned authors: #{author_ids.join(', ')}"
+      else
+        Rails.logger.warn "No authors provided for the story."
+      end
+  
+      # Save the story
+      if @story.save
+        Rails.logger.info "Story created successfully with ID: #{@story.id}"
+        render json: story_json(@story), status: :created
+      else
+        Rails.logger.error "Failed to save story: #{@story.errors.full_messages.join(', ')}"
+        render json: { errors: @story.errors.full_messages }, status: :unprocessable_entity
+      end
     end
-      
-      
   
     private
   
@@ -89,9 +94,9 @@ class Api::StoriesController < ApplicationController
       begin
         decoded = JWT.decode(token, JWT_SECRET_KEY, true, { algorithm: 'HS256' })
         @current_user = User.find(decoded[0]['user_id'])
-        Rails.logger.debug "Authenticated user: #{@current_user.email}"
+        Rails.logger.info "Authenticated user: #{@current_user.email}"
       rescue JWT::DecodeError, ActiveRecord::RecordNotFound
-        Rails.logger.debug "Unauthorized access: Invalid token"
+        Rails.logger.warn "Unauthorized access: Invalid token"
         render json: { error: "Unauthorized access" }, status: :unauthorized
       end
     end
@@ -110,6 +115,14 @@ class Api::StoriesController < ApplicationController
             title: translation.title,
             content: translation.content,
             language: translation.language
+          }
+        end,
+        authors: story.authors.map do |author|
+          {
+            id: author.id,
+            name: author.name,
+            bio: author.bio,
+            image_url: author.image.attached? ? url_for(author.image) : nil
           }
         end
       }
