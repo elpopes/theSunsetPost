@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const PostForm = () => {
   const user = useSelector((state) => state.auth.user); // Get user from Redux
+  const [authors, setAuthors] = useState([]); // Fetch authors from the backend
+  const [selectedAuthors, setSelectedAuthors] = useState([]);
   const [titleEn, setTitleEn] = useState("");
   const [contentEn, setContentEn] = useState("");
   const [titleEs, setTitleEs] = useState("");
@@ -11,6 +13,29 @@ const PostForm = () => {
   const [contentZh, setContentZh] = useState("");
   const [image, setImage] = useState(null);
   const [message, setMessage] = useState("");
+
+  // Fetch authors from the backend on component mount
+  useEffect(() => {
+    const fetchAuthors = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/authors");
+        const data = await response.json();
+        setAuthors(data);
+      } catch (error) {
+        console.error("Error fetching authors:", error);
+      }
+    };
+    fetchAuthors();
+  }, []);
+
+  // Handle author selection
+  const handleAuthorChange = (e) => {
+    const selected = Array.from(
+      e.target.selectedOptions,
+      (option) => option.value
+    );
+    setSelectedAuthors(selected);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -33,10 +58,12 @@ const PostForm = () => {
     ];
 
     formData.append("translations", JSON.stringify(translations));
+    formData.append("author_ids", JSON.stringify(selectedAuthors)); // Include selected authors
 
     try {
       console.log("Submitting the form...");
       console.log("Translations to be sent:", translations);
+      console.log("Selected Authors:", selectedAuthors);
       console.log("Authorization Token:", user?.token);
 
       const response = await fetch("http://localhost:3000/api/stories", {
@@ -62,6 +89,7 @@ const PostForm = () => {
         setTitleZh("");
         setContentZh("");
         setImage(null);
+        setSelectedAuthors([]);
       } else {
         console.error("Failed to post story:", data.error);
         setMessage(data.error || "Failed to post the story.");
@@ -140,6 +168,18 @@ const PostForm = () => {
         <div>
           <label>Image:</label>
           <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+        </div>
+
+        {/* Author Selection */}
+        <div>
+          <label>Select Authors:</label>
+          <select multiple onChange={handleAuthorChange}>
+            {authors.map((author) => (
+              <option key={author.id} value={author.id}>
+                {author.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <button type="submit">Post Story</button>
