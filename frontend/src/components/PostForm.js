@@ -5,6 +5,8 @@ const PostForm = () => {
   const user = useSelector((state) => state.auth.user); // Get user from Redux
   const [authors, setAuthors] = useState([]); // Fetch authors from the backend
   const [selectedAuthors, setSelectedAuthors] = useState([]);
+  const [newAuthorName, setNewAuthorName] = useState(""); // New author name
+  const [newAuthorBio, setNewAuthorBio] = useState(""); // New author bio
   const [titleEn, setTitleEn] = useState("");
   const [contentEn, setContentEn] = useState("");
   const [titleEs, setTitleEs] = useState("");
@@ -37,6 +39,41 @@ const PostForm = () => {
     setSelectedAuthors(selected);
   };
 
+  // Create a new author
+  const handleAddAuthor = async (e) => {
+    e.preventDefault();
+    if (!newAuthorName.trim()) {
+      alert("Author name cannot be empty!");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3000/api/authors", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`, // Include token for authentication
+        },
+        body: JSON.stringify({ name: newAuthorName, bio: newAuthorBio }),
+      });
+
+      if (response.ok) {
+        const newAuthor = await response.json();
+        setAuthors((prevAuthors) => [...prevAuthors, newAuthor]); // Update authors list
+        setNewAuthorName("");
+        setNewAuthorBio("");
+        setMessage("Author added successfully!");
+      } else {
+        const error = await response.json();
+        console.error("Error adding author:", error);
+        setMessage(error.message || "Failed to add author.");
+      }
+    } catch (error) {
+      console.error("Error adding author:", error);
+      setMessage("An error occurred while adding the author.");
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -61,11 +98,6 @@ const PostForm = () => {
     formData.append("author_ids", JSON.stringify(selectedAuthors)); // Include selected authors
 
     try {
-      console.log("Submitting the form...");
-      console.log("Translations to be sent:", translations);
-      console.log("Selected Authors:", selectedAuthors);
-      console.log("Authorization Token:", user?.token);
-
       const response = await fetch("http://localhost:3000/api/stories", {
         method: "POST",
         body: formData,
@@ -74,12 +106,9 @@ const PostForm = () => {
         },
       });
 
-      console.log("Response received. Status:", response.status);
-
       const data = await response.json();
 
       if (response.ok) {
-        console.log("Story posted successfully!", data);
         setMessage("Story posted successfully!");
         // Reset form fields
         setTitleEn("");
@@ -91,11 +120,9 @@ const PostForm = () => {
         setImage(null);
         setSelectedAuthors([]);
       } else {
-        console.error("Failed to post story:", data.error);
         setMessage(data.error || "Failed to post the story.");
       }
     } catch (error) {
-      console.error("Post form error:", error);
       setMessage("Error posting the story. Please try again.");
     }
   };
@@ -184,6 +211,29 @@ const PostForm = () => {
 
         <button type="submit">Post Story</button>
       </form>
+
+      {/* Add New Author Form */}
+      <h3>Add New Author</h3>
+      <form onSubmit={handleAddAuthor}>
+        <div>
+          <label>Author Name:</label>
+          <input
+            type="text"
+            value={newAuthorName}
+            onChange={(e) => setNewAuthorName(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Author Bio:</label>
+          <textarea
+            value={newAuthorBio}
+            onChange={(e) => setNewAuthorBio(e.target.value)}
+          ></textarea>
+        </div>
+        <button type="submit">Add Author</button>
+      </form>
+
       <p>{message}</p>
     </div>
   );
