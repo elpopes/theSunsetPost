@@ -8,8 +8,8 @@ class Api::SectionsController < ApplicationController
       section = Section.find(params[:id])
       render json: {
         id: section.id,
-        name: section.name,
-        description: section.description,
+        name: section.translated_name(I18n.locale.to_s),
+        description: section.translated_description(I18n.locale.to_s),
         stories: section.stories.map { |story| story_json(story) }
       }
     end
@@ -19,8 +19,8 @@ class Api::SectionsController < ApplicationController
     def section_json(section)
       {
         id: section.id,
-        name: section.name,
-        description: section.description
+        name: section.translated_name(I18n.locale.to_s),
+        description: section.translated_description(I18n.locale.to_s)
       }
     end
   
@@ -38,8 +38,8 @@ class Api::SectionsController < ApplicationController
             content: translation.content,
             language: translation.language
           }
-        end
+        }
       }
     end
-end
+  end
   

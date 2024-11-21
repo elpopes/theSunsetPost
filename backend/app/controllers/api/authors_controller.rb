@@ -25,16 +25,17 @@ class Api::AuthorsController < ApplicationController
     private
   
     def author_json(author)
-      {
-        id: author.id,
-        name: author.name,
-        bio: author.bio,
-        image_url: author.image.attached? ? url_for(author.image) : nil,
-        stories: author.stories.map do |story|
-          { id: story.id, title: story.title }
-        end
-      }
+        locale = I18n.locale.to_s
+        {
+          id: author.id,
+          name: author.name,
+          bio: author.translated_bio(locale),
+          image_url: author.image.attached? ? url_for(author.image) : nil,
+          stories: author.stories.map { |story| { id: story.id, title: story.title } }
+        }
     end
+      
+      
   
     def author_params
       params.permit(:name, :bio)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_21_142102) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_21_163325) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_21_142102) do
     t.index ["story_id"], name: "index_author_stories_on_story_id"
   end
 
+  create_table "author_translations", force: :cascade do |t|
+    t.bigint "author_id", null: false
+    t.text "bio"
+    t.string "language", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_author_translations_on_author_id"
+  end
+
   create_table "authors", force: :cascade do |t|
     t.string "name", null: false
     t.text "bio"
@@ -65,6 +74,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_21_142102) do
     t.datetime "updated_at", null: false
     t.index ["section_id"], name: "index_section_stories_on_section_id"
     t.index ["story_id"], name: "index_section_stories_on_story_id"
+  end
+
+  create_table "section_translations", force: :cascade do |t|
+    t.bigint "section_id", null: false
+    t.string "name", null: false
+    t.text "description"
+    t.string "language", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["section_id"], name: "index_section_translations_on_section_id"
   end
 
   create_table "sections", force: :cascade do |t|
@@ -104,7 +123,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_21_142102) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "author_stories", "authors"
   add_foreign_key "author_stories", "stories"
+  add_foreign_key "author_translations", "authors"
   add_foreign_key "section_stories", "sections"
   add_foreign_key "section_stories", "stories"
+  add_foreign_key "section_translations", "sections"
   add_foreign_key "story_translations", "stories"
 end
