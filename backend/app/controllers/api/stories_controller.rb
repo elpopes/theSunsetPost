@@ -73,6 +73,18 @@ class Api::StoriesController < ApplicationController
       else
         Rails.logger.warn "No authors provided for the story."
       end
+
+        # Assign sections
+      if params[:section_ids].present?
+        section_ids = JSON.parse(params[:section_ids])
+        @story.sections = Section.where(id: section_ids)
+      end
+
+      if @story.save
+        render json: story_json(@story), status: :created
+      else
+        render json: { errors: @story.errors.full_messages }, status: :unprocessable_entity
+      end
   
       # Save the story
       if @story.save
@@ -124,6 +136,13 @@ class Api::StoriesController < ApplicationController
             bio: author.bio,
             image_url: author.image.attached? ? url_for(author.image) : nil
           }
+        end,
+        sections: story.sections.map do |section|
+            {
+              id: section.id,
+              name: section.name,
+              description: section.description
+            }
         end
       }
     end
