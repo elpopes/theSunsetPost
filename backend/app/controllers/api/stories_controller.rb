@@ -24,77 +24,75 @@ class Api::StoriesController < ApplicationController
     end
   
     # POST /api/stories
+    # POST /api/stories
     def create
-      Rails.logger.debug "Creating a new story with params: #{params.inspect}"
-      @story = Story.new
-  
-      # Attach image if provided
-      if params[:image].present?
-        @story.image.attach(params[:image])
-        Rails.logger.debug "Image attachment status: #{@story.image.attached? ? 'Success' : 'Failure'}"
-      end
-  
-      # Parse translations from JSON string
-      begin
-        translations = JSON.parse(params[:translations])
-        Rails.logger.info "Parsed #{translations.size} translations"
-      rescue JSON::ParserError => e
-        Rails.logger.error "Failed to parse translations: #{e.message}"
-        return render json: { error: "Invalid translations format" }, status: :unprocessable_entity
-      end
-  
-      # Use the first translation as primary attributes for the story
-      primary_translation = translations.first
-      if primary_translation
-        @story.assign_attributes(
-          title: primary_translation["title"],
-          content: primary_translation["content"],
-          language: primary_translation["language"]
-        )
-        Rails.logger.debug "Primary attributes set: title=#{@story.title}, language=#{@story.language}"
-      else
-        Rails.logger.warn "No primary translation found; primary attributes not set."
-      end
-  
-      # Add additional translations
-      translations.each do |translation|
-        @story.story_translations.build(
-          title: translation["title"],
-          content: translation["content"],
-          language: translation["language"]
-        )
-      end
-  
-      # Assign authors if provided
-      if params[:author_ids].present?
-        author_ids = JSON.parse(params[:author_ids])
-        @story.authors = Author.where(id: author_ids)
-        Rails.logger.info "Assigned authors: #{author_ids.join(', ')}"
-      else
-        Rails.logger.warn "No authors provided for the story."
-      end
-
-        # Assign sections
-      if params[:section_ids].present?
-        section_ids = JSON.parse(params[:section_ids])
-        @story.sections = Section.where(id: section_ids)
-      end
-
-      if @story.save
-        render json: story_json(@story), status: :created
-      else
-        render json: { errors: @story.errors.full_messages }, status: :unprocessable_entity
-      end
-  
-      # Save the story
-      if @story.save
-        Rails.logger.info "Story created successfully with ID: #{@story.id}"
-        render json: story_json(@story), status: :created
-      else
-        Rails.logger.error "Failed to save story: #{@story.errors.full_messages.join(', ')}"
-        render json: { errors: @story.errors.full_messages }, status: :unprocessable_entity
-      end
+        Rails.logger.debug "Creating a new story with params: #{params.inspect}"
+        @story = Story.new
+    
+        # Attach image if provided
+        if params[:image].present?
+            @story.image.attach(params[:image])
+            Rails.logger.debug "Image attachment status: #{@story.image.attached? ? 'Success' : 'Failure'}"
+        end
+    
+        # Parse translations from JSON string
+        begin
+            translations = JSON.parse(params[:translations])
+            Rails.logger.info "Parsed #{translations.size} translations"
+        rescue JSON::ParserError => e
+            Rails.logger.error "Failed to parse translations: #{e.message}"
+            render json: { error: "Invalid translations format" }, status: :unprocessable_entity
+            return
+        end
+    
+        # Use the first translation as primary attributes for the story
+        primary_translation = translations.first
+        if primary_translation
+            @story.assign_attributes(
+                title: primary_translation["title"],
+                content: primary_translation["content"],
+                language: primary_translation["language"]
+            )
+            Rails.logger.debug "Primary attributes set: title=#{@story.title}, language=#{@story.language}"
+        else
+            Rails.logger.warn "No primary translation found; primary attributes not set."
+        end
+    
+        # Add additional translations
+        translations.each do |translation|
+            @story.story_translations.build(
+                title: translation["title"],
+                content: translation["content"],
+                language: translation["language"]
+            )
+        end
+    
+        # Assign authors if provided
+        if params[:author_ids].present?
+            author_ids = JSON.parse(params[:author_ids])
+            @story.authors = Author.where(id: author_ids)
+            Rails.logger.info "Assigned authors: #{author_ids.join(', ')}"
+        else
+            Rails.logger.warn "No authors provided for the story."
+        end
+    
+        # Assign sections if provided
+        if params[:section_ids].present?
+            section_ids = JSON.parse(params[:section_ids])
+            @story.sections = Section.where(id: section_ids)
+            Rails.logger.info "Assigned sections: #{section_ids.join(', ')}"
+        end
+    
+        # Save the story
+        if @story.save
+            Rails.logger.info "Story created successfully with ID: #{@story.id}"
+            render json: story_json(@story), status: :created
+        else
+            Rails.logger.error "Failed to save story: #{@story.errors.full_messages.join(', ')}"
+            render json: { errors: @story.errors.full_messages }, status: :unprocessable_entity
+        end
     end
+  
   
     private
   

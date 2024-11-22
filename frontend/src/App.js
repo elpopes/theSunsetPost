@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import MainLayout from "./components/MainLayout";
 import StoriesList from "./components/StoriesList";
 import StoryDetail from "./components/StoryDetail";
+import SectionDetail from "./components/SectionDetail"; // Import the new component
 import SignUpForm from "./components/SignUpForm";
 import LoginForm from "./components/LoginForm";
 import PostForm from "./components/PostForm";
@@ -42,6 +43,14 @@ function App() {
           element={
             <MainLayout>
               <StoryDetail />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/sections/:id"
+          element={
+            <MainLayout>
+              <SectionDetail />
             </MainLayout>
           }
         />

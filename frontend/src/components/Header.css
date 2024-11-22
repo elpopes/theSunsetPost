@@ -107,6 +107,32 @@
   text-align: right;
 }
 
+.header__sections-nav {
+  margin-top: 10px;
+}
+
+.header__sections-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.header__sections-nav li {
+  margin-right: 15px;
+}
+
+.header__sections-nav li a {
+  text-decoration: none;
+  color: #007bff;
+  font-size: 0.9em;
+}
+
+.header__sections-nav li a:hover {
+  text-decoration: underline;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .header__content {

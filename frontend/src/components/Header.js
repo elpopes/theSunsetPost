@@ -1,30 +1,36 @@
+import React, { useEffect, useState } from "react";
 import "./Header.css";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
 import WeatherTime from "./WeatherTime";
-// import TransitInfo from "./TransitInfo";
-import { useDispatch, useSelector } from "react-redux"; // Import Redux hooks
-import { logout } from "../features/auth/authSlice"; // Import logout action
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../features/auth/authSlice";
 
 const Header = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language;
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user); // Get user from Redux store
+  const user = useSelector((state) => state.auth.user);
+  const [sections, setSections] = useState([]);
 
-  // Debug logs to understand the user state
-  console.log("Redux User State in Header:", user);
-  if (user) {
-    console.log("User is logged in. Admin status:", user.admin);
-  } else {
-    console.log("No user logged in.");
-  }
+  useEffect(() => {
+    const fetchSections = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/sections");
+        const data = await response.json();
+        console.log("Fetched sections:", data); // Debugging log
+        setSections(data); // Ensure sections is set correctly
+      } catch (error) {
+        console.error("Error fetching sections:", error);
+      }
+    };
+    fetchSections();
+  }, [currentLanguage]); // Refetch whenever the language changes
 
-  // Handle logout
   const handleLogout = () => {
-    console.log("Logging out user:", user);
-    dispatch(logout()); // Clear user from Redux store
-    localStorage.removeItem("user"); // Remove from localStorage
-    window.location.reload(); // Reload to reflect logged-out state
+    dispatch(logout());
+    localStorage.removeItem("user");
+    window.location.reload();
   };
 
   return (
@@ -51,35 +57,39 @@ const Header = () => {
               </li>
               {user && user.admin && (
                 <li>
-                  <a href="/post" className="header__auth-link">
-                    {t("post")}
-                  </a>
+                  <a href="/post">{t("post")}</a>
                 </li>
               )}
               {user ? (
                 <li>
-                  <button onClick={handleLogout} className="header__auth-link">
-                    {t("logout")}
-                  </button>
+                  <button onClick={handleLogout}>{t("logout")}</button>
                 </li>
               ) : (
                 <>
                   <li>
-                    <a href="/signup" className="header__auth-link">
-                      {t("sign_up")}
-                    </a>
+                    <a href="/signup">{t("sign_up")}</a>
                   </li>
                   <li>
-                    <a href="/login" className="header__auth-link">
-                      {t("login")}
-                    </a>
+                    <a href="/login">{t("login")}</a>
                   </li>
                 </>
               )}
             </ul>
           </nav>
+          <nav className="header__sections-nav">
+            <ul>
+              {Array.isArray(sections) && sections.length > 0 ? (
+                sections.map((section) => (
+                  <li key={section.id}>
+                    <a href={`/sections/${section.id}`}>{section.name}</a>
+                  </li>
+                ))
+              ) : (
+                <li>{t("No sections available")}</li>
+              )}
+            </ul>
+          </nav>
         </div>
-        {/* <TransitInfo /> */}
       </div>
     </header>
   );

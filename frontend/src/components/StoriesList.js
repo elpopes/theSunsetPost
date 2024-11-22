@@ -20,23 +20,22 @@ const StoriesList = () => {
     }
   }, [status, dispatch]);
 
-  const filteredStories = stories
-    .map((story) => {
-      const translation = story.translations.find(
-        (t) => t.language === language
-      );
-      if (translation) {
-        const truncatedContent =
-          translation.content.split(" ").slice(0, 25).join(" ") + "…";
-        return {
-          ...story,
-          title: translation.title,
-          content: truncatedContent,
-        };
-      }
-      return null;
-    })
-    .filter((story) => story !== null);
+  const filteredStories = stories.map((story) => {
+    // Find the translation for the current language
+    const translation = story.translations.find((t) => t.language === language);
+
+    // If no translation is found, fallback to primary language (title, content)
+    const title = translation ? translation.title : story.title;
+    const content = translation
+      ? translation.content.split(" ").slice(0, 25).join(" ") + "…"
+      : story.content.split(" ").slice(0, 25).join(" ") + "…";
+
+    return {
+      ...story,
+      title,
+      content,
+    };
+  });
 
   return (
     <section className="stories-section">

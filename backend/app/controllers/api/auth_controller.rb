@@ -3,28 +3,40 @@ class Api::AuthController < ApplicationController
   
     # POST /api/signup
     def signup
-      # Check if the email matches the predefined admin email
-      is_admin = (params[:email] == ENV['ADMIN_EMAIL'])
-  
-      # Prevent further sign-ups after the initial admin is created
-      if User.exists? && !is_admin
-        render json: { error: "Sign-ups are currently disabled" }, status: :forbidden
-        return
-      end
-  
-      user = User.new(user_params)
-      user.admin = is_admin
-  
-      if user.save
-        token = generate_token(user.id) # Generate JWT token
-        render json: { 
-          message: "Sign-up successful", 
-          user: { id: user.id, email: user.email, admin: user.admin, token: token } 
-        }, status: :created
-      else
-        render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
-      end
+        # Correctly access the email from the nested params
+        email = params.dig(:user, :email) || params.dig("user", "email") || params[:email]
+        
+        # Debugging: Log the email and the expected admin email
+        puts "Signup email: #{email}"
+        puts "Expected admin email (ADMIN_EMAIL): #{ENV['ADMIN_EMAIL']}"
+    
+        # Check if the email matches the predefined admin email
+        is_admin = (email == ENV['ADMIN_EMAIL'])
+    
+        # Debugging: Log whether the email matches the admin email
+        puts "Is admin: #{is_admin}"
+    
+        # Prevent further sign-ups after the initial admin is created
+        if User.exists? && !is_admin
+            render json: { error: "Sign-ups are currently disabled" }, status: :forbidden
+            return
+        end
+    
+        user = User.new(user_params)
+        user.admin = is_admin
+    
+        if user.save
+            token = generate_token(user.id) # Generate JWT token
+            render json: { 
+                message: "Sign-up successful", 
+                user: { id: user.id, email: user.email, admin: user.admin, token: token } 
+            }, status: :created
+        else
+            render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+        end
     end
+  
+  
   
     # POST /api/login
     def login
@@ -62,5 +74,5 @@ class Api::AuthController < ApplicationController
       payload = { user_id: user_id, exp: exp }
       JWT.encode(payload, JWT_SECRET_KEY, 'HS256')
     end
-  end
+end
   

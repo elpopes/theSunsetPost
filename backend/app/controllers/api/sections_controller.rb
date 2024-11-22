@@ -1,8 +1,15 @@
 class Api::SectionsController < ApplicationController
     def index
-      sections = Section.all
-      render json: sections.map { |section| section_json(section) }
+        sections = Section.all
+        render json: sections.map do |section|
+          {
+            id: section.id,
+            name: section.translated_name(I18n.locale.to_s),
+            description: section.translated_description(I18n.locale.to_s)
+          }
+        end
     end
+    
   
     def show
       section = Section.find(params[:id])
@@ -38,8 +45,8 @@ class Api::SectionsController < ApplicationController
             content: translation.content,
             language: translation.language
           }
-        }
+        end 
       }
     end
-  end
+end
   

@@ -46,3 +46,35 @@
 .story-detail__translations li {
   margin-bottom: 15px;
 }
+
+.story-detail__authors {
+  margin-top: 20px;
+}
+
+.story-detail__author {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.story-detail__author-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+  object-fit: cover;
+}
+
+.story-detail__author-info {
+  flex: 1;
+}
+
+.story-detail__author-info h4 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.story-detail__author-info p {
+  margin: 5px 0 0;
+  color: #555;
+}

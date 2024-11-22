@@ -4,9 +4,11 @@ import { useSelector } from "react-redux";
 const PostForm = () => {
   const user = useSelector((state) => state.auth.user); // Get user from Redux
   const [authors, setAuthors] = useState([]); // Fetch authors from the backend
+  const [sections, setSections] = useState([]); // Fetch sections from the backend
   const [selectedAuthors, setSelectedAuthors] = useState([]);
-  const [newAuthorName, setNewAuthorName] = useState(""); // New author name
-  const [newAuthorBio, setNewAuthorBio] = useState(""); // New author bio
+  const [selectedSections, setSelectedSections] = useState([]); // Selected sections
+  const [newAuthorName, setNewAuthorName] = useState("");
+  const [newAuthorBio, setNewAuthorBio] = useState("");
   const [titleEn, setTitleEn] = useState("");
   const [contentEn, setContentEn] = useState("");
   const [titleEs, setTitleEs] = useState("");
@@ -16,18 +18,23 @@ const PostForm = () => {
   const [image, setImage] = useState(null);
   const [message, setMessage] = useState("");
 
-  // Fetch authors from the backend on component mount
+  // Fetch authors and sections from the backend on component mount
   useEffect(() => {
-    const fetchAuthors = async () => {
+    const fetchAuthorsAndSections = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/authors");
-        const data = await response.json();
-        setAuthors(data);
+        const [authorsResponse, sectionsResponse] = await Promise.all([
+          fetch("http://localhost:3000/api/authors"),
+          fetch("http://localhost:3000/api/sections"),
+        ]);
+        const authorsData = await authorsResponse.json();
+        const sectionsData = await sectionsResponse.json();
+        setAuthors(authorsData);
+        setSections(sectionsData);
       } catch (error) {
-        console.error("Error fetching authors:", error);
+        console.error("Error fetching authors or sections:", error);
       }
     };
-    fetchAuthors();
+    fetchAuthorsAndSections();
   }, []);
 
   // Handle author selection
@@ -39,7 +46,15 @@ const PostForm = () => {
     setSelectedAuthors(selected);
   };
 
-  // Create a new author
+  // Handle section selection
+  const handleSectionChange = (e) => {
+    const selected = Array.from(
+      e.target.selectedOptions,
+      (option) => option.value
+    );
+    setSelectedSections(selected);
+  };
+
   const handleAddAuthor = async (e) => {
     e.preventDefault();
     if (!newAuthorName.trim()) {
@@ -52,14 +67,14 @@ const PostForm = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`, // Include token for authentication
+          Authorization: `Bearer ${user.token}`,
         },
         body: JSON.stringify({ name: newAuthorName, bio: newAuthorBio }),
       });
 
       if (response.ok) {
         const newAuthor = await response.json();
-        setAuthors((prevAuthors) => [...prevAuthors, newAuthor]); // Update authors list
+        setAuthors((prevAuthors) => [...prevAuthors, newAuthor]);
         setNewAuthorName("");
         setNewAuthorBio("");
         setMessage("Author added successfully!");
@@ -79,7 +94,6 @@ const PostForm = () => {
 
     if (!user?.token) {
       setMessage("Unauthorized: Please log in to post a story.");
-      console.error("Authorization token is missing.");
       return;
     }
 
@@ -95,14 +109,15 @@ const PostForm = () => {
     ];
 
     formData.append("translations", JSON.stringify(translations));
-    formData.append("author_ids", JSON.stringify(selectedAuthors)); // Include selected authors
+    formData.append("author_ids", JSON.stringify(selectedAuthors));
+    formData.append("section_ids", JSON.stringify(selectedSections)); // Include selected sections
 
     try {
       const response = await fetch("http://localhost:3000/api/stories", {
         method: "POST",
         body: formData,
         headers: {
-          Authorization: `Bearer ${user.token}`, // Include token
+          Authorization: `Bearer ${user.token}`,
         },
       });
 
@@ -119,6 +134,7 @@ const PostForm = () => {
         setContentZh("");
         setImage(null);
         setSelectedAuthors([]);
+        setSelectedSections([]);
       } else {
         setMessage(data.error || "Failed to post the story.");
       }
@@ -204,6 +220,18 @@ const PostForm = () => {
             {authors.map((author) => (
               <option key={author.id} value={author.id}>
                 {author.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Section Selection */}
+        <div>
+          <label>Select Sections:</label>
+          <select multiple onChange={handleSectionChange}>
+            {sections.map((section) => (
+              <option key={section.id} value={section.id}>
+                {section.name}
               </option>
             ))}
           </select>
