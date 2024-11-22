@@ -64,21 +64,29 @@ const StoryDetail = () => {
       {/* Render authors */}
       <div className="story-detail__authors">
         {story.authors.length > 0 ? (
-          story.authors.map((author) => (
-            <div key={author.id} className="story-detail__author">
-              {author.image_url && (
-                <img
-                  src={author.image_url}
-                  alt={author.name}
-                  className="story-detail__author-image"
-                />
-              )}
-              <div className="story-detail__author-info">
-                <h4>{author.name}</h4>
-                <p>{author.bio}</p>
+          story.authors.map((author) => {
+            // Use the selected translation for author bio or fallback to primary language
+            const translation = author.translations?.find(
+              (t) => t.language === language
+            );
+            const bio = translation ? translation.bio : author.bio;
+
+            return (
+              <div key={author.id} className="story-detail__author">
+                {author.image_url && (
+                  <img
+                    src={author.image_url}
+                    alt={author.name}
+                    className="story-detail__author-image"
+                  />
+                )}
+                <div className="story-detail__author-info">
+                  <h4>{author.name}</h4>
+                  <p>{bio}</p>
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <p>No authors available for this story.</p>
         )}

@@ -127,12 +127,18 @@ class Api::StoriesController < ApplicationController
           }
         end,
         authors: story.authors.map do |author|
-          {
-            id: author.id,
-            name: author.name,
-            bio: author.bio,
-            image_url: author.image.attached? ? url_for(author.image) : nil
-          }
+            {
+              id: author.id,
+              name: author.name,
+              bio: author.bio,
+              image_url: author.image.attached? ? url_for(author.image) : nil,
+              translations: author.author_translations.map do |translation|
+                {
+                  language: translation.language,
+                  bio: translation.bio
+                }
+              end
+            }
         end,
         sections: story.sections.map do |section|
             {
