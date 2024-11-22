@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import MainLayout from "./components/MainLayout";
 import StoriesList from "./components/StoriesList";
 import StoryDetail from "./components/StoryDetail";
-import SectionDetail from "./components/SectionDetail"; // Import the new component
+import SectionDetail from "./components/SectionDetail";
 import SignUpForm from "./components/SignUpForm";
 import LoginForm from "./components/LoginForm";
 import PostForm from "./components/PostForm";
-import { login } from "./features/auth/authSlice"; // Import login action
+import { login } from "./features/auth/authSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,7 +28,12 @@ function App() {
   }, [dispatch]);
 
   return (
-    <Router>
+    <BrowserRouter
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+    >
       <Routes>
         <Route
           path="/"
@@ -79,7 +84,7 @@ function App() {
           }
         />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 

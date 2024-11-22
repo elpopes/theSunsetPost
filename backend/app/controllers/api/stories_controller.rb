@@ -24,7 +24,6 @@ class Api::StoriesController < ApplicationController
     end
   
     # POST /api/stories
-    # POST /api/stories
     def create
         Rails.logger.debug "Creating a new story with params: #{params.inspect}"
         @story = Story.new

@@ -3,20 +3,24 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // Async thunk to fetch all sections
 export const fetchSections = createAsyncThunk(
   "sections/fetchSections",
-  async (_, { rejectWithValue }) => {
+  async (_, { getState, rejectWithValue }) => {
+    const state = getState();
+    const currentLanguage = state.i18n?.language || "en"; // Default to English
+
     try {
-      const response = await fetch("http://localhost:3000/api/sections");
-      if (!response.ok) {
-        throw new Error("Failed to fetch sections");
-      }
-      return await response.json(); // Assuming API returns an array of sections
+      const response = await fetch(
+        `http://localhost:3000/api/sections?locale=${currentLanguage}`
+      );
+      const data = await response.json();
+      console.log("Fetched sections:", data); // Debugging log
+      return data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Async thunk to fetch a single section
+// Async thunk to fetch a single section by ID
 export const fetchSectionById = createAsyncThunk(
   "sections/fetchSectionById",
   async (id, { rejectWithValue }) => {
@@ -25,7 +29,7 @@ export const fetchSectionById = createAsyncThunk(
       if (!response.ok) {
         throw new Error(`Failed to fetch section with ID: ${id}`);
       }
-      return await response.json(); // Assuming API returns a single section object
+      return await response.json(); // Fetch a single section with stories
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -35,10 +39,10 @@ export const fetchSectionById = createAsyncThunk(
 const sectionsSlice = createSlice({
   name: "sections",
   initialState: {
-    items: [], // List of all sections
-    currentSection: null, // Single section for `SectionDetail`
-    status: "idle", // loading, succeeded, failed
-    error: null, // Error message
+    items: [], // Array of all sections with translations
+    currentSection: null, // Data for a single section
+    status: "idle", // Status to track API request state
+    error: null, // Capture any errors during the fetch
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -50,7 +54,7 @@ const sectionsSlice = createSlice({
       })
       .addCase(fetchSections.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.items = action.payload; // Set fetched sections
+        state.items = action.payload; // Store all fetched sections
       })
       .addCase(fetchSections.rejected, (state, action) => {
         state.status = "failed";
@@ -63,7 +67,7 @@ const sectionsSlice = createSlice({
       })
       .addCase(fetchSectionById.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.currentSection = action.payload; // Set the current section
+        state.currentSection = action.payload; // Store the current section data
       })
       .addCase(fetchSectionById.rejected, (state, action) => {
         state.status = "failed";

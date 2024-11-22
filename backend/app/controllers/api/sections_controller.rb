@@ -1,36 +1,46 @@
 class Api::SectionsController < ApplicationController
+    # GET /api/sections
     def index
-        sections = Section.all
-        render json: sections.map do |section|
-          {
-            id: section.id,
-            name: section.translated_name(I18n.locale.to_s),
-            description: section.translated_description(I18n.locale.to_s)
-          }
-        end
+      Rails.logger.debug "Fetching all sections with translations"
+      sections = Section.includes(:section_translations).all
+      Rails.logger.info "Fetched #{sections.size} sections"
+      render json: sections.map { |section| section_json(section) }
     end
-    
   
+    # GET /api/sections/:id
     def show
-      section = Section.find(params[:id])
-      render json: {
-        id: section.id,
-        name: section.translated_name(I18n.locale.to_s),
-        description: section.translated_description(I18n.locale.to_s),
-        stories: section.stories.map { |story| story_json(story) }
-      }
+      Rails.logger.debug "Fetching section with ID: #{params[:id]}"
+      section = Section.includes(:section_translations, stories: [:story_translations]).find_by(id: params[:id])
+  
+      if section
+        Rails.logger.info "Section found: #{section.name}"
+        render json: section_json(section, include_stories: true)
+      else
+        Rails.logger.error "Section not found with ID: #{params[:id]}"
+        render json: { error: "Section not found" }, status: :not_found
+      end
     end
   
     private
   
-    def section_json(section)
+    # Format section for JSON response
+    def section_json(section, include_stories: false)
       {
         id: section.id,
         name: section.translated_name(I18n.locale.to_s),
-        description: section.translated_description(I18n.locale.to_s)
-      }
+        description: section.translated_description(I18n.locale.to_s),
+        translations: section.section_translations.map do |translation|
+          {
+            language: translation.language,
+            name: translation.name,
+            description: translation.description
+          }
+        end,
+        stories: include_stories ? section.stories.map { |story| story_json(story) } : nil
+      }.compact
     end
   
+    # Format story for JSON response (same logic as in StoriesController)
     def story_json(story)
       {
         id: story.id,
@@ -45,8 +55,8 @@ class Api::SectionsController < ApplicationController
             content: translation.content,
             language: translation.language
           }
-        end 
+        end
       }
     end
-end
+  end
   

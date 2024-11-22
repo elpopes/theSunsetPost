@@ -1,31 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./Header.css";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
 import WeatherTime from "./WeatherTime";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchSections } from "../features/sections/sectionsSlice";
 import { logout } from "../features/auth/authSlice";
 
 const Header = () => {
   const { t, i18n } = useTranslation();
-  const currentLanguage = i18n.language;
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
-  const [sections, setSections] = useState([]);
 
+  // Redux state
+  const sections = useSelector((state) => state.sections.items);
+  const user = useSelector((state) => state.auth.user);
+
+  // Fetch sections on initial load
   useEffect(() => {
-    const fetchSections = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/api/sections");
-        const data = await response.json();
-        console.log("Fetched sections:", data); // Debugging log
-        setSections(data); // Ensure sections is set correctly
-      } catch (error) {
-        console.error("Error fetching sections:", error);
-      }
+    dispatch(fetchSections());
+  }, [dispatch]);
+
+  // Filter translations for the current language with a safe check
+  const filteredSections = sections.map((section) => {
+    const translation = section.translations?.find(
+      (t) => t.language === i18n.language
+    );
+    return {
+      ...section,
+      name: translation ? translation.name : section.name,
+      description: translation ? translation.description : section.description,
     };
-    fetchSections();
-  }, [currentLanguage]); // Refetch whenever the language changes
+  });
 
   const handleLogout = () => {
     dispatch(logout());
@@ -78,8 +83,8 @@ const Header = () => {
           </nav>
           <nav className="header__sections-nav">
             <ul>
-              {Array.isArray(sections) && sections.length > 0 ? (
-                sections.map((section) => (
+              {filteredSections.length > 0 ? (
+                filteredSections.map((section) => (
                   <li key={section.id}>
                     <a href={`/sections/${section.id}`}>{section.name}</a>
                   </li>
