@@ -1,15 +1,28 @@
 /* src/components/Header.css */
 
+/* CSS Variables for easy theming */
+:root {
+  --primary-color: #771000;
+  --primary-color-hover: #a32800;
+  --text-color: #000000;
+  --background-color: #ffffff;
+  --secondary-text-color: #555555;
+  --font-family-logo: "Dancing Script", cursive;
+  --font-size-logo: 4.5rem;
+  --font-size-logo-mobile: 2.5rem;
+}
+
 /* Basic header styling */
 .header {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #ffffff;
-  color: #000000;
+  background-color: var(--background-color);
+  color: var(--text-color);
   text-align: center;
   border-bottom: 2px solid #ddd;
+  width: 100%;
 }
 
 .header__content {
@@ -19,6 +32,7 @@
   width: 100%;
   max-width: 1200px;
   padding: 10px 20px;
+  box-sizing: border-box;
 }
 
 /* Center section for title, language switcher, and nav */
@@ -26,16 +40,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
   flex: 2;
 }
 
 /* Logo styling */
 .header__logo h1 {
-  font-family: "Dancing Script", cursive;
-  font-size: 4.5rem;
-  color: #771000;
+  font-family: var(--font-family-logo);
+  font-size: var(--font-size-logo);
+  color: var(--primary-color);
   font-weight: bold;
+  margin: 0;
 }
 
 /* Language switcher styling */
@@ -45,18 +59,21 @@
   gap: 10px;
 }
 
-.language-switcher button {
+.header__language-switcher button {
   padding: 8px 12px;
-  background-color: #771000;
+  background-color: var(--primary-color);
   color: #ffffff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 0.875rem;
+  transition: background-color 0.3s;
 }
 
-.language-switcher button:hover {
-  background-color: #a32800;
+.header__language-switcher button:hover,
+.header__language-switcher button:focus {
+  background-color: var(--primary-color-hover);
+  outline: none;
 }
 
 /* Navigation styling */
@@ -70,43 +87,45 @@
 
 .header__nav a,
 .header__auth-link {
-  color: #771000;
+  color: var(--primary-color);
   text-decoration: none;
   font-weight: bold;
+  transition: color 0.3s;
 }
 
 .header__auth-link {
   background: none;
   border: none;
   cursor: pointer;
-  font-weight: bold;
-  color: #771000;
 }
 
+.header__nav a:hover,
 .header__auth-link:hover,
-.header__nav a:hover {
+.header__nav a:focus,
+.header__auth-link:focus {
   text-decoration: underline;
+  outline: none;
 }
 
 /* Weather and transit information styling */
-.weather-time {
+.header__info {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  font-size: 14px;
-  color: #555;
+  font-size: 0.875rem;
+  color: var(--secondary-text-color);
+}
+
+.weather-time,
+.transit-info {
   text-align: left;
 }
 
 .transit-info {
-  display: flex;
-  flex-direction: column;
   align-items: flex-end;
-  font-size: 14px;
-  color: #555;
   text-align: right;
 }
 
+/* Sections navigation */
 .header__sections-nav {
   margin-top: 10px;
 }
@@ -117,33 +136,62 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  gap: 15px;
 }
 
-.header__sections-nav li {
-  margin-right: 15px;
-}
-
-.header__sections-nav li a {
+.header__sections-nav a {
   text-decoration: none;
   color: #007bff;
-  font-size: 0.9em;
+  font-size: 0.9rem;
+  transition: color 0.3s;
 }
 
-.header__sections-nav li a:hover {
+.header__sections-nav a:hover,
+.header__sections-nav a:focus {
   text-decoration: underline;
+  outline: none;
 }
 
 /* Responsive adjustments */
+@media (max-width: 1024px) {
+  .header__content {
+    padding: 10px 15px;
+  }
+
+  .header__nav ul {
+    gap: 15px;
+  }
+}
+
 @media (max-width: 768px) {
   .header__content {
     flex-direction: column;
     align-items: center;
   }
+
   .header__logo h1 {
-    font-size: 2rem;
+    font-size: var(--font-size-logo-mobile);
   }
+
   .header__nav ul {
     flex-direction: column;
-    gap: 5px;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .header__language-switcher {
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 15px;
+  }
+
+  .header__sections-nav ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
   }
 }

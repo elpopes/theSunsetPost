@@ -9,6 +9,7 @@ const PostForm = () => {
   const [selectedSections, setSelectedSections] = useState([]); // Selected sections
   const [newAuthorName, setNewAuthorName] = useState("");
   const [newAuthorBio, setNewAuthorBio] = useState("");
+  const [newAuthorImage, setNewAuthorImage] = useState(null); // New author image
   const [titleEn, setTitleEn] = useState("");
   const [contentEn, setContentEn] = useState("");
   const [titleEs, setTitleEs] = useState("");
@@ -63,13 +64,20 @@ const PostForm = () => {
     }
 
     try {
+      // Use FormData to handle image upload
+      const formData = new FormData();
+      formData.append("name", newAuthorName);
+      formData.append("bio", newAuthorBio);
+      if (newAuthorImage) {
+        formData.append("image", newAuthorImage);
+      }
+
       const response = await fetch("http://localhost:3000/api/authors", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user.token}`, // Include the token for authentication
         },
-        body: JSON.stringify({ name: newAuthorName, bio: newAuthorBio }),
+        body: formData,
       });
 
       if (response.ok) {
@@ -77,6 +85,7 @@ const PostForm = () => {
         setAuthors((prevAuthors) => [...prevAuthors, newAuthor]);
         setNewAuthorName("");
         setNewAuthorBio("");
+        setNewAuthorImage(null);
         setMessage("Author added successfully!");
       } else {
         const error = await response.json();
@@ -258,6 +267,13 @@ const PostForm = () => {
             value={newAuthorBio}
             onChange={(e) => setNewAuthorBio(e.target.value)}
           ></textarea>
+        </div>
+        <div>
+          <label>Author Image:</label>
+          <input
+            type="file"
+            onChange={(e) => setNewAuthorImage(e.target.files[0])}
+          />
         </div>
         <button type="submit">Add Author</button>
       </form>

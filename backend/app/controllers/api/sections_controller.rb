@@ -36,8 +36,13 @@ class Api::SectionsController < ApplicationController
             description: translation.description
           }
         end,
-        stories: include_stories ? section.stories.map { |story| story_json(story) } : nil
+        stories: include_stories ? ordered_stories(section) : nil
       }.compact
+    end
+  
+    # Helper to format and order stories
+    def ordered_stories(section)
+      section.stories.order(created_at: :desc).map { |story| story_json(story) }
     end
   
     # Format story for JSON response (same logic as in StoriesController)

@@ -3,11 +3,12 @@ class Api::StoriesController < ApplicationController
   
     # GET /api/stories
     def index
-      Rails.logger.debug "Fetching all stories with translations and authors"
-      @stories = Story.includes(:story_translations, :authors).all
-      Rails.logger.info "Fetched #{@stories.size} stories"
-      render json: @stories.map { |story| story_json(story) }
+        Rails.logger.debug "Fetching all stories with translations and authors"
+        @stories = Story.includes(:story_translations, :authors).order(created_at: :desc)
+        Rails.logger.info "Fetched #{@stories.size} stories"
+        render json: @stories.map { |story| story_json(story) }
     end
+      
   
     # GET /api/stories/:id
     def show
