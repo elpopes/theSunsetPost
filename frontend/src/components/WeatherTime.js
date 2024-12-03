@@ -39,11 +39,11 @@ const WeatherTime = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Update time every second
+  // Update time every 10 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(new Date());
-    }, 1000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, []);
