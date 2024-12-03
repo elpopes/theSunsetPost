@@ -68,7 +68,7 @@ Rails.application.configure do
     # Action Mailer Configuration for Production
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
-    address: "mail.sunsetpost.org",
+    address: "smtp.dreamhost.com",
     port: 587,
     domain: "sunsetpost.org",
     authentication: "login",

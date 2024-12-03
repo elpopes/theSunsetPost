@@ -8,6 +8,8 @@ import SectionDetail from "./components/SectionDetail";
 import SignUpForm from "./components/SignUpForm";
 import LoginForm from "./components/LoginForm";
 import PostForm from "./components/PostForm";
+import ContactForm from "./components/ContactForm";
+import About from "./components/About";
 import { login } from "./features/auth/authSlice";
 
 function App() {
@@ -40,6 +42,22 @@ function App() {
           element={
             <MainLayout>
               <StoriesList />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <MainLayout>
+              <About />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <MainLayout>
+              <ContactForm />
             </MainLayout>
           }
         />

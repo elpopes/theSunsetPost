@@ -1,0 +1,16 @@
+.about-page {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.about-page h1 {
+  font-size: 2.5rem;
+  text-align: center;
+}
+
+.about-page p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin: 20px 0;
+}

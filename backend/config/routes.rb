@@ -6,6 +6,7 @@ Rails.application.routes.draw do
         get 'transit', to: 'transit#get_transit_info'
         post 'signup', to: 'auth#signup'
         post 'login', to: 'auth#login'
+        post 'contact', to: 'contact#create'
         delete 'logout', to: 'auth#logout'
     end
 end

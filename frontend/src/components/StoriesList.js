@@ -39,7 +39,7 @@ const StoriesList = () => {
 
   return (
     <section className="stories-section">
-      <h2>{t("Stories")}</h2>
+      <h2>{t("")}</h2>
 
       {/* Display error message if there is an error */}
       {error && (

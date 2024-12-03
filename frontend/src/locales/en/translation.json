@@ -6,7 +6,30 @@
     "about": "About",
     "contact": "Contact",
     "sign_up": "Sign Up",
-	"login": "Login",
-	"logout": "Logout"
+    "login": "Login",
+    "logout": "Logout",
+    "about_page": {
+      "title": "About The Sunset Post",
+      "welcome": "Welcome to the Sunset Post, your community-centric news platform.",
+      "mission": "We are committed to bringing stories, updates, and insights that matter most to Sunset Park residents and community members.",
+      "team": "Our expanding team of passionate storytellers is dedicated to fostering a vibrant and informed community.",
+      "stay_tuned": "Stay tuned for the latest news, events, and more. We believe in the power of stories to connect people and spark change."
+    },
+    "contact_page": {
+    "title": "Contact Us",
+    "welcome_text": "We’d love to hear from you! Feel free to reach out using the form below for any questions, feedback, or just to say hi.",
+    "recruitment_text": "We're also looking for talented writers, photographers, and salespeople to join our team. If you’re interested, let us know in your message!",
+    "name_label": "Your Name",
+    "name_placeholder": "Enter your name",
+    "email_label": "Your Email",
+    "email_placeholder": "Enter your email",
+    "message_label": "Your Message",
+    "message_placeholder": "Enter your message",
+    "send_button": "Send",
+    "sending_status": "Sending...",
+    "success_status": "Message sent successfully!",
+    "failure_status": "Failed to send: {{error}}",
+    "error_status": "An error occurred while sending the message."
+  }
 }
   

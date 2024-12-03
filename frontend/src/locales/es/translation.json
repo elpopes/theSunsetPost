@@ -5,7 +5,31 @@
     "home": "Inicio",
     "about": "Acerca de",
     "contact": "Contacto",
-    "sign_up": "Registrarse",
-	"login": "Iniciar sesión",
-	"logout": "Cerrar sesión"
+    "sign_up": "Regístrate",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "about_page": {
+      "title": "Acerca de The Sunset Post",
+      "welcome": "Bienvenido a The Sunset Post, tu plataforma de noticias centrada en la comunidad.",
+      "mission": "Nos comprometemos a brindar historias, actualizaciones y perspectivas que importan más a los residentes y miembros de la comunidad de Sunset Park.",
+      "team": "Nuestro creciente equipo de narradores apasionados está dedicado a fomentar una comunidad vibrante e informada.",
+      "stay_tuned": "Mantente atento a las últimas noticias, eventos y más. Creemos en el poder de las historias para conectar a las personas y generar cambios."
+    },
+    "contact_page": {
+    "title": "Contáctanos",
+    "welcome_text": "¡Nos encantaría saber de ti! No dudes en comunicarte usando el formulario a continuación para cualquier pregunta, comentario o simplemente para saludar.",
+    "recruitment_text": "También estamos buscando escritores, fotógrafos y vendedores talentosos para unirse a nuestro equipo. Si estás interesado, ¡háznoslo saber en tu mensaje!",
+    "name_label": "Tu Nombre",
+    "name_placeholder": "Introduce tu nombre",
+    "email_label": "Tu Correo Electrónico",
+    "email_placeholder": "Introduce tu correo electrónico",
+    "message_label": "Tu Mensaje",
+    "message_placeholder": "Introduce tu mensaje",
+    "send_button": "Enviar",
+    "sending_status": "Enviando...",
+    "success_status": "¡Mensaje enviado con éxito!",
+    "failure_status": "Error al enviar: {{error}}",
+    "error_status": "Ocurrió un error al enviar el mensaje."
+    }
 }
+  

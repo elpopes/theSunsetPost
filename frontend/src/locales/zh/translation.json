@@ -6,7 +6,30 @@
     "about": "关于",
     "contact": "联系",
     "sign_up": "注册",
-	"login": "登录",
-	"logout": "登出"
+    "login": "登录",
+    "logout": "退出登录",
+    "about_page": {
+      "title": "关于 Sunset Post",
+      "welcome": "欢迎来到 Sunset Post，您的社区新闻平台。",
+      "mission": "我们致力于为 Sunset Park 的居民和社区成员带来最重要的故事、更新和见解。",
+      "team": "我们热情的讲故事团队正在不断壮大，致力于促进充满活力和信息丰富的社区。",
+      "stay_tuned": "请关注最新的新闻、活动等。我们相信故事的力量能够连接人们并激发改变。"
+    },
+    "contact_page": {
+    "title": "联系我们",
+    "welcome_text": "我们很想听到您的消息！如有任何问题、反馈或仅仅是打招呼，请随时使用以下表单联系我们。",
+    "recruitment_text": "我们还在寻找有才华的作家、摄影师和销售人员加入我们的团队。如果您感兴趣，请在您的信息中告诉我们！",
+    "name_label": "您的姓名",
+    "name_placeholder": "请输入您的姓名",
+    "email_label": "您的邮箱",
+    "email_placeholder": "请输入您的邮箱",
+    "message_label": "您的信息",
+    "message_placeholder": "请输入您的信息",
+    "send_button": "发送",
+    "sending_status": "发送中...",
+    "success_status": "消息发送成功！",
+    "failure_status": "发送失败：{{error}}",
+    "error_status": "发送消息时出错。"
+  }
 }
   
