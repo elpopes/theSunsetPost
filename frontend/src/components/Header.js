@@ -6,6 +6,7 @@ import WeatherTime from "./WeatherTime";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSections } from "../features/sections/sectionsSlice";
 import { logout } from "../features/auth/authSlice";
+// import TransitInfo from "./TransitInfo";
 
 const Header = () => {
   const { t, i18n } = useTranslation();

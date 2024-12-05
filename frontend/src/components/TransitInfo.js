@@ -18,7 +18,7 @@ const TransitInfo = () => {
             console.log(`Fetching data for stop: ${stop.id}`);
             // Updated API URL for our backend controller
             const response = await fetch(
-              `/api/transit?stop_id=${stop.id}&route_id=MTA NYCT_B63`
+              `http://localhost:3000/api/transit?stop_id=${stop.id}&route_id=MTA NYCT_B63`
             );
 
             if (!response.ok) {

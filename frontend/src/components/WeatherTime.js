@@ -1,30 +1,30 @@
-// src/components/WeatherTime.js
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const WeatherTime = () => {
+  const { i18n } = useTranslation();
   const [weather, setWeather] = useState(null);
   const [time, setTime] = useState(new Date());
 
-  // Fetch weather data from the NWS API
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        // Step 1: Get the office and grid information for Sunset Park
-        const pointResponse = await fetch(
-          `https://api.weather.gov/points/40.6452,-74.0122`
+        const lang = i18n.language;
+        const lat = 40.6452;
+        const lon = -74.0122;
+
+        const response = await fetch(
+          `http://localhost:3000/api/weather?lat=${lat}&lon=${lon}&lang=${lang}`
         );
-        const pointData = await pointResponse.json();
-        const forecastUrl = pointData.properties.forecast;
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
 
-        // Step 2: Fetch the forecast data
-        const forecastResponse = await fetch(forecastUrl);
-        const forecastData = await forecastResponse.json();
-
-        // Get the current period (usually the first item in the forecast)
-        const currentWeather = forecastData.properties.periods[0];
         setWeather({
-          temp: currentWeather.temperature,
-          description: currentWeather.shortForecast,
+          temp: data.current.temp_c,
+          description: data.current.condition.text,
+          icon: data.current.condition.icon,
         });
       } catch (error) {
         console.error("Error fetching weather:", error);
@@ -33,18 +33,12 @@ const WeatherTime = () => {
 
     fetchWeather();
 
-    // Update weather every 10 minutes
-    const interval = setInterval(fetchWeather, 600000);
-
+    const interval = setInterval(fetchWeather, 600000); // Update every 10 minutes
     return () => clearInterval(interval);
-  }, []);
+  }, [i18n.language]);
 
-  // Update time every 10 seconds
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(new Date());
-    }, 10000);
-
+    const interval = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -52,7 +46,12 @@ const WeatherTime = () => {
     <div className="weather-time">
       {weather ? (
         <>
-          <p className="weather-time__temp">{weather.temp}°F</p>
+          <img
+            src={weather.icon}
+            alt={weather.description}
+            className="weather-time__icon"
+          />
+          <p className="weather-time__temp">{weather.temp}°C</p>
           <p className="weather-time__description">{weather.description}</p>
         </>
       ) : (
