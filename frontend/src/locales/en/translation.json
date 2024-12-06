@@ -8,6 +8,11 @@
     "sign_up": "Sign Up",
     "login": "Login",
     "logout": "Logout",
+    "error_status": "An error occurred while sending the message.",
+    "North-Bound B63 @ 44th:": "North-Bound B63 @ 45th:",
+    "Loading transit information...": "Loading transit information...",
+    "No arrivals available.": "No arrivals available.",
+    "Error fetching transit data.": "Error fetching transit data.",
     "about_page": {
       "title": "About The Sunset Post",
       "welcome": "Welcome to the Sunset Post, your community-centric news platform.",
@@ -28,8 +33,7 @@
     "send_button": "Send",
     "sending_status": "Sending...",
     "success_status": "Message sent successfully!",
-    "failure_status": "Failed to send: {{error}}",
-    "error_status": "An error occurred while sending the message."
+    "failure_status": "Failed to send: {{error}}"
   }
 }
   

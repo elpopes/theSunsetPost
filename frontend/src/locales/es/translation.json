@@ -8,6 +8,10 @@
     "sign_up": "Regístrate",
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión",
+    "North-Bound B63 @ 44th:": "B63 hacia el norte @ 45th:",
+    "Loading transit information...": "Cargando información de tránsito...",
+    "No arrivals available.": "No hay llegadas disponibles.",
+    "Error fetching transit data.": "Error al obtener datos de tránsito.",
     "about_page": {
       "title": "Acerca de The Sunset Post",
       "welcome": "Bienvenido a The Sunset Post, tu plataforma de noticias centrada en la comunidad.",

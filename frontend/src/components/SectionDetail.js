@@ -12,19 +12,28 @@ const SectionDetail = () => {
   const language = i18n.language;
   const dispatch = useDispatch();
 
+  // Redux state selectors
   const section = useSelector((state) => state.sections.currentSection);
   const status = useSelector((state) => state.sections.status);
   const error = useSelector((state) => state.sections.error);
 
+  // Fetch the section data on component mount
   useEffect(() => {
     if (id) {
-      dispatch(fetchSectionById(id)); // Fetch section once, no need to refetch on language change
+      dispatch(fetchSectionById(id));
     }
   }, [id, dispatch]);
 
-  if (status === "loading") return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-  if (!section) return <p>Section not found.</p>;
+  // Early returns for loading/error states
+  if (status === "loading") {
+    return <p>Loading...</p>;
+  }
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+  if (!section) {
+    return <p>Section not found.</p>;
+  }
 
   // Get the current translation for the section
   const currentTranslation = section.translations.find(
@@ -36,7 +45,11 @@ const SectionDetail = () => {
     const translation = story.translations.find(
       (t) => t.language === language
     ) || { title: story.title, content: story.content };
-    return { ...story, ...translation };
+
+    // Remove `id` from the translation to prevent overwriting `story.id`
+    const { id: _, ...safeTranslation } = translation;
+
+    return { ...story, ...safeTranslation };
   });
 
   return (
@@ -59,6 +72,7 @@ const SectionDetail = () => {
                 />
               )}
               <p>{story.content.split(" ").slice(0, 25).join(" ")}...</p>
+              {/* Log the story ID and link */}
             </li>
           ))
         ) : (

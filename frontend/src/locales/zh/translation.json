@@ -8,6 +8,11 @@
     "sign_up": "注册",
     "login": "登录",
     "logout": "退出登录",
+    "North-Bound B63 @ 44th:": "北行 B63 @ 45th:",
+    "Loading transit information...": "正在加载交通信息...",
+    "No arrivals available.": "没有可用的到达信息。",
+    "Error fetching transit data.": "获取交通数据时出错。",
+
     "about_page": {
       "title": "关于 Sunset Post",
       "welcome": "欢迎来到 Sunset Post，您的社区新闻平台。",

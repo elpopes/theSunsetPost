@@ -1,24 +1,32 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import "./TransitInfo.css";
 
-// Define stops with MTA stop ID for the B63 route
-const stops = [{ id: "MTA_201285", name: "B63 Bus Stop - 5th Ave & 36 St" }];
+// Define stops with MTA stop IDs
+const stops = [{ id: "MTA_305361", name: "North-Bound B63 @ 44th:" }];
 
 const TransitInfo = () => {
+  const { t, i18n } = useTranslation(); // Access translation functions
   const [transitData, setTransitData] = useState([]);
-  const [loading, setLoading] = useState(true); // Track loading state
-  const [error, setError] = useState(null); // Track errors
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    let interval;
+
     const fetchTransitData = async () => {
       setLoading(true);
       setError(null);
+
       try {
+        const lang = i18n.language; // Get current language from i18next
+
         const results = await Promise.all(
           stops.map(async (stop) => {
             console.log(`Fetching data for stop: ${stop.id}`);
-            // Updated API URL for our backend controller
+
             const response = await fetch(
-              `http://localhost:3000/api/transit?stop_id=${stop.id}&route_id=MTA NYCT_B63`
+              `http://localhost:3000/api/transit?stop_id=${stop.id}&route_id=MTA NYCT_B63&lang=${lang}`
             );
 
             if (!response.ok) {
@@ -28,9 +36,13 @@ const TransitInfo = () => {
             const data = await response.json();
             console.log(`Data received for stop ${stop.id}:`, data);
 
-            return { stop: stop.name, data: data.arrivals };
+            return {
+              stop: stop.name,
+              data: data.arrivals,
+            };
           })
         );
+
         console.log("All transit data:", results);
         setTransitData(results);
       } catch (error) {
@@ -41,38 +53,56 @@ const TransitInfo = () => {
       }
     };
 
-    fetchTransitData();
-    const interval = setInterval(fetchTransitData, 60000); // Refresh every 60 seconds
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        fetchTransitData();
+        interval = setInterval(fetchTransitData, 60000); // Start interval when tab is active
+      } else {
+        clearInterval(interval); // Clear interval when tab is inactive
+      }
+    };
 
-    return () => clearInterval(interval);
-  }, []);
+    // Attach event listener for visibility change
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Initial fetch when component mounts
+    if (document.visibilityState === "visible") {
+      fetchTransitData();
+      interval = setInterval(fetchTransitData, 60000);
+    }
+
+    // Cleanup
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      clearInterval(interval);
+    };
+  }, [i18n.language]); // Refetch data when the language changes
 
   return (
     <div className="transit-info">
       {loading ? (
-        <p>Loading transit information...</p>
+        <p>{t("Loading transit information...")}</p>
       ) : error ? (
-        <p>{error}</p>
+        <p>{t("Error fetching transit data.")}</p>
       ) : transitData.length > 0 ? (
         transitData.map((stop) => (
-          <div key={stop.stop} className="transit-info__stop">
-            <h4>{stop.stop}</h4>
+          <div key={stop.id} className="transit-info__stop">
+            <h4>{t(stop.stop)}</h4> {/* Translate stop name dynamically */}
             {stop.data && stop.data.length > 0 ? (
               <ul>
                 {stop.data.map((arrival, index) => (
-                  <li key={index}>
-                    Arrival at {new Date(arrival.time).toLocaleTimeString()} -{" "}
-                    {arrival.status} ({arrival.route})
+                  <li key={`${stop.id}-${arrival.time}-${index}`}>
+                    {new Date(arrival.time).toLocaleTimeString()}
                   </li>
                 ))}
               </ul>
             ) : (
-              <p>No arrivals available.</p>
+              <p>{t("No arrivals available.")}</p>
             )}
           </div>
         ))
       ) : (
-        <p>No transit data available.</p>
+        <p>{t("No transit data available.")}</p>
       )}
     </div>
   );

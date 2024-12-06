@@ -30,16 +30,30 @@
   justify-content: space-between;
   width: 100%;
   max-width: 1200px;
-  padding: 10px 20px;
+  padding: 5px 10px;
   box-sizing: border-box;
+}
+
+/* Left section: WeatherTime */
+.header__left {
+  flex: 0.8;
+  display: flex;
+  justify-content: flex-start;
 }
 
 /* Center section for title, language switcher, and nav */
 .header__center {
+  flex: 4;
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 2;
+}
+
+/* Right section: TransitInfo */
+.header__right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
 }
 
 /* Logo styling */
@@ -107,20 +121,14 @@
 }
 
 /* Weather and transit information styling */
-.header__info {
-  display: flex;
-  flex-direction: column;
-  font-size: 0.875rem;
-  color: var(--secondary-text-color);
-}
-
 .weather-time,
 .transit-info {
   text-align: left;
+  font-size: 0.9rem;
+  color: var(--secondary-text-color);
 }
 
 .transit-info {
-  align-items: flex-end;
   text-align: right;
 }
 
@@ -134,8 +142,8 @@
   flex-wrap: wrap;
   list-style: none;
   padding: 0;
-  margin: 0;
-  gap: 15px;
+  margin: 0 10px;
+  gap: 8px;
 }
 
 .header__sections-nav a {

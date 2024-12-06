@@ -3,10 +3,10 @@ import "./Header.css";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
 import WeatherTime from "./WeatherTime";
+import TransitInfo from "./TransitInfo"; // Import TransitInfo component
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSections } from "../features/sections/sectionsSlice";
 import { logout } from "../features/auth/authSlice";
-// import TransitInfo from "./TransitInfo";
 
 const Header = () => {
   const { t, i18n } = useTranslation();
@@ -42,7 +42,12 @@ const Header = () => {
   return (
     <header className="header">
       <div className="header__content">
-        <WeatherTime />
+        {/* Left section: Weather */}
+        <div className="header__left">
+          <WeatherTime />
+        </div>
+
+        {/* Center section: Logo, Language Switcher, Navigation */}
         <div className="header__center">
           <div className="header__logo">
             <h1>{t("The Sunset Post")}</h1>
@@ -95,6 +100,11 @@ const Header = () => {
               )}
             </ul>
           </nav>
+        </div>
+
+        {/* Right section: Transit Info */}
+        <div className="header__right">
+          <TransitInfo />
         </div>
       </div>
     </header>

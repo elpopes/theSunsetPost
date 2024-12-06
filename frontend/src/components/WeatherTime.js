@@ -22,7 +22,7 @@ const WeatherTime = () => {
         const data = await response.json();
 
         setWeather({
-          temp: data.current.temp_c,
+          temp: data.current.temp_f,
           description: data.current.condition.text,
           icon: data.current.condition.icon,
         });
@@ -38,7 +38,7 @@ const WeatherTime = () => {
   }, [i18n.language]);
 
   useEffect(() => {
-    const interval = setInterval(() => setTime(new Date()), 1000);
+    const interval = setInterval(() => setTime(new Date()), 10000);
     return () => clearInterval(interval);
   }, []);
 
@@ -51,7 +51,7 @@ const WeatherTime = () => {
             alt={weather.description}
             className="weather-time__icon"
           />
-          <p className="weather-time__temp">{weather.temp}°C</p>
+          <p className="weather-time__temp">{weather.temp}°F</p>
           <p className="weather-time__description">{weather.description}</p>
         </>
       ) : (
