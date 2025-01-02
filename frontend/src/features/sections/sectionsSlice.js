@@ -12,7 +12,6 @@ export const fetchSections = createAsyncThunk(
         `http://localhost:3000/api/sections?locale=${currentLanguage}`
       );
       const data = await response.json();
-      console.log("Fetched sections:", data); // Debugging log
       return data;
     } catch (error) {
       return rejectWithValue(error.message);

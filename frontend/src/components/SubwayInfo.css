@@ -1,5 +1,5 @@
 /* Main container styling */
-.transit-info {
+.subway-info {
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
   padding: 8px;
@@ -10,7 +10,7 @@
 }
 
 /* Header styling */
-.transit-info__header {
+.subway-info__header {
   font-size: 0.8rem;
   color: #0056b3;
   margin-bottom: 10px;
@@ -19,7 +19,7 @@
 }
 
 /* Loading and error messages */
-.transit-info p {
+.subway-info p {
   font-size: 0.8rem;
   color: #333;
   text-align: center;
@@ -27,14 +27,14 @@
 }
 
 /* List styling */
-.transit-info ul {
+.subway-info ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-/* Individual bus entry */
-.transit-info li {
+/* Individual train entry */
+.subway-info li {
   background: #fff;
   margin: 5px 0;
   padding: 5px 10px;
@@ -45,23 +45,23 @@
   align-items: center;
 }
 
-/* Bus route name */
-.transit-info li h4 {
+/* Train route name */
+.subway-info li h4 {
   font-size: 0.7rem;
   color: #0056b3;
   margin: 0;
   font-weight: bold;
 }
 
-/* Wait time styling */
-.transit-info li span {
+/* Arrival time styling */
+.subway-info li span {
   font-size: 0.7rem;
   color: #666;
   text-align: right;
 }
 
 /* Styling for "Now arriving" */
-.transit-info li span.now-arriving {
+.subway-info li span.now-arriving {
   color: #d9534f;
   font-weight: bold;
 }

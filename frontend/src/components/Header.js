@@ -7,6 +7,7 @@ import TransitInfo from "./TransitInfo"; // Import TransitInfo component
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSections } from "../features/sections/sectionsSlice";
 import { logout } from "../features/auth/authSlice";
+import SubwayInfo from "./SubwayInfo";
 
 const Header = () => {
   const { t, i18n } = useTranslation();
@@ -102,9 +103,12 @@ const Header = () => {
           </nav>
         </div>
 
-        {/* Right section: Transit Info */}
+        {/* Right section: Subway Info and Transit Info */}
         <div className="header__right">
-          <TransitInfo />
+          <div className="header__info">
+            <SubwayInfo />
+            <TransitInfo />
+          </div>
         </div>
       </div>
     </header>

@@ -8,11 +8,15 @@
     "sign_up": "Sign Up",
     "login": "Login",
     "logout": "Logout",
-    "error_status": "An error occurred while sending the message.",
-    "North-Bound B63 @ 44th:": "North-Bound B63 @ 45th:",
+    "Northbound Buses at 44th St.": "Northbound Buses at 44th St.",
     "Loading transit information...": "Loading transit information...",
     "No arrivals available.": "No arrivals available.",
     "Error fetching transit data.": "Error fetching transit data.",
+    "Northbound Trains at 36th St.": "Northbound Trains at 36th St.",
+    "Bus": "Bus",
+    "Train": "Train",
+    "Now arriving": "Now arriving",
+    "min": "min",
     "about_page": {
       "title": "About The Sunset Post",
       "welcome": "Welcome to the Sunset Post, your community-centric news platform.",
@@ -21,19 +25,20 @@
       "stay_tuned": "Stay tuned for the latest news, events, and more. We believe in the power of stories to connect people and spark change."
     },
     "contact_page": {
-    "title": "Contact Us",
-    "welcome_text": "We’d love to hear from you! Feel free to reach out using the form below for any questions, feedback, or just to say hi.",
-    "recruitment_text": "We're also looking for talented writers, photographers, and salespeople to join our team. If you’re interested, let us know in your message!",
-    "name_label": "Your Name",
-    "name_placeholder": "Enter your name",
-    "email_label": "Your Email",
-    "email_placeholder": "Enter your email",
-    "message_label": "Your Message",
-    "message_placeholder": "Enter your message",
-    "send_button": "Send",
-    "sending_status": "Sending...",
-    "success_status": "Message sent successfully!",
-    "failure_status": "Failed to send: {{error}}"
-  }
+      "title": "Contact Us",
+      "welcome_text": "We’d love to hear from you! Feel free to reach out using the form below for any questions, feedback, or just to say hi.",
+      "recruitment_text": "We're also looking for talented writers, photographers, and salespeople to join our team. If you’re interested, let us know in your message!",
+      "name_label": "Your Name",
+      "name_placeholder": "Enter your name",
+      "email_label": "Your Email",
+      "email_placeholder": "Enter your email",
+      "message_label": "Your Message",
+      "message_placeholder": "Enter your message",
+      "send_button": "Send",
+      "sending_status": "Sending...",
+      "success_status": "Message sent successfully!",
+      "failure_status": "Failed to send: {{error}}",
+      "error_status": "An error occurred while sending the message."
+    }
 }
   

@@ -21,7 +21,6 @@ function App() {
     if (storedUser) {
       try {
         const user = JSON.parse(storedUser);
-        console.log("Rehydrating user from localStorage:", user);
         dispatch(login(user)); // Dispatch login action to restore user state
       } catch (error) {
         console.error("Error parsing stored user:", error);

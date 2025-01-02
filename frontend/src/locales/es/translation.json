@@ -8,10 +8,15 @@
     "sign_up": "Regístrate",
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión",
-    "North-Bound B63 @ 44th:": "B63 hacia el norte @ 45th:",
+    "Northbound Buses at 44th St.": "Autobuses hacia el norte en la calle 44.",
     "Loading transit information...": "Cargando información de tránsito...",
     "No arrivals available.": "No hay llegadas disponibles.",
     "Error fetching transit data.": "Error al obtener datos de tránsito.",
+    "Northbound Trains at 36th St.": "Trenes hacia el norte en la calle 36.",
+    "Bus": "Autobús",
+    "Train": "Tren",
+    "Now arriving": "Llegando ahora",
+    "min": "min",
     "about_page": {
       "title": "Acerca de The Sunset Post",
       "welcome": "Bienvenido a The Sunset Post, tu plataforma de noticias centrada en la comunidad.",
@@ -20,20 +25,20 @@
       "stay_tuned": "Mantente atento a las últimas noticias, eventos y más. Creemos en el poder de las historias para conectar a las personas y generar cambios."
     },
     "contact_page": {
-    "title": "Contáctanos",
-    "welcome_text": "¡Nos encantaría saber de ti! No dudes en comunicarte usando el formulario a continuación para cualquier pregunta, comentario o simplemente para saludar.",
-    "recruitment_text": "También estamos buscando escritores, fotógrafos y vendedores talentosos para unirse a nuestro equipo. Si estás interesado, ¡háznoslo saber en tu mensaje!",
-    "name_label": "Tu Nombre",
-    "name_placeholder": "Introduce tu nombre",
-    "email_label": "Tu Correo Electrónico",
-    "email_placeholder": "Introduce tu correo electrónico",
-    "message_label": "Tu Mensaje",
-    "message_placeholder": "Introduce tu mensaje",
-    "send_button": "Enviar",
-    "sending_status": "Enviando...",
-    "success_status": "¡Mensaje enviado con éxito!",
-    "failure_status": "Error al enviar: {{error}}",
-    "error_status": "Ocurrió un error al enviar el mensaje."
+      "title": "Contáctanos",
+      "welcome_text": "¡Nos encantaría saber de ti! No dudes en comunicarte usando el formulario a continuación para cualquier pregunta, comentario o simplemente para saludar.",
+      "recruitment_text": "También estamos buscando escritores, fotógrafos y vendedores talentosos para unirse a nuestro equipo. Si estás interesado, ¡háznoslo saber en tu mensaje!",
+      "name_label": "Tu Nombre",
+      "name_placeholder": "Introduce tu nombre",
+      "email_label": "Tu Correo Electrónico",
+      "email_placeholder": "Introduce tu correo electrónico",
+      "message_label": "Tu Mensaje",
+      "message_placeholder": "Introduce tu mensaje",
+      "send_button": "Enviar",
+      "sending_status": "Enviando...",
+      "success_status": "¡Mensaje enviado con éxito!",
+      "failure_status": "Error al enviar: {{error}}",
+      "error_status": "Ocurrió un error al enviar el mensaje."
     }
-}
+  }
   

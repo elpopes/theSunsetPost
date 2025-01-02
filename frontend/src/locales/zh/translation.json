@@ -8,11 +8,15 @@
     "sign_up": "注册",
     "login": "登录",
     "logout": "退出登录",
-    "North-Bound B63 @ 44th:": "北行 B63 @ 45th:",
+    "Northbound Buses at 44th St.": "44街北行巴士",
     "Loading transit information...": "正在加载交通信息...",
     "No arrivals available.": "没有可用的到达信息。",
     "Error fetching transit data.": "获取交通数据时出错。",
-
+    "Northbound Trains at 36th St.": "36街北行列车",
+    "Bus": "巴士",
+    "Train": "列车",
+    "Now arriving": "即将到达",
+    "min": "分钟",
     "about_page": {
       "title": "关于 Sunset Post",
       "welcome": "欢迎来到 Sunset Post，您的社区新闻平台。",
@@ -21,20 +25,20 @@
       "stay_tuned": "请关注最新的新闻、活动等。我们相信故事的力量能够连接人们并激发改变。"
     },
     "contact_page": {
-    "title": "联系我们",
-    "welcome_text": "我们很想听到您的消息！如有任何问题、反馈或仅仅是打招呼，请随时使用以下表单联系我们。",
-    "recruitment_text": "我们还在寻找有才华的作家、摄影师和销售人员加入我们的团队。如果您感兴趣，请在您的信息中告诉我们！",
-    "name_label": "您的姓名",
-    "name_placeholder": "请输入您的姓名",
-    "email_label": "您的邮箱",
-    "email_placeholder": "请输入您的邮箱",
-    "message_label": "您的信息",
-    "message_placeholder": "请输入您的信息",
-    "send_button": "发送",
-    "sending_status": "发送中...",
-    "success_status": "消息发送成功！",
-    "failure_status": "发送失败：{{error}}",
-    "error_status": "发送消息时出错。"
+      "title": "联系我们",
+      "welcome_text": "我们很想听到您的消息！如有任何问题、反馈或仅仅是打招呼，请随时使用以下表单联系我们。",
+      "recruitment_text": "我们还在寻找有才华的作家、摄影师和销售人员加入我们的团队。如果您感兴趣，请在您的信息中告诉我们！",
+      "name_label": "您的姓名",
+      "name_placeholder": "请输入您的姓名",
+      "email_label": "您的邮箱",
+      "email_placeholder": "请输入您的邮箱",
+      "message_label": "您的信息",
+      "message_placeholder": "请输入您的信息",
+      "send_button": "发送",
+      "sending_status": "发送中...",
+      "success_status": "消息发送成功！",
+      "failure_status": "发送失败：{{error}}",
+      "error_status": "发送消息时出错。"
+    }
   }
-}
   
