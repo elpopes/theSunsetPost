@@ -10,7 +10,6 @@ const TransitInfo = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Memoized function for calculating wait time
   const calculateWaitTime = useCallback(
     (arrivalTime) => {
       const now = new Date();
@@ -22,6 +21,8 @@ const TransitInfo = () => {
   );
 
   useEffect(() => {
+    let interval;
+
     const fetchTransitData = async () => {
       setLoading(true);
       setError(null);
@@ -60,9 +61,29 @@ const TransitInfo = () => {
       }
     };
 
-    fetchTransitData();
-    const interval = setInterval(fetchTransitData, 60000);
-    return () => clearInterval(interval);
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        fetchTransitData();
+        interval = setInterval(fetchTransitData, 60000); // Start polling
+      } else {
+        clearInterval(interval); // Stop polling when tab is inactive
+      }
+    };
+
+    // Attach event listener for visibility change
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Initial fetch when component mounts
+    if (document.visibilityState === "visible") {
+      fetchTransitData();
+      interval = setInterval(fetchTransitData, 60000);
+    }
+
+    // Cleanup on unmount or visibility change
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      clearInterval(interval);
+    };
   }, [calculateWaitTime, t]);
 
   return (

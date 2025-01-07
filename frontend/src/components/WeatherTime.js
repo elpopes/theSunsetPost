@@ -7,6 +7,8 @@ const WeatherTime = () => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
+    let weatherInterval;
+
     const fetchWeather = async () => {
       try {
         const lang = i18n.language;
@@ -31,15 +33,35 @@ const WeatherTime = () => {
       }
     };
 
-    fetchWeather();
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        fetchWeather();
+        weatherInterval = setInterval(fetchWeather, 600000); // Update every 10 minutes
+      } else {
+        clearInterval(weatherInterval);
+      }
+    };
 
-    const interval = setInterval(fetchWeather, 600000); // Update every 10 minutes
-    return () => clearInterval(interval);
+    // Initial fetch and attach visibility listener
+    if (document.visibilityState === "visible") {
+      fetchWeather();
+      weatherInterval = setInterval(fetchWeather, 600000);
+    }
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Cleanup
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      clearInterval(weatherInterval);
+    };
   }, [i18n.language]);
 
   useEffect(() => {
-    const interval = setInterval(() => setTime(new Date()), 10000);
-    return () => clearInterval(interval);
+    let timeInterval = setInterval(() => setTime(new Date()), 10000);
+
+    // Cleanup
+    return () => clearInterval(timeInterval);
   }, []);
 
   return (
