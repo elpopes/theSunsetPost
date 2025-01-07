@@ -3,7 +3,6 @@ import "./Header.css";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
 import WeatherTime from "./WeatherTime";
-import TransitInfo from "./TransitInfo"; // Import TransitInfo component
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSections } from "../features/sections/sectionsSlice";
 import { logout } from "../features/auth/authSlice";
@@ -107,7 +106,6 @@ const Header = () => {
         <div className="header__right">
           <div className="header__info">
             <SubwayInfo />
-            <TransitInfo />
           </div>
         </div>
       </div>
