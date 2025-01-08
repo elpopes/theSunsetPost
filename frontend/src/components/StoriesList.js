@@ -22,13 +22,17 @@ const StoriesList = () => {
 
   const filteredStories = stories.map((story) => {
     // Find the translation for the current language
-    const translation = story.translations.find((t) => t.language === language);
+    const translation = story.translations?.find(
+      (t) => t.language === language
+    );
 
     // If no translation is found, fallback to primary language (title, content)
-    const title = translation ? translation.title : story.title;
-    const content = translation
-      ? translation.content.split(" ").slice(0, 25).join(" ") + "…"
-      : story.content.split(" ").slice(0, 25).join(" ") + "…";
+    const title = translation?.title || story.title || t("Untitled Story");
+    const content =
+      (translation?.content || story.content || t("No content available."))
+        .split(" ")
+        .slice(0, 25)
+        .join(" ") + "…";
 
     return {
       ...story,
