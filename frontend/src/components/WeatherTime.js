@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 const WeatherTime = () => {
   const { i18n } = useTranslation();
   const [weather, setWeather] = useState(null);
   const [time, setTime] = useState(new Date());
+  const weatherIntervalRef = useRef(null); // Use a ref for weatherInterval
 
   useEffect(() => {
-    let weatherInterval;
-
     const fetchWeather = async () => {
       try {
         const lang = i18n.language;
@@ -36,16 +35,19 @@ const WeatherTime = () => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
         fetchWeather();
-        weatherInterval = setInterval(fetchWeather, 600000); // Update every 10 minutes
+        weatherIntervalRef.current = setInterval(fetchWeather, 600000); // Update every 10 minutes
       } else {
-        clearInterval(weatherInterval);
+        if (weatherIntervalRef.current) {
+          clearInterval(weatherIntervalRef.current);
+          weatherIntervalRef.current = null;
+        }
       }
     };
 
     // Initial fetch and attach visibility listener
     if (document.visibilityState === "visible") {
       fetchWeather();
-      weatherInterval = setInterval(fetchWeather, 600000);
+      weatherIntervalRef.current = setInterval(fetchWeather, 600000);
     }
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -53,12 +55,15 @@ const WeatherTime = () => {
     // Cleanup
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
-      clearInterval(weatherInterval);
+      if (weatherIntervalRef.current) {
+        clearInterval(weatherIntervalRef.current);
+        weatherIntervalRef.current = null;
+      }
     };
   }, [i18n.language]);
 
   useEffect(() => {
-    let timeInterval = setInterval(() => setTime(new Date()), 10000);
+    const timeInterval = setInterval(() => setTime(new Date()), 10000);
 
     // Cleanup
     return () => clearInterval(timeInterval);
