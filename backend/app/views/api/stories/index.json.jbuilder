@@ -15,6 +15,7 @@ json.array! @stories do |story|
   
     # Include authors
     json.authors story.authors.map { |author|
+ 
       {
         id: author.id,
         name: author.name,

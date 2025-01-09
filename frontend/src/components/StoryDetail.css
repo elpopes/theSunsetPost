@@ -26,6 +26,7 @@
   font-size: 1.1em;
   color: #555;
   line-height: 1.6;
+  white-space: pre-wrap;
 }
 
 .story-detail__translations {

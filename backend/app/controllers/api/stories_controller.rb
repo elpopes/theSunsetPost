@@ -137,7 +137,8 @@ class Api::StoriesController < ApplicationController
           {
             id: author.id,
             name: author.name,
-            bio: author.bio
+            bio: author.bio,
+            image_url: author.image.attached? ? url_for(author.image) : nil
           }
         end,
         sections: story.sections.map do |section|

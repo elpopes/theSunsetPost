@@ -18,6 +18,8 @@ const StoryDetail = () => {
   const [editMode, setEditMode] = useState(false);
   const [translations, setTranslations] = useState([]);
 
+  console.log("Story:", story);
+
   useEffect(() => {
     const existingStory = stories.find((s) => s.id === parseInt(id));
     if (existingStory) {
@@ -121,6 +123,38 @@ const StoryDetail = () => {
           <p className="story-detail__content">{content}</p>
         </>
       )}
+
+      {/* Render author information */}
+      <div className="story-detail__authors">
+        <h3>{t("Written By")}</h3>
+        {story.authors.length > 0 ? (
+          story.authors.map((author) => {
+            // Get the current translation for the author bio
+            const translation = author.translations?.find(
+              (t) => t.language === i18n.language
+            );
+            const bio = translation ? translation.bio : author.bio;
+
+            return (
+              <div key={author.id} className="story-detail__author">
+                {author.image_url && (
+                  <img
+                    src={author.image_url}
+                    alt={author.name}
+                    className="story-detail__author-image"
+                  />
+                )}
+                <div className="story-detail__author-info">
+                  <h4>{author.name}</h4>
+                  <p className="story-detail__author-bio">{bio}</p>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <p>{t("No authors available for this story.")}</p>
+        )}
+      </div>
 
       {user?.admin && (
         <div>
