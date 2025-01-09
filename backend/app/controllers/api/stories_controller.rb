@@ -137,8 +137,14 @@ class Api::StoriesController < ApplicationController
           {
             id: author.id,
             name: author.name,
-            bio: author.bio,
-            image_url: author.image.attached? ? url_for(author.image) : nil
+            bio: author.translated_bio(I18n.locale.to_s),
+            image_url: author.image.attached? ? url_for(author.image) : nil,
+            translations: author.author_translations.map do |translation|
+              {
+                language: translation.language,
+                bio: translation.bio
+              }
+            end
           }
         end,
         sections: story.sections.map do |section|
@@ -150,5 +156,5 @@ class Api::StoriesController < ApplicationController
         end
       }
     end
-end
+  end
   
