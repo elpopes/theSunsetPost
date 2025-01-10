@@ -126,7 +126,7 @@ const StoryDetail = () => {
 
       {/* Render author information */}
       <div className="story-detail__authors">
-        <h3>{t("Written By")}</h3>
+        <h3>{t("Written by")}</h3>
         {story.authors.length > 0 ? (
           story.authors.map((author) => {
             // Get the current translation for the author bio
