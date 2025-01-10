@@ -12,31 +12,31 @@ const StoryDetail = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
   const stories = useSelector((state) => state.stories.items);
+
   const [story, setStory] = useState(null);
+  const [translations, setTranslations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [translations, setTranslations] = useState([]);
-
-  console.log("Story:", story);
 
   useEffect(() => {
-    const existingStory = stories.find((s) => s.id === parseInt(id));
-    if (existingStory) {
-      setStory(existingStory);
-      setTranslations(existingStory.translations);
-      setLoading(false);
-      return;
-    }
-
+    // Fetch story from Redux or API
     const fetchStory = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:3000/api/stories/${id}`);
-        if (!response.ok) throw new Error("Failed to fetch story data");
-        const data = await response.json();
-        setStory(data);
-        setTranslations(data.translations);
+        const existingStory = stories.find((s) => s.id === parseInt(id));
+        if (existingStory) {
+          setStory(existingStory);
+          setTranslations(existingStory.translations);
+        } else {
+          const response = await fetch(
+            `http://localhost:3000/api/stories/${id}`
+          );
+          if (!response.ok) throw new Error(t("Failed to fetch story data"));
+          const data = await response.json();
+          setStory(data);
+          setTranslations(data.translations);
+        }
       } catch (err) {
         setError(err.message);
       } finally {
@@ -45,7 +45,7 @@ const StoryDetail = () => {
     };
 
     fetchStory();
-  }, [id, stories]);
+  }, [id, stories, t]);
 
   const handleDelete = () => {
     if (user?.token) {
@@ -63,46 +63,53 @@ const StoryDetail = () => {
     }
   };
 
+  const handleTranslationChange = (idx, field, value) => {
+    setTranslations((prev) =>
+      prev.map((tr, i) => (i === idx ? { ...tr, [field]: value } : tr))
+    );
+  };
+
   if (loading) return <p>{t("Loading story...")}</p>;
   if (error) return <p>{error}</p>;
   if (!story) return <p>{t("Story not found.")}</p>;
 
-  // Retrieve the current translation for the selected language
   const currentTranslation = story.translations.find(
     (translation) => translation.language === i18n.language
   );
-  const title = currentTranslation ? currentTranslation.title : story.title;
-  const content = currentTranslation
-    ? currentTranslation.content
-    : story.content;
+  const title = currentTranslation?.title || story.title;
+  const content = currentTranslation?.content || story.content;
+  const caption = currentTranslation?.caption || "";
 
   return (
     <div className="story-detail">
       {editMode ? (
         <form onSubmit={(e) => e.preventDefault()}>
           {translations.map((translation, idx) => (
-            <div key={idx}>
+            <div key={translation.language}>
               <h3>{t(`Edit Translation (${translation.language})`)}</h3>
+              <label>{t("Title")}</label>
               <input
                 type="text"
                 value={translation.title}
                 onChange={(e) =>
-                  setTranslations((prev) =>
-                    prev.map((tr, i) =>
-                      i === idx ? { ...tr, title: e.target.value } : tr
-                    )
-                  )
+                  handleTranslationChange(idx, "title", e.target.value)
                 }
               />
+              <label>{t("Content")}</label>
               <textarea
                 value={translation.content}
                 onChange={(e) =>
-                  setTranslations((prev) =>
-                    prev.map((tr, i) =>
-                      i === idx ? { ...tr, content: e.target.value } : tr
-                    )
-                  )
+                  handleTranslationChange(idx, "content", e.target.value)
                 }
+              />
+              <label>{t("Caption")}</label>
+              <input
+                type="text"
+                value={translation.caption}
+                onChange={(e) =>
+                  handleTranslationChange(idx, "caption", e.target.value)
+                }
+                placeholder={t("Add a caption for the photo")}
               />
             </div>
           ))}
@@ -114,26 +121,32 @@ const StoryDetail = () => {
         <>
           <h2 className="story-detail__title">{title}</h2>
           {story.image_url && (
-            <img
-              src={story.image_url}
-              alt={title}
-              className="story-detail__image"
-            />
+            <figure className="story-detail__image-container">
+              <img
+                src={story.image_url}
+                alt={title}
+                className="story-detail__image"
+              />
+              {caption && (
+                <figcaption className="story-detail__caption">
+                  {caption}
+                </figcaption>
+              )}
+            </figure>
           )}
           <p className="story-detail__content">{content}</p>
         </>
       )}
 
-      {/* Render author information */}
+      {/* Authors Section */}
       <div className="story-detail__authors">
         <h3>{t("Written by")}</h3>
         {story.authors.length > 0 ? (
           story.authors.map((author) => {
-            // Get the current translation for the author bio
-            const translation = author.translations?.find(
+            const authorTranslation = author.translations?.find(
               (t) => t.language === i18n.language
             );
-            const bio = translation ? translation.bio : author.bio;
+            const bio = authorTranslation?.bio || author.bio;
 
             return (
               <div key={author.id} className="story-detail__author">
@@ -156,8 +169,9 @@ const StoryDetail = () => {
         )}
       </div>
 
+      {/* Admin Actions */}
       {user?.admin && (
-        <div>
+        <div className="story-detail__admin-actions">
           <button onClick={() => setEditMode(!editMode)}>
             {editMode ? t("Cancel Edit") : t("Edit")}
           </button>

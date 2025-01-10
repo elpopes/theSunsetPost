@@ -8,10 +8,11 @@ import { useSelector } from "react-redux";
 const PostForm = () => {
   const user = useSelector((state) => state.auth.user);
   const [translations, setTranslations] = useState({
-    en: { title: "", content: "", metaDescription: "" },
-    es: { title: "", content: "", metaDescription: "" },
-    zh: { title: "", content: "", metaDescription: "" },
+    en: { title: "", content: "", metaDescription: "", caption: "" },
+    es: { title: "", content: "", metaDescription: "", caption: "" },
+    zh: { title: "", content: "", metaDescription: "", caption: "" },
   });
+
   const [selectedAuthors, setSelectedAuthors] = useState([]);
   const [selectedSections, setSelectedSections] = useState([]);
   const [image, setImage] = useState(null);
@@ -54,10 +55,11 @@ const PostForm = () => {
       if (response.ok) {
         setMessage("Story posted successfully!");
         setTranslations({
-          en: { title: "", content: "", metaDescription: "" },
-          es: { title: "", content: "", metaDescription: "" },
-          zh: { title: "", content: "", metaDescription: "" },
+          en: { title: "", content: "", metaDescription: "", caption: "" },
+          es: { title: "", content: "", metaDescription: "", caption: "" },
+          zh: { title: "", content: "", metaDescription: "", caption: "" },
         });
+
         setImage(null);
         setSelectedAuthors([]);
         setSelectedSections([]);

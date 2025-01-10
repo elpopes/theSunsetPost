@@ -39,6 +39,7 @@ class Api::StoriesController < ApplicationController
             title: translation["title"],
             content: translation["content"],
             meta_description: translation["meta_description"],
+            caption: translation["caption"],
             language: translation["language"]
           )
         end
@@ -130,6 +131,7 @@ class Api::StoriesController < ApplicationController
             title: translation.title,
             content: translation.content,
             meta_description: translation.meta_description,
+            caption: translation.caption,
             language: translation.language
           }
         end,
@@ -156,5 +158,5 @@ class Api::StoriesController < ApplicationController
         end
       }
     end
-  end
+end
   

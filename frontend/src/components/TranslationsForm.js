@@ -44,6 +44,17 @@ const TranslationsForm = ({ translations, setTranslations }) => {
               maxLength="160"
             ></textarea>
           </div>
+          <div>
+            <label>Caption:</label>
+            <input
+              type="text"
+              value={translations[lang].caption}
+              onChange={(e) =>
+                handleTranslationChange(lang, "caption", e.target.value)
+              }
+              placeholder="Enter caption for this language"
+            />
+          </div>
         </div>
       ))}
     </div>

@@ -22,6 +22,20 @@
   border-radius: 5px;
 }
 
+.story-detail__image-container {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.story-detail__caption {
+  font-size: 0.9em;
+  color: #888;
+  margin-top: 5px;
+  font-style: italic;
+  text-align: left;
+  margin-left: 0;
+}
+
 .story-detail__content {
   font-size: 1.1em;
   color: #555;
