@@ -6,11 +6,14 @@ const SectionsForm = ({ selectedSections, setSelectedSections }) => {
   useEffect(() => {
     const fetchSections = async () => {
       try {
+        console.log("Fetching sections from backend...");
         const response = await fetch("http://localhost:3000/api/sections");
         if (response.ok) {
-          setSections(await response.json());
+          const data = await response.json();
+          console.log("Fetched sections:", data);
+          setSections(data);
         } else {
-          console.error("Failed to fetch sections");
+          console.error("Failed to fetch sections, status:", response.status);
         }
       } catch (error) {
         console.error("Error fetching sections:", error);
@@ -20,23 +23,27 @@ const SectionsForm = ({ selectedSections, setSelectedSections }) => {
     fetchSections();
   }, []);
 
+  const handleSelectionChange = (e) => {
+    const selectedValues = Array.from(
+      e.target.selectedOptions,
+      (opt) => opt.value
+    );
+    console.log("Selected section IDs:", selectedValues);
+    setSelectedSections(selectedValues);
+  };
+
   return (
     <div>
       <h3>Select Sections</h3>
-      <select
-        multiple
-        onChange={(e) =>
-          setSelectedSections(
-            Array.from(e.target.selectedOptions, (opt) => opt.value)
-          )
-        }
-      >
+      {sections.length === 0 && <p>Loading sections...</p>}
+      <select multiple onChange={handleSelectionChange}>
         {sections.map((section) => (
           <option key={section.id} value={section.id}>
             {section.name}
           </option>
         ))}
       </select>
+      <p>Currently selected sections: {JSON.stringify(selectedSections)}</p>
     </div>
   );
 };
