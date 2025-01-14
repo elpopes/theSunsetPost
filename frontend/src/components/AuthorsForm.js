@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { baseURL } from "../config";
 
 const AuthorsForm = ({ selectedAuthors, setSelectedAuthors }) => {
   const user = useSelector((state) => state.auth.user); // Get user from Redux
@@ -15,7 +16,7 @@ const AuthorsForm = ({ selectedAuthors, setSelectedAuthors }) => {
   useEffect(() => {
     const fetchAuthors = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/authors");
+        const response = await fetch(`${baseURL}/api/authors`);
         if (response.ok) {
           setAuthors(await response.json());
         } else {
@@ -65,7 +66,7 @@ const AuthorsForm = ({ selectedAuthors, setSelectedAuthors }) => {
       console.log(`${key}: ${value}`);
     }
 
-    const response = await fetch("http://localhost:3000/api/authors", {
+    const response = await fetch(`${baseURL}/api/authors`, {
       method: "POST",
       headers: { Authorization: `Bearer ${user.token}` },
       body: formData,

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { baseURL } from "../config";
 import "./TransitInfo.css";
 
 const stops = [{ id: "MTA_305361", name: "North-Bound B63 @ 44th:" }];
@@ -31,7 +32,7 @@ const TransitInfo = () => {
         const results = await Promise.all(
           stops.map(async (stop) => {
             const response = await fetch(
-              `http://localhost:3000/api/transit?stop_id=${stop.id}&route_id=MTA NYCT_B63`
+              `${baseURL}/api/transit?stop_id=${stop.id}&route_id=MTA NYCT_B63`
             );
 
             if (!response.ok) {

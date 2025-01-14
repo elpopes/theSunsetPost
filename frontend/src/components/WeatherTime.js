@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { baseURL } from "../config";
+import "./WeatherTime.css";
 
 const WeatherTime = () => {
   const { i18n } = useTranslation();
@@ -15,7 +17,7 @@ const WeatherTime = () => {
         const lon = -74.0122;
 
         const response = await fetch(
-          `http://localhost:3000/api/weather?lat=${lat}&lon=${lon}&lang=${lang}`
+          `${baseURL}/api/weather?lat=${lat}&lon=${lon}&lang=${lang}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

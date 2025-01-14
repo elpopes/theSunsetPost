@@ -4,6 +4,7 @@ import AuthorsForm from "./AuthorsForm";
 import SectionsForm from "./SectionsForm";
 import ImageUpload from "./ImageUpload";
 import { useSelector } from "react-redux";
+import { baseURL } from "../config";
 
 const PostForm = () => {
   const user = useSelector((state) => state.auth.user);
@@ -46,7 +47,7 @@ const PostForm = () => {
     formData.append("section_ids", JSON.stringify(selectedSections));
 
     try {
-      const response = await fetch("http://localhost:3000/api/stories", {
+      const response = await fetch(`${baseURL}/api/stories`, {
         method: "POST",
         headers: { Authorization: `Bearer ${user.token}` },
         body: formData,

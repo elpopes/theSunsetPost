@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { baseURL } from "../../config";
 
 // Async thunk to fetch all sections
 export const fetchSections = createAsyncThunk(
@@ -9,7 +10,7 @@ export const fetchSections = createAsyncThunk(
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/sections?locale=${currentLanguage}`
+        `${baseURL}/api/sections?locale=${currentLanguage}`
       );
       const data = await response.json();
       return data;
@@ -24,7 +25,7 @@ export const fetchSectionById = createAsyncThunk(
   "sections/fetchSectionById",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/sections/${id}`);
+      const response = await fetch(`${baseURL}/api/sections/${id}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch section with ID: ${id}`);
       }

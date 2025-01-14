@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { deleteStory, editStory } from "../features/stories/storiesSlice";
+import { baseURL } from "../config";
 import "./StoryDetail.css";
 
 const StoryDetail = () => {
@@ -40,9 +41,7 @@ const StoryDetail = () => {
         } else {
           // Otherwise fetch from API
           console.log("[StoryDetail] Fetching story from API for ID:", id);
-          const response = await fetch(
-            `http://localhost:3000/api/stories/${id}`
-          );
+          const response = await fetch(`${baseURL}/api/stories/${id}`);
           if (!response.ok) throw new Error(t("Failed to fetch story data"));
           const data = await response.json();
           console.log("[StoryDetail] Fetched story data from API:", data);

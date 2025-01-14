@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { baseURL } from "../config";
 
 const SectionsForm = ({ selectedSections, setSelectedSections }) => {
   const [sections, setSections] = useState([]);
@@ -7,7 +8,7 @@ const SectionsForm = ({ selectedSections, setSelectedSections }) => {
     const fetchSections = async () => {
       try {
         console.log("Fetching sections from backend...");
-        const response = await fetch("http://localhost:3000/api/sections");
+        const response = await fetch(`${baseURL}/api/sections`);
         if (response.ok) {
           const data = await response.json();
           console.log("Fetched sections:", data);

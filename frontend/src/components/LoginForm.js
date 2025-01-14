@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux"; // Import useDispatch from Redux
 import { login } from "../features/auth/authSlice"; // Import login action
+import { baseURL } from "../config";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -13,7 +14,7 @@ const LoginForm = () => {
     try {
       console.log("Attempting login with:", { email, password });
 
-      const response = await fetch("http://localhost:3000/api/login", {
+      const response = await fetch(`${baseURL}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
