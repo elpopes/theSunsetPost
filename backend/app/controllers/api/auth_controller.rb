@@ -9,9 +9,6 @@ class Api::AuthController < ApplicationController
         # Check if the email matches the predefined admin email
         is_admin = (email == ENV['ADMIN_EMAIL'])
     
-        # Debugging: Log whether the email matches the admin email
-        puts "Is admin: #{is_admin}"
-    
         # Prevent further sign-ups after the initial admin is created
         if User.exists? && !is_admin
             render json: { error: "Sign-ups are currently disabled" }, status: :forbidden
@@ -40,13 +37,11 @@ class Api::AuthController < ApplicationController
   
       if user&.authenticate(params[:password])
         token = generate_token(user.id) # Generate JWT token
-        Rails.logger.debug "[#{Time.current}] JWT Token generated for user #{user.email}: #{token}"
         render json: { 
           message: "Login successful", 
           user: { id: user.id, email: user.email, admin: user.admin, token: token } 
         }, status: :ok
       else
-        Rails.logger.debug "[#{Time.current}] Login failed for email: #{params[:email]}"
         render json: { error: "Invalid email or password" }, status: :unauthorized
       end
     end

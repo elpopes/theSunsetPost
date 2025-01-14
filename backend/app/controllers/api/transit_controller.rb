@@ -20,8 +20,6 @@ module Api
         params_hash[:LineRef] = route_id if route_id.present?
         url.query = URI.encode_www_form(params_hash)
   
-        Rails.logger.debug("Constructed MTA API URL: #{url}")
-  
         begin
           response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
             http.get(url.request_uri)
@@ -55,7 +53,6 @@ module Api
   
           render json: { arrivals: arrivals }, status: :ok
         rescue => e
-          Rails.logger.error("Error fetching transit data: #{e.message}")
           render json: { error: "Error fetching transit data" }, status: :bad_gateway
         end
       end

@@ -18,7 +18,6 @@ module Api
         ContactMailer.contact_email(name, email, message).deliver_now
         render json: { success: "Message sent successfully!" }, status: :ok
         rescue => e
-        Rails.logger.error("Error sending email: #{e.message}")
         render json: { error: "Failed to send message." }, status: :internal_server_error
         end
     

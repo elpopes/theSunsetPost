@@ -1,22 +1,17 @@
 class Api::SectionsController < ApplicationController
     # GET /api/sections
     def index
-      Rails.logger.debug "Fetching all sections with translations"
       sections = Section.includes(:section_translations).all
-      Rails.logger.info "Fetched #{sections.size} sections"
       render json: sections.map { |section| section_json(section) }
     end
   
     # GET /api/sections/:id
     def show
-      Rails.logger.debug "Fetching section with ID: #{params[:id]}"
       section = Section.includes(:section_translations, stories: [:story_translations]).find_by(id: params[:id])
   
       if section
-        Rails.logger.info "Section found: #{section.name}"
         render json: section_json(section, include_stories: true)
       else
-        Rails.logger.error "Section not found with ID: #{params[:id]}"
         render json: { error: "Section not found" }, status: :not_found
       end
     end
