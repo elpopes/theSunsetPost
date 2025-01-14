@@ -3,29 +3,22 @@ class Api::StoriesController < ApplicationController
   
     # GET /api/stories
     def index
-      Rails.logger.debug "Fetching all stories with translations and authors"
       @stories = Story.includes(:story_translations, :authors, :sections).order(created_at: :desc)
-      Rails.logger.info "Fetched #{@stories.size} stories"
       render json: @stories.map { |story| story_json(story) }
     end
   
     # GET /api/stories/:id
     def show
-      Rails.logger.debug "Fetching story with ID: #{params[:id]}"
-      @story = Story.includes(:story_translations, :authors, :sections).find_by(id: params[:id])
-  
+      @story = Story.includes(:story_translations, :authors, :sections).find_by(id: params[:id]) 
       if @story
-        Rails.logger.info "Story found: #{@story.id}"
         render json: story_json(@story)
       else
-        Rails.logger.error "Story not found with ID: #{params[:id]}"
         render json: { error: "Story not found" }, status: :not_found
       end
     end
   
     # POST /api/stories
     def create
-      Rails.logger.debug "Creating a new story with params: #{params.inspect}"
       @story = Story.new
   
       # Attach image if provided
@@ -44,7 +37,6 @@ class Api::StoriesController < ApplicationController
           )
         end
       rescue JSON::ParserError => e
-        Rails.logger.error "Failed to parse translations: #{e.message}"
         render json: { error: "Invalid translations format" }, status: :unprocessable_entity
         return
       end
@@ -54,10 +46,8 @@ class Api::StoriesController < ApplicationController
       @story.sections = Section.where(id: JSON.parse(params[:section_ids])) if params[:section_ids].present?
   
       if @story.save
-        Rails.logger.info "Story created successfully with ID: #{@story.id}"
         render json: story_json(@story), status: :created
       else
-        Rails.logger.error "Failed to save story: #{@story.errors.full_messages.join(', ')}"
         render json: { errors: @story.errors.full_messages }, status: :unprocessable_entity
       end
     end
@@ -66,7 +56,6 @@ class Api::StoriesController < ApplicationController
     def update
         @story = Story.find_by(id: params[:id])
         unless @story
-          Rails.logger.error "[StoriesController#update] Story not found: #{params[:id]}"
           return render json: { error: "Story not found" }, status: :not_found
         end
       
@@ -85,24 +74,19 @@ class Api::StoriesController < ApplicationController
               )
             end
           rescue JSON::ParserError => e
-            Rails.logger.error "[StoriesController#update] JSON parse error: #{e.message}"
             return render json: { error: "Invalid translations format" }, status: :unprocessable_entity
           end
         end
       
         # 2. Only update the image if a new one is actually provided
         if params[:image].present?
-          Rails.logger.debug "[StoriesController#update] Updating image"
           @story.image.attach(params[:image])
         end
       
         # 3. Attempt to save the story (which now has any new translations and optional new image)
         if @story.save
-          Rails.logger.info "[StoriesController#update] Story #{@story.id} updated successfully"
-          Rails.logger.debug "[StoriesController#update] Final translations on story: #{@story.story_translations.inspect}"
           render json: story_json(@story), status: :ok
         else
-          Rails.logger.error "[StoriesController#update] Failed to update story: #{@story.errors.full_messages.join(', ')}"
           render json: { errors: @story.errors.full_messages }, status: :unprocessable_entity
         end
     end
@@ -130,7 +114,6 @@ class Api::StoriesController < ApplicationController
       begin
         decoded = JWT.decode(token, JWT_SECRET_KEY, true, { algorithm: 'HS256' })
         @current_user = User.find(decoded[0]['user_id'])
-        Rails.logger.info "Authenticated user: #{@current_user.email}"
       rescue JWT::DecodeError, ActiveRecord::RecordNotFound
         render json: { error: "Unauthorized access" }, status: :unauthorized
       end
