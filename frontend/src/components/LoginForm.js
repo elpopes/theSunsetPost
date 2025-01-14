@@ -12,8 +12,6 @@ const LoginForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log("Attempting login with:", { email, password });
-
       const response = await fetch(`${baseURL}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -21,18 +19,12 @@ const LoginForm = () => {
       });
       const data = await response.json();
 
-      console.log("Login response data:", data);
-
       if (response.ok) {
-        console.log("Saving user to Redux store:", data.user);
-        console.log("Dispatching login action with user:", data.user);
         dispatch(login(data.user));
-        console.log("Login action dispatched.");
         localStorage.setItem("user", JSON.stringify(data.user)); // Save to localStorage for persistence
         window.location.href = "/";
       } else {
         setMessage(data.error);
-        console.log("Login failed with error:", data.error);
       }
     } catch (error) {
       setMessage("Error during login. Please try again.");

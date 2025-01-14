@@ -5,11 +5,7 @@ class Api::AuthController < ApplicationController
     def signup
         # Correctly access the email from the nested params
         email = params.dig(:user, :email) || params.dig("user", "email") || params[:email]
-        
-        # Debugging: Log the email and the expected admin email
-        puts "Signup email: #{email}"
-        puts "Expected admin email (ADMIN_EMAIL): #{ENV['ADMIN_EMAIL']}"
-    
+         
         # Check if the email matches the predefined admin email
         is_admin = (email == ENV['ADMIN_EMAIL'])
     

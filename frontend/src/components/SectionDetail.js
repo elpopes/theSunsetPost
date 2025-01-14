@@ -20,7 +20,6 @@ const SectionDetail = () => {
   // Fetch the section data on component mount
   useEffect(() => {
     if (id) {
-      console.log("[SectionDetail] Fetching section with ID:", id);
       dispatch(fetchSectionById(id));
     }
   }, [id, dispatch]);
@@ -65,8 +64,6 @@ const SectionDetail = () => {
       ...safeTranslation,
       translationId,
     };
-
-    console.log("[SectionDetail] Final merged story:", mergedStory);
 
     return mergedStory;
   });

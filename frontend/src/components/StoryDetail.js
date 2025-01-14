@@ -28,28 +28,14 @@ const StoryDetail = () => {
         // Try pulling from Redux first
         const existingStory = stories.find((s) => s.id === parseInt(id));
         if (existingStory) {
-          console.log(
-            "[StoryDetail] Found existing story in Redux:",
-            existingStory
-          );
           setStory(existingStory);
-          console.log(
-            "[StoryDetail] Setting translations from Redux story:",
-            existingStory.translations
-          );
           setTranslations(existingStory.translations);
         } else {
           // Otherwise fetch from API
-          console.log("[StoryDetail] Fetching story from API for ID:", id);
           const response = await fetch(`${baseURL}/api/stories/${id}`);
           if (!response.ok) throw new Error(t("Failed to fetch story data"));
           const data = await response.json();
-          console.log("[StoryDetail] Fetched story data from API:", data);
           setStory(data);
-          console.log(
-            "[StoryDetail] Setting translations from fetched data:",
-            data.translations
-          );
           setTranslations(data.translations);
         }
       } catch (err) {
@@ -75,11 +61,6 @@ const StoryDetail = () => {
     if (!user?.token) return;
     const sanitizedTranslations = translations.map(({ id, ...rest }) => rest);
 
-    console.log(
-      "[StoryDetail] Dispatching edit with translations:",
-      sanitizedTranslations
-    );
-
     dispatch(
       editStory({
         storyId: story.id,
@@ -97,7 +78,6 @@ const StoryDetail = () => {
       prev.map((tr, i) => {
         if (i !== idx) return tr;
         const updated = { ...tr, [field]: value };
-        console.log("[StoryDetail] Updated translation at idx:", idx, updated);
         return updated;
       })
     );

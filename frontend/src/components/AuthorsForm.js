@@ -34,7 +34,6 @@ const AuthorsForm = ({ selectedAuthors, setSelectedAuthors }) => {
   const handleSelect = (e) => {
     const selected = Array.from(e.target.selectedOptions, (opt) => opt.value);
     setSelectedAuthors(selected);
-    console.log("Selected Authors:", selected);
   };
 
   // Handle adding a new author
@@ -60,12 +59,6 @@ const AuthorsForm = ({ selectedAuthors, setSelectedAuthors }) => {
       formData.append("image", newAuthor.image);
     }
 
-    // Debug: Log formData entries
-    console.log("FormData being sent:");
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
-
     const response = await fetch(`${baseURL}/api/authors`, {
       method: "POST",
       headers: { Authorization: `Bearer ${user.token}` },
@@ -74,7 +67,6 @@ const AuthorsForm = ({ selectedAuthors, setSelectedAuthors }) => {
 
     if (response.ok) {
       const newAuthorData = await response.json();
-      console.log("API Response:", newAuthorData); // Debug: Log API response
       setAuthors((prev) => [...prev, newAuthorData]);
       setNewAuthor({
         name: "",

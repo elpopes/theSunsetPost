@@ -7,11 +7,9 @@ const SectionsForm = ({ selectedSections, setSelectedSections }) => {
   useEffect(() => {
     const fetchSections = async () => {
       try {
-        console.log("Fetching sections from backend...");
         const response = await fetch(`${baseURL}/api/sections`);
         if (response.ok) {
           const data = await response.json();
-          console.log("Fetched sections:", data);
           setSections(data);
         } else {
           console.error("Failed to fetch sections, status:", response.status);
@@ -29,7 +27,6 @@ const SectionsForm = ({ selectedSections, setSelectedSections }) => {
       e.target.selectedOptions,
       (opt) => opt.value
     );
-    console.log("Selected section IDs:", selectedValues);
     setSelectedSections(selectedValues);
   };
 
