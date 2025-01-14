@@ -20,6 +20,7 @@ const SectionDetail = () => {
   // Fetch the section data on component mount
   useEffect(() => {
     if (id) {
+      console.log("[SectionDetail] Fetching section with ID:", id);
       dispatch(fetchSectionById(id));
     }
   }, [id, dispatch]);
@@ -29,27 +30,45 @@ const SectionDetail = () => {
     return <p>Loading...</p>;
   }
   if (error) {
+    console.error("[SectionDetail] Error:", error);
     return <p>Error: {error}</p>;
   }
   if (!section) {
+    console.warn("[SectionDetail] No section found for ID:", id);
     return <p>Section not found.</p>;
   }
 
   // Get the current translation for the section
   const currentTranslation = section.translations.find(
     (t) => t.language === language
-  ) || { name: section.name, description: section.description };
+  ) || {
+    name: section.name,
+    description: section.description,
+  };
 
   // Translate stories dynamically
   const translatedStories = section.stories.map((story) => {
+    // If we can't find a matching language translation, fall back to the base story fields
     const translation = story.translations.find(
       (t) => t.language === language
-    ) || { title: story.title, content: story.content };
+    ) || {
+      title: story.title || "Untitled",
+      content: story.content || "",
+    };
 
-    // Remove `id` from the translation to prevent overwriting `story.id`
-    const { id: _, ...safeTranslation } = translation;
+    // Destructure translation.id so we don't overwrite story.id
+    const { id: translationId, ...safeTranslation } = translation;
 
-    return { ...story, ...safeTranslation };
+    // Merge the story with the safe translation
+    const mergedStory = {
+      ...story,
+      ...safeTranslation,
+      translationId,
+    };
+
+    console.log("[SectionDetail] Final merged story:", mergedStory);
+
+    return mergedStory;
   });
 
   return (
@@ -71,8 +90,12 @@ const SectionDetail = () => {
                   className="section-story-image"
                 />
               )}
-              <p>{story.content.split(" ").slice(0, 25).join(" ")}...</p>
-              {/* Log the story ID and link */}
+              <p>
+                {story.content
+                  ? story.content.split(" ").slice(0, 25).join(" ")
+                  : "No content available"}
+                ...
+              </p>
             </li>
           ))
         ) : (

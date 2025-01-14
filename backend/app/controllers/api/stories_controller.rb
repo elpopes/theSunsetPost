@@ -64,34 +64,50 @@ class Api::StoriesController < ApplicationController
   
     # PATCH/PUT /api/stories/:id
     def update
-      @story = Story.find_by(id: params[:id])
-      return render json: { error: "Story not found" }, status: :not_found unless @story
-  
-      # Update translations
-      if params[:translations].present?
-        @story.story_translations.destroy_all
-        begin
-          translations = JSON.parse(params[:translations])
-          translations.each do |translation|
-            @story.story_translations.build(
-              title: translation["title"],
-              content: translation["content"],
-              meta_description: translation["meta_description"],
-              language: translation["language"]
-            )
-          end
-        rescue JSON::ParserError => e
-          render json: { error: "Invalid translations format" }, status: :unprocessable_entity
-          return
+        @story = Story.find_by(id: params[:id])
+        unless @story
+          Rails.logger.error "[StoriesController#update] Story not found: #{params[:id]}"
+          return render json: { error: "Story not found" }, status: :not_found
         end
-      end
-  
-      if @story.update(image: params[:image])
-        render json: story_json(@story), status: :ok
-      else
-        render json: { errors: @story.errors.full_messages }, status: :unprocessable_entity
-      end
+      
+        # 1. Destroy old translations and rebuild if translations are provided
+        if params[:translations].present?
+          @story.story_translations.destroy_all
+          begin
+            translations = JSON.parse(params[:translations])
+            translations.each_with_index do |translation, idx|
+              @story.story_translations.build(
+                title: translation["title"],
+                content: translation["content"],
+                meta_description: translation["meta_description"],
+                caption: translation["caption"],
+                language: translation["language"]
+              )
+            end
+          rescue JSON::ParserError => e
+            Rails.logger.error "[StoriesController#update] JSON parse error: #{e.message}"
+            return render json: { error: "Invalid translations format" }, status: :unprocessable_entity
+          end
+        end
+      
+        # 2. Only update the image if a new one is actually provided
+        if params[:image].present?
+          Rails.logger.debug "[StoriesController#update] Updating image"
+          @story.image.attach(params[:image])
+        end
+      
+        # 3. Attempt to save the story (which now has any new translations and optional new image)
+        if @story.save
+          Rails.logger.info "[StoriesController#update] Story #{@story.id} updated successfully"
+          Rails.logger.debug "[StoriesController#update] Final translations on story: #{@story.story_translations.inspect}"
+          render json: story_json(@story), status: :ok
+        else
+          Rails.logger.error "[StoriesController#update] Failed to update story: #{@story.errors.full_messages.join(', ')}"
+          render json: { errors: @story.errors.full_messages }, status: :unprocessable_entity
+        end
     end
+      
+  
   
     # DELETE /api/stories/:id
     def destroy

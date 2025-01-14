@@ -37,9 +37,13 @@ const TranslationsForm = ({ translations, setTranslations }) => {
           <div>
             <label>Meta Description:</label>
             <textarea
-              value={translations[lang].metaDescription}
+              value={translations[lang].meta_description}
               onChange={(e) =>
-                handleTranslationChange(lang, "metaDescription", e.target.value)
+                handleTranslationChange(
+                  lang,
+                  "meta_description",
+                  e.target.value
+                )
               }
               maxLength="160"
             ></textarea>

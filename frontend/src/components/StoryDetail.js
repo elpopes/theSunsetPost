@@ -24,20 +24,37 @@ const StoryDetail = () => {
     const fetchStory = async () => {
       setLoading(true);
       try {
+        // Try pulling from Redux first
         const existingStory = stories.find((s) => s.id === parseInt(id));
         if (existingStory) {
+          console.log(
+            "[StoryDetail] Found existing story in Redux:",
+            existingStory
+          );
           setStory(existingStory);
+          console.log(
+            "[StoryDetail] Setting translations from Redux story:",
+            existingStory.translations
+          );
           setTranslations(existingStory.translations);
         } else {
+          // Otherwise fetch from API
+          console.log("[StoryDetail] Fetching story from API for ID:", id);
           const response = await fetch(
             `http://localhost:3000/api/stories/${id}`
           );
           if (!response.ok) throw new Error(t("Failed to fetch story data"));
           const data = await response.json();
+          console.log("[StoryDetail] Fetched story data from API:", data);
           setStory(data);
+          console.log(
+            "[StoryDetail] Setting translations from fetched data:",
+            data.translations
+          );
           setTranslations(data.translations);
         }
       } catch (err) {
+        console.error("[StoryDetail] Error fetching story:", err.message);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -56,16 +73,34 @@ const StoryDetail = () => {
   };
 
   const handleEdit = () => {
-    if (user?.token) {
-      dispatch(
-        editStory({ storyId: story.id, translations, token: user.token })
-      ).then(() => setEditMode(false));
-    }
+    if (!user?.token) return;
+    const sanitizedTranslations = translations.map(({ id, ...rest }) => rest);
+
+    console.log(
+      "[StoryDetail] Dispatching edit with translations:",
+      sanitizedTranslations
+    );
+
+    dispatch(
+      editStory({
+        storyId: story.id,
+        translations: sanitizedTranslations,
+        token: user.token,
+      })
+    ).then(() => {
+      setEditMode(false);
+    });
   };
 
+  // Log changes as user types
   const handleTranslationChange = (idx, field, value) => {
     setTranslations((prev) =>
-      prev.map((tr, i) => (i === idx ? { ...tr, [field]: value } : tr))
+      prev.map((tr, i) => {
+        if (i !== idx) return tr;
+        const updated = { ...tr, [field]: value };
+        console.log("[StoryDetail] Updated translation at idx:", idx, updated);
+        return updated;
+      })
     );
   };
 
@@ -87,29 +122,46 @@ const StoryDetail = () => {
           {translations.map((translation, idx) => (
             <div key={translation.language}>
               <h3>{t(`Edit Translation (${translation.language})`)}</h3>
+
               <label>{t("Title")}</label>
               <input
                 type="text"
-                value={translation.title}
+                value={translation.title || ""}
                 onChange={(e) =>
                   handleTranslationChange(idx, "title", e.target.value)
                 }
               />
+
               <label>{t("Content")}</label>
               <textarea
-                value={translation.content}
+                value={translation.content || ""}
                 onChange={(e) =>
                   handleTranslationChange(idx, "content", e.target.value)
                 }
               />
+
               <label>{t("Caption")}</label>
               <input
                 type="text"
-                value={translation.caption}
+                value={translation.caption || ""}
                 onChange={(e) =>
                   handleTranslationChange(idx, "caption", e.target.value)
                 }
                 placeholder={t("Add a caption for the photo")}
+              />
+
+              <label>{t("Meta Description")}</label>
+              <input
+                type="text"
+                value={translation.meta_description || ""}
+                onChange={(e) =>
+                  handleTranslationChange(
+                    idx,
+                    "meta_description",
+                    e.target.value
+                  )
+                }
+                placeholder={t("Add a meta description")}
               />
             </div>
           ))}
@@ -120,6 +172,7 @@ const StoryDetail = () => {
       ) : (
         <>
           <h2 className="story-detail__title">{title}</h2>
+
           {story.image_url && (
             <figure className="story-detail__image-container">
               <img
@@ -144,7 +197,7 @@ const StoryDetail = () => {
         {story.authors.length > 0 ? (
           story.authors.map((author) => {
             const authorTranslation = author.translations?.find(
-              (t) => t.language === i18n.language
+              (trans) => trans.language === i18n.language
             );
             const bio = authorTranslation?.bio || author.bio;
 
