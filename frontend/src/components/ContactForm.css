@@ -1,3 +1,4 @@
+/* src/components/ContactForm.css */
 .contact-form-container {
   max-width: 600px;
   margin: 0 auto;
@@ -10,13 +11,16 @@
 
 h2 {
   text-align: center;
+  font-size: clamp(1.8rem, 5vw, 2rem);
   color: #771000;
+  margin-bottom: 15px;
 }
 
 .welcome-text,
 .recruitment-text {
   text-align: center;
   margin-bottom: 10px;
+  font-size: clamp(0.9rem, 3vw, 1rem);
   color: #333;
 }
 
@@ -32,7 +36,7 @@ h2 {
 }
 
 .contact-form label {
-  font-size: 14px;
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
   font-weight: bold;
   color: #444;
 }
@@ -40,7 +44,7 @@ h2 {
 .contact-form input,
 .contact-form textarea {
   padding: 10px;
-  font-size: 14px;
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
   border: 1px solid #ddd;
   border-radius: 5px;
   outline: none;
@@ -58,7 +62,7 @@ h2 {
   color: #fff;
   border: none;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: clamp(1rem, 3vw, 1.2rem);
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
 }
@@ -69,6 +73,30 @@ h2 {
 
 .status-message {
   text-align: center;
-  font-size: 14px;
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
   color: #007bff;
+}
+
+@media (max-width: 768px) {
+  .contact-form-container {
+    padding: 15px;
+  }
+  h2 {
+    font-size: 1.8rem;
+  }
+  .contact-form button {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-form-container {
+    padding: 10px;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  .contact-form button {
+    font-size: 0.9rem;
+  }
 }
