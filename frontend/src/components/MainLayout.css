@@ -30,6 +30,7 @@
   border-radius: 5px;
   text-align: center;
   font-size: clamp(0.85rem, 2.5vw, 1rem);
+  transition: all 0.3s ease-in-out;
 }
 
 /* Full-width header styling */
@@ -56,6 +57,16 @@ header {
   }
   .main-layout__content {
     padding: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ad-space {
+    position: relative;
+    width: 100%;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 0;
   }
 }
 

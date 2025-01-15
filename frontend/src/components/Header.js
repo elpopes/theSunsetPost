@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./Header.css";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -11,6 +11,7 @@ import SubwayInfo from "./SubwayInfo";
 const Header = () => {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // Redux state
   const sections = useSelector((state) => state.sections.items);
@@ -55,7 +56,13 @@ const Header = () => {
           <div className="header__language-switcher">
             <LanguageSwitcher />
           </div>
-          <nav className="header__nav">
+          <button
+            className="hamburger-menu"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? "\u2715" : "\u2630"}
+          </button>
+          <nav className={`header__nav ${menuOpen ? "open" : ""}`}>
             <ul>
               <li>
                 <a href="/">{t("home")}</a>
@@ -87,7 +94,7 @@ const Header = () => {
               )}
             </ul>
           </nav>
-          <nav className="header__sections-nav">
+          <nav className={`header__sections-nav ${menuOpen ? "open" : ""}`}>
             <ul>
               {filteredSections.length > 0 ? (
                 filteredSections.map((section) => (
