@@ -48,20 +48,28 @@ class Api::AuthorsController < ApplicationController
     private
   
     def author_json(author)
-      {
-        id: author.id,
-        name: author.name,
-        bio: author.translated_bio(I18n.locale.to_s),
-        image_url: author.image.attached? ? url_for(author.image) : nil,
-        stories: author.stories.map { |story| { id: story.id, title: story.title } },
-        translations: author.author_translations.map do |translation|
-          {
-            language: translation.language,
-            bio: translation.bio
-          }
-        end
-      }
-    end
+        {
+          id: author.id,
+          name: author.name,
+          bio: author.translated_bio(I18n.locale.to_s),
+          image_url: author.image.attached? ? url_for(author.image) : nil,
+      
+          stories: author.stories.map do |story|
+            en_translation = story.story_translations.find_by(language: 'en')
+            {
+              id: story.id,
+              title: en_translation&.title || "Untitled"
+            }
+          end,
+      
+          translations: author.author_translations.map do |translation|
+            {
+              language: translation.language,
+              bio: translation.bio
+            }
+          end
+        }
+    end   
   
     def author_params
       params.permit(:name, :bio, :image, translations: [:language, :bio])

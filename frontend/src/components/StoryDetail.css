@@ -9,7 +9,7 @@
 }
 
 .story-detail__title {
-  font-size: 2em;
+  font-size: clamp(1.5rem, 5vw, 2rem);
   margin-bottom: 20px;
   color: #771000;
   text-align: center;
@@ -28,7 +28,7 @@
 }
 
 .story-detail__caption {
-  font-size: 0.9em;
+  font-size: clamp(0.8rem, 2.5vw, 0.9rem);
   color: #888;
   margin-top: 5px;
   font-style: italic;
@@ -37,7 +37,7 @@
 }
 
 .story-detail__content {
-  font-size: 1.1em;
+  font-size: clamp(1rem, 3vw, 1.1rem);
   color: #555;
   line-height: 1.6;
   white-space: pre-wrap;
@@ -48,7 +48,7 @@
 }
 
 .story-detail__translations h3 {
-  font-size: 1.5em;
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
   color: #333;
   margin-bottom: 10px;
 }
@@ -86,10 +86,34 @@
 
 .story-detail__author-info h4 {
   margin: 0;
-  font-size: 1.2em;
+  font-size: clamp(1rem, 3vw, 1.2rem);
 }
 
 .story-detail__author-info p {
   margin: 5px 0 0;
   color: #555;
+}
+
+@media (max-width: 768px) {
+  .story-detail {
+    padding: 15px;
+  }
+  .story-detail__title {
+    font-size: 1.8rem;
+  }
+  .story-detail__content {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .story-detail {
+    padding: 10px;
+  }
+  .story-detail__title {
+    font-size: 1.5rem;
+  }
+  .story-detail__caption {
+    font-size: 0.8rem;
+  }
 }

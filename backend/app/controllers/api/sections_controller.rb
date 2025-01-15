@@ -42,21 +42,19 @@ class Api::SectionsController < ApplicationController
   
     # Format story for JSON response (same logic as in StoriesController)
     def story_json(story)
-      {
-        id: story.id,
-        title: story.title,
-        content: story.content,
-        language: story.language,
-        image_url: story.image.attached? ? url_for(story.image) : nil,
-        translations: story.story_translations.map do |translation|
-          {
-            id: translation.id,
-            title: translation.title,
-            content: translation.content,
-            language: translation.language
-          }
-        end
-      }
+        {
+          id: story.id,
+          image_url: story.image.attached? ? url_for(story.image) : nil,
+          translations: story.story_translations.map do |translation|
+            {
+              id: translation.id,
+              title: translation.title,
+              content: translation.content,
+              language: translation.language
+            }
+          end
+        }
     end
-  end
+      
+end
   
