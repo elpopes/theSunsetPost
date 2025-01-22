@@ -18,18 +18,24 @@
     "Now arriving": "Llegando ahora",
     "min": "min",
     "Advertisement": "Anuncio",
-    "Your Ad Here": "Tu Anuncio Aquí",
+    "Your Ad Here": "¡Contáctanos para colocar tu anuncio aquí!",
     "Written by": "Escrito por",
+    "no_stories": {
+        "development": "Nuestro sitio aún está en desarrollo, y estamos buscando historias y colaboradores. Si tienes una historia o estás interesado en enviar contenido, contáctanos usando nuestro formulario de contacto.",
+        "contact_link": "Contáctanos aquí."
+    },
     "about_page": {
-      "title": "Acerca de The Sunset Post",
-      "welcome": "Bienvenido a The Sunset Post, tu plataforma de noticias centrada en la comunidad.",
-      "mission": "Nos comprometemos a brindar historias, actualizaciones y perspectivas que importan más a los residentes y miembros de la comunidad de Sunset Park.",
-      "team": "Nuestro creciente equipo de narradores apasionados está dedicado a fomentar una comunidad vibrante e informada.",
-      "stay_tuned": "Mantente atento a las últimas noticias, eventos y más. Creemos en el poder de las historias para conectar a las personas y generar cambios."
+        "title": "Sobre el Sunset Post",
+        "welcome": "Bienvenido a Sunset Post, tu plataforma de noticias hiperlocal y trilingüe.",
+        "mission": "Estamos comprometidos a traer las historias, actualizaciones e ideas que más importan a los residentes y miembros de la comunidad de Sunset Park.",
+        "team": "Nuestro creciente equipo de narradores apasionados está dedicado a fomentar una comunidad vibrante e informada.",
+        "stay_tuned": "Mantente al tanto de las últimas noticias, eventos y más. Creemos en el poder de las historias para conectar a las personas e inspirar el cambio.",
+        "join_us": "Si estás interesado en unirte a nuestro equipo de escritores, fotógrafos y desarrolladores, ¡contáctanos hoy!",
+        "connect": "Conéctate con Sunset Post aquí."
     },
     "contact_page": {
       "title": "Contáctanos",
-      "welcome_text": "¡Nos encantaría saber de ti! No dudes en comunicarte usando el formulario a continuación para cualquier pregunta, comentario o simplemente para saludar.",
+      "welcome_text": "¡Nos encantaría saber de ti! Usa el formulario a continuación para compartir una idea de historia, anunciarte con nosotros, enviar un artículo para nuestra sección de Clasificados o publicitar un próximo evento.",
       "recruitment_text": "También estamos buscando escritores, fotógrafos y vendedores talentosos para unirse a nuestro equipo. Si estás interesado, ¡háznoslo saber en tu mensaje!",
       "name_label": "Tu Nombre",
       "name_placeholder": "Introduce tu nombre",
@@ -42,6 +48,13 @@
       "success_status": "¡Mensaje enviado con éxito!",
       "failure_status": "Error al enviar: {{error}}",
       "error_status": "Ocurrió un error al enviar el mensaje."
-    }
+    },
+    "Sections": "Secciones",
+    "Contact_Us": "Contáctenos",
+    "Account": "Cuenta",
+    "Advertise with Us": "Anúnciate con nosotros",
+    "Post in Classifieds": "Publicar en Clasificados",
+    "Careers": "Carreras",
+    "Letters to the Editor": "Cartas al Editor"
   }
   

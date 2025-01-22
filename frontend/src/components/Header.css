@@ -1,5 +1,3 @@
-/* src/components/Header.css */
-
 :root {
   --primary-color: #771000;
   --primary-color-hover: #a32800;
@@ -9,6 +7,16 @@
   --font-family-logo: "Dancing Script", cursive;
   --font-size-logo: 4.5rem;
   --font-size-logo-mobile: 2.5rem;
+}
+
+a {
+  text-decoration: none; /* Removes underlining */
+  color: var(--text-color); /* Default link color (black) */
+  transition: color 0.3s; /* Smooth transition for hover effect */
+}
+
+a:hover {
+  color: var(--secondary-text-color); /* Gray color on hover */
 }
 
 /* Basic header styling */
@@ -57,7 +65,7 @@
 }
 
 /* Logo styling */
-.header__logo h1 {
+.header__logo h1 a {
   font-family: var(--font-family-logo);
   font-size: var(--font-size-logo);
   color: var(--primary-color);
@@ -67,9 +75,9 @@
 
 /* Language switcher styling */
 .header__language-switcher {
-  margin-top: 10px;
+  margin-top: -25px;
   display: flex;
-  gap: 10px;
+  /* gap: 10px; */
 }
 
 .header__language-switcher button {
@@ -116,7 +124,7 @@
 .header__auth-link:hover,
 .header__nav a:focus,
 .header__auth-link:focus {
-  text-decoration: underline;
+  text-decoration: none;
   outline: none;
 }
 
@@ -148,15 +156,16 @@
 
 .header__sections-nav a {
   text-decoration: none;
-  color: #007bff;
+  color: #000000;
   font-size: 0.9rem;
   transition: color 0.3s;
 }
 
 .header__sections-nav a:hover,
 .header__sections-nav a:focus {
-  text-decoration: underline;
+  text-decoration: none;
   outline: none;
+  color: #a32800;
 }
 
 /* Hamburger Menu */

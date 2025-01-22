@@ -18,18 +18,24 @@
     "Now arriving": "Now arriving",
     "min": "min",
     "Advertisement": "Advertisement",
-    "Your Ad Here": "Your Ad Here",
+    "Your Ad Here": "Contact Us to Place Your Ad Here!",
     "Written by" : "Written by",
+    "no_stories": {
+        "development": "Our site is still in development, and we’re actively looking for stories and contributors. If you have a story or are interested in submitting content, please reach out to us using our contact form.",
+        "contact_link": "Contact us here."
+    },
     "about_page": {
-      "title": "About The Sunset Post",
-      "welcome": "Welcome to the Sunset Post, your community-centric news platform.",
-      "mission": "We are committed to bringing stories, updates, and insights that matter most to Sunset Park residents and community members.",
+      "title": "About the Sunset Post",
+      "welcome": "Welcome to the Sunset Post, your hyper-local, trilingual news platform.",
+      "mission": "We are committed to bringing the stories, updates, and insights that matter most to Sunset Park residents and community members.",
       "team": "Our expanding team of passionate storytellers is dedicated to fostering a vibrant and informed community.",
-      "stay_tuned": "Stay tuned for the latest news, events, and more. We believe in the power of stories to connect people and spark change."
+      "stay_tuned": "Stay tuned for the latest news, events, and more. We believe in the power of stories to connect people and spark change.",
+      "join_us": "If you're interested in joining our team of writers, photographers and developers reach out to us today!",
+      "connect": "Connect with the Sunset Post here."
     },
     "contact_page": {
       "title": "Contact Us",
-      "welcome_text": "We’d love to hear from you! Feel free to reach out using the form below for any questions, feedback, or just to say hi.",
+      "welcome_text": "We want to hear from you! Reach out using the form below to share a story idea, advertise with us, submit an item for our Classifieds section or publicize an upcoming event.",
       "recruitment_text": "We're also looking for talented writers, photographers, and salespeople to join our team. If you’re interested, let us know in your message!",
       "name_label": "Your Name",
       "name_placeholder": "Enter your name",
@@ -42,6 +48,13 @@
       "success_status": "Message sent successfully!",
       "failure_status": "Failed to send: {{error}}",
       "error_status": "An error occurred while sending the message."
-    }
+    },
+    "Sections": "Sections",
+    "Contact_Us": "Contact Us",
+    "Account": "Account",
+    "Advertise with Us": "Advertise with Us",
+    "Post in Classifieds": "Post in Classifieds",
+    "Careers": "Careers",
+    "Letters to the Editor": "Letters to the Editor"
 }
   

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom"; // Import Link for navigation
 import Header from "./Header";
 import { useTranslation } from "react-i18next";
 import "./MainLayout.css";
@@ -23,7 +24,10 @@ const MainLayout = ({ children }) => {
       {isMobile && (
         <div className="ad-space">
           <h4>{t("Advertisement")}</h4> {/* Translated header */}
-          <p>{t("Your Ad Here")}</p> {/* Translated ad text */}
+          <p>
+            <Link to="/contact">{t("Your Ad Here")}</Link>{" "}
+            {/* Clickable link */}
+          </p>
         </div>
       )}
       <div className="main-layout__container">
@@ -32,7 +36,10 @@ const MainLayout = ({ children }) => {
           <aside className="main-layout__sidebar">
             <div className="ad-space">
               <h4>{t("Advertisement")}</h4> {/* Translated header */}
-              <p>{t("Your Ad Here")}</p> {/* Translated ad text */}
+              <p>
+                <Link to="/contact">{t("Your Ad Here")}</Link>{" "}
+                {/* Clickable link */}
+              </p>
             </div>
           </aside>
         )}

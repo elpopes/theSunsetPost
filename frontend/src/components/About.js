@@ -12,6 +12,10 @@ const About = () => {
       <p>{t("about_page.mission")}</p>
       <p>{t("about_page.team")}</p>
       <p>{t("about_page.stay_tuned")}</p>
+      <p>{t("about_page.join_us")}</p>
+      <p>
+        <a href="/contact">{t("about_page.connect")}</a>
+      </p>
     </div>
   );
 };

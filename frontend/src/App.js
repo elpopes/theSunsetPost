@@ -10,6 +10,7 @@ import LoginForm from "./components/LoginForm";
 import PostForm from "./components/PostForm";
 import ContactForm from "./components/ContactForm";
 import About from "./components/About";
+import Footer from "./components/Footer"; // Import the new Footer component
 import { login } from "./features/auth/authSlice";
 
 function App() {
@@ -29,78 +30,76 @@ function App() {
   }, [dispatch]);
 
   return (
-    <BrowserRouter
-      future={{
-        v7_startTransition: true,
-        v7_relativeSplatPath: true,
-      }}
-    >
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <MainLayout>
-              <StoriesList />
-            </MainLayout>
-          }
-        />
-        <Route
-          path="/about"
-          element={
-            <MainLayout>
-              <About />
-            </MainLayout>
-          }
-        />
-        <Route
-          path="/contact"
-          element={
-            <MainLayout>
-              <ContactForm />
-            </MainLayout>
-          }
-        />
-        <Route
-          path="/stories/:id"
-          element={
-            <MainLayout>
-              <StoryDetail />
-            </MainLayout>
-          }
-        />
-        <Route
-          path="/sections/:id"
-          element={
-            <MainLayout>
-              <SectionDetail />
-            </MainLayout>
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            <MainLayout>
-              <SignUpForm />
-            </MainLayout>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <MainLayout>
-              <LoginForm />
-            </MainLayout>
-          }
-        />
-        <Route
-          path="/post"
-          element={
-            <MainLayout>
-              <PostForm />
-            </MainLayout>
-          }
-        />
-      </Routes>
+    <BrowserRouter>
+      <div className="app-container">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <MainLayout>
+                <StoriesList />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/about"
+            element={
+              <MainLayout>
+                <About />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <MainLayout>
+                <ContactForm />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/stories/:id"
+            element={
+              <MainLayout>
+                <StoryDetail />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/sections/:id"
+            element={
+              <MainLayout>
+                <SectionDetail />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <MainLayout>
+                <SignUpForm />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <MainLayout>
+                <LoginForm />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/post"
+            element={
+              <MainLayout>
+                <PostForm />
+              </MainLayout>
+            }
+          />
+        </Routes>
+        <Footer /> {/* Add Footer component here */}
+      </div>
     </BrowserRouter>
   );
 }

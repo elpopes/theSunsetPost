@@ -1,0 +1,89 @@
+.footer {
+  background-color: #f9f9f9;
+  padding: 40px 20px;
+  color: #333;
+  text-align: left;
+}
+
+.footer__container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: flex-start; /* Aligns columns at the top */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer__column {
+  flex: 1;
+  min-width: 200px;
+}
+
+.footer__logo {
+  font-family: "Dancing Script", cursive;
+  font-size: 1.8rem;
+  color: #771000;
+  margin-bottom: 10px;
+  text-align: left;
+  line-height: 1;
+}
+
+.footer__logo-link {
+  text-decoration: none;
+  color: #771000;
+}
+
+.footer__logo-link:hover {
+  text-decoration: none;
+  color: #944848;
+  transition: color 0.3s;
+}
+
+.footer__heading {
+  font-size: 1.5rem;
+  color: #771000;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.footer__column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer__column ul li {
+  margin-bottom: 10px;
+}
+
+.footer__column ul li a {
+  text-decoration: none;
+  color: #333;
+  transition: color 0.3s;
+}
+
+.footer__column ul li a:hover {
+  color: #606060;
+}
+
+.footer__logout {
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer__logout:hover {
+  color: #777;
+}
+
+.footer__bottom {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.875rem;
+  color: #555;
+}

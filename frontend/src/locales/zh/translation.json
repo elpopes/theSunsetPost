@@ -18,30 +18,43 @@
     "Now arriving": "即将到达",
     "min": "分钟",
     "Advertisement": "广告",
-    "Your Ad Here": "您的广告在这里",
+    "Your Ad Here": "联系我们，在这里投放您的广告！",
     "Written by": "作者",
-    "about_page": {
-      "title": "关于 Sunset Post",
-      "welcome": "欢迎来到 Sunset Post，您的社区新闻平台。",
-      "mission": "我们致力于为 Sunset Park 的居民和社区成员带来最重要的故事、更新和见解。",
-      "team": "我们热情的讲故事团队正在不断壮大，致力于促进充满活力和信息丰富的社区。",
-      "stay_tuned": "请关注最新的新闻、活动等。我们相信故事的力量能够连接人们并激发改变。"
+    "no_stories": {
+        "development": "我们的网站仍在开发中，我们正在积极寻找故事和贡献者。如果您有故事或有兴趣提交内容，请通过我们的联系表与我们联系。",
+        "contact_link": "点击此处联系我们。"
     },
+    "about_page": {
+        "title": "关于 Sunset Post",
+        "welcome_text": "我们很想听到您的声音！使用下面的表单分享故事创意、与我们合作投放广告、提交分类信息，或宣传即将到来的活动。",
+        "mission": "我们致力于为 Sunset Park 的居民和社区成员提供最重要的故事、更新和见解。",
+        "team": "我们不断壮大的热情讲述者团队致力于打造一个充满活力和信息丰富的社区。",
+        "stay_tuned": "敬请关注最新新闻、活动等。我们相信故事的力量能够连接人们并激发变革。",
+        "join_us": "如果您有兴趣加入我们的作家、摄影师和开发人员团队，请立即联系我们！",
+        "connect": "在这里与 Sunset Post 联系。"
+  },
     "contact_page": {
-      "title": "联系我们",
-      "welcome_text": "我们很想听到您的消息！如有任何问题、反馈或仅仅是打招呼，请随时使用以下表单联系我们。",
-      "recruitment_text": "我们还在寻找有才华的作家、摄影师和销售人员加入我们的团队。如果您感兴趣，请在您的信息中告诉我们！",
-      "name_label": "您的姓名",
-      "name_placeholder": "请输入您的姓名",
-      "email_label": "您的邮箱",
-      "email_placeholder": "请输入您的邮箱",
-      "message_label": "您的信息",
-      "message_placeholder": "请输入您的信息",
-      "send_button": "发送",
-      "sending_status": "发送中...",
-      "success_status": "消息发送成功！",
-      "failure_status": "发送失败：{{error}}",
-      "error_status": "发送消息时出错。"
-    }
+        "title": "联系我们",
+        "welcome_text": "我们很想听到您的消息！如有任何问题、反馈或仅仅是打招呼，请随时使用以下表单联系我们。",
+        "recruitment_text": "我们还在寻找有才华的作家、摄影师和销售人员加入我们的团队。如果您感兴趣，请在您的信息中告诉我们！",
+        "name_label": "您的姓名",
+        "name_placeholder": "请输入您的姓名",
+        "email_label": "您的邮箱",
+        "email_placeholder": "请输入您的邮箱",
+        "message_label": "您的信息",
+        "message_placeholder": "请输入您的信息",
+        "send_button": "发送",
+        "sending_status": "发送中...",
+        "success_status": "消息发送成功！",
+        "failure_status": "发送失败：{{error}}",
+        "error_status": "发送消息时出错。"
+    },
+        "Sections": "部分",
+        "Contact_Us": "联系我们",
+        "Account": "账户",
+        "Advertise with Us": "与我们广告",
+        "Post in Classifieds": "发布分类广告",
+        "Careers": "职业",
+        "Letters to the Editor": "给编辑的信"
   }
   

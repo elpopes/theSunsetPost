@@ -20,55 +20,56 @@ const StoriesList = () => {
     }
   }, [status, dispatch]);
 
-  const filteredStories = stories.map((story) => {
-    // Find the translation for the current language
-    const translation = story.translations?.find(
-      (t) => t.language === language
-    );
+  const filteredStories = stories
+    .filter((story) => {
+      const sectionNames = story.sections?.map((section) => section.name) || [];
+      const isClassifieds = sectionNames.includes("Classifieds");
+      return sectionNames.length > 0 && !isClassifieds;
+    })
+    .map((story) => {
+      const translation = story.translations?.find(
+        (t) => t.language === language
+      );
 
-    // If no translation is found, fallback to primary language (title, content)
-    const title = translation?.title || story.title || t("Untitled Story");
-    const content =
-      (translation?.content || story.content || t("No content available."))
-        .split(" ")
-        .slice(0, 25)
-        .join(" ") + "…";
+      const title = translation?.title || story.title || t("Untitled Story");
+      const content =
+        (translation?.content || story.content || t("No content available."))
+          .split(" ")
+          .slice(0, 26)
+          .join(" ") + "…";
 
-    return {
-      ...story,
-      title,
-      content,
-    };
-  });
+      return {
+        ...story,
+        title,
+        content,
+      };
+    });
 
   return (
     <section className="stories-section">
-      {/* Display error message if there is an error */}
       {error && (
         <p className="error-message">
           {t("Error fetching stories")}: {error}
         </p>
       )}
 
-      {/* Display a loading message if the stories are being fetched */}
       {status === "loading" && <p>{t("Loading stories...")}</p>}
 
-      {/* Display the stories list if available */}
       {status === "succeeded" && filteredStories.length > 0 ? (
         <ul className="stories-list">
           {filteredStories.map((story) => (
             <li key={story.id} className="story-item">
-              <h3 className="story-title">
-                <Link to={`/stories/${story.id}`}>{story.title}</Link>
-              </h3>
-              {story.image_url && (
-                <img
-                  src={story.image_url}
-                  alt={story.title}
-                  className="story-image"
-                />
-              )}
-              <p className="story-content">{story.content}</p>
+              <Link to={`/stories/${story.id}`} className="story-link">
+                {story.image_url && (
+                  <img
+                    src={story.image_url}
+                    alt={story.title}
+                    className="story-image"
+                  />
+                )}
+                <h3 className="story-title">{story.title}</h3>
+                <p className="story-content">{story.content}</p>
+              </Link>
             </li>
           ))}
         </ul>
