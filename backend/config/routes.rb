@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+    root to: ->(env) { [200, { "Content-Type" => "text/plain" }, ["API is live"]] }
     namespace :api do
       resources :sections, only: [:index, :show]
       resources :stories, only: [:index, :show, :create, :update, :destroy]
