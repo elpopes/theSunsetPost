@@ -7,12 +7,17 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
     allow do
-      origins 'http://localhost:5000'
+        if Rails.env.production?
+            origins 'https://thesunsetpost-1.onrender.com' # Production frontend URL
+          else
+            origins 'http://localhost:5000' # Local development frontend URL
+        end
   
       resource "*",
         headers: :any,
         methods: [:get, :post, :put, :patch, :delete, :options, :head],
-        credentials: true # Allow cookies
+        credentials: true, 
+        expose: ['Authorization'] 
     end
   end
   
