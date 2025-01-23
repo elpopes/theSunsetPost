@@ -8,6 +8,7 @@ SectionStory.destroy_all
 StoryTranslation.destroy_all
 Story.destroy_all
 Section.destroy_all
+User.destroy_all
 
 puts "Seeding sections with translations..."
 sections = [
