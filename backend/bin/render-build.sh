@@ -4,9 +4,8 @@ set -o errexit
 
 bundle install
 
-
-# If you're using a Free instance type, you need to
-# perform database migrations in the build command.
-# Uncomment the following line:
-
+# Perform database migrations
 bundle exec rails db:migrate
+
+# Seed the database
+bundle exec rails db:seed
