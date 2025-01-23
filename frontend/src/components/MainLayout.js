@@ -6,13 +6,17 @@ import "./MainLayout.css";
 
 const MainLayout = ({ children }) => {
   const { t } = useTranslation();
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    // Set initial state after the component mounts
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
+
+    handleResize(); // Run on mount
     window.addEventListener("resize", handleResize);
+
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -23,10 +27,9 @@ const MainLayout = ({ children }) => {
       <Header /> {/* Full-width header */}
       {isMobile && (
         <div className="ad-space">
-          <h4>{t("Advertisement")}</h4> {/* Translated header */}
+          <h4>{t("Advertisement", "Advertisement")}</h4>
           <p>
-            <Link to="/contact">{t("Your Ad Here")}</Link>{" "}
-            {/* Clickable link */}
+            <Link to="/contact">{t("Your Ad Here", "Your Ad Here")}</Link>
           </p>
         </div>
       )}
@@ -35,10 +38,9 @@ const MainLayout = ({ children }) => {
         {!isMobile && (
           <aside className="main-layout__sidebar">
             <div className="ad-space">
-              <h4>{t("Advertisement")}</h4> {/* Translated header */}
+              <h4>{t("Advertisement", "Advertisement")}</h4>
               <p>
-                <Link to="/contact">{t("Your Ad Here")}</Link>{" "}
-                {/* Clickable link */}
+                <Link to="/contact">{t("Your Ad Here", "Your Ad Here")}</Link>{" "}
               </p>
             </div>
           </aside>
