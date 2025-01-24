@@ -46,14 +46,14 @@ const SectionDetail = () => {
   };
 
   const translatedStories = section.stories.map((story) => {
-    const translation = story.translations.find(
-      (t) => t.language === language
-    ) || {
-      title: story.title || "Untitled",
-      content: story.content || "",
-    };
+    const translation =
+      story.translations.find((t) => t.language === language) || {};
 
-    return { ...story, ...translation };
+    const { id: translationId, ...safeTranslation } = translation; // Exclude translation.id
+    return {
+      ...story,
+      ...safeTranslation, // Merge safely without overwriting story.id
+    };
   });
 
   return (
