@@ -2,13 +2,13 @@
 require "open-uri"
 
 # Clear existing data
-puts "Clearing existing data..."
-SectionTranslation.destroy_all
-SectionStory.destroy_all
-StoryTranslation.destroy_all
-Story.destroy_all
-Section.destroy_all
-User.destroy_all
+# puts "Clearing existing data..."
+# SectionTranslation.destroy_all
+# SectionStory.destroy_all
+# StoryTranslation.destroy_all
+# Story.destroy_all
+# Section.destroy_all
+# User.destroy_all
 
 puts "Seeding sections with translations..."
 sections = [

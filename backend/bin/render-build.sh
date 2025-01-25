@@ -8,4 +8,4 @@ bundle install
 bundle exec rails db:migrate
 
 # Seed the database
-bundle exec rails db:seed
+# bundle exec rails db:seed
