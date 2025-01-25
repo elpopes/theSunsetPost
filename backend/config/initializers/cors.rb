@@ -8,7 +8,7 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
     allow do
         if Rails.env.production?
-            origins 'https://sunsetpost.org' # Production frontend URL
+            origins 'https://www.sunsetpost.org' # Production frontend URL
           else
             origins 'http://localhost:5000' # Local development frontend URL
         end
