@@ -19,7 +19,6 @@ a:hover {
   color: var(--secondary-text-color);
 }
 
-/* Header container */
 .header {
   display: flex;
   flex-direction: column;
@@ -38,18 +37,16 @@ a:hover {
   justify-content: space-between;
   width: 100%;
   max-width: 1200px;
-  padding: 5px 10px;
+  padding: 0 16px;
   box-sizing: border-box;
 }
 
-/* Left section (weather) */
 .header__left {
   flex: 0.8;
   display: flex;
   justify-content: flex-start;
 }
 
-/* Center (logo, lang switcher, nav) */
 .header__center {
   flex: 4;
   display: flex;
@@ -59,20 +56,19 @@ a:hover {
   flex-wrap: wrap;
 }
 
-/* Right section (subway info) */
 .header__right {
   flex: 1;
   display: flex;
   justify-content: flex-end;
 }
 
-/* Logo image (masthead) */
 .header__logo-image {
   width: 100%;
   max-width: 600px;
   height: auto;
   display: block;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .header__logo h1 a {
@@ -84,10 +80,10 @@ a:hover {
   margin: 20px;
 }
 
-/* Language switcher */
 .header__language-switcher {
   display: flex;
-  margin-top: 0px;
+  margin-top: 12px;
+  gap: 8px;
 }
 
 .header__language-switcher button {
@@ -107,7 +103,6 @@ a:hover {
   outline: none;
 }
 
-/* Sections navigation */
 .header__sections-nav {
   flex-shrink: 1;
   max-width: 100%;
@@ -140,7 +135,6 @@ a:hover {
   outline: none;
 }
 
-/* Hamburger toggle */
 .hamburger-menu {
   display: none;
   background: none;
@@ -150,7 +144,12 @@ a:hover {
   cursor: pointer;
 }
 
-/* Mobile adjustments */
+@media (max-width: 992px) {
+  .header__logo-image {
+    max-width: 90vw;
+  }
+}
+
 @media (max-width: 768px) {
   .hamburger-menu {
     display: block;
@@ -164,6 +163,9 @@ a:hover {
   .header__content {
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
   }
 
   .header__left,
@@ -188,16 +190,12 @@ a:hover {
     align-items: center;
     width: 100%;
     max-width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
   }
 
   .header__logo h1 {
     font-size: var(--font-size-logo-mobile);
-  }
-
-  .header__language-switcher {
-    display: flex;
-    margin-top: 12px;
-    gap: 8px;
   }
 
   .header__sections-nav ul {
@@ -217,6 +215,9 @@ a:hover {
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 16px;
 }
 
 @media (max-width: 480px) {
