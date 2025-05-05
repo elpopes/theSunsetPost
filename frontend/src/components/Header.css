@@ -66,19 +66,28 @@ a:hover {
   justify-content: flex-end;
 }
 
-/* Logo */
+/* Logo image (masthead) */
+.header__logo-image {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
 .header__logo h1 a {
   font-family: var(--font-family-logo);
   font-size: var(--font-size-logo);
   color: var(--primary-color);
   font-weight: bold;
   margin: 0;
+  margin: 20px;
 }
 
 /* Language switcher */
 .header__language-switcher {
   display: flex;
-  margin-top: -25px;
+  margin-top: 0px;
 }
 
 .header__language-switcher button {
@@ -168,12 +177,27 @@ a:hover {
     gap: 10px;
   }
 
+  .header__logo {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .header__branding {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+  }
+
   .header__logo h1 {
     font-size: var(--font-size-logo-mobile);
   }
 
   .header__language-switcher {
-    margin: 0;
+    display: flex;
+    margin-top: 12px;
+    gap: 8px;
   }
 
   .header__sections-nav ul {

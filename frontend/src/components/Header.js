@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import masthead from "../assets/sunset-post-masthead.png";
 import "./Header.css";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -41,11 +42,13 @@ const Header = () => {
         <div className="header__center">
           <div className="header__branding">
             <div className="header__logo">
-              <h1>
-                <a href="/" className="header__logo-link">
-                  {t("The Sunset Post")}
-                </a>
-              </h1>
+              <a href="/" className="header__logo-link">
+                <img
+                  src={masthead}
+                  alt="The Sunset Post logo"
+                  className="header__logo-image"
+                />
+              </a>
             </div>
 
             <div className="header__language-switcher">
