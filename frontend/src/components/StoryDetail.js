@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { deleteStory, editStory } from "../features/stories/storiesSlice";
 import { baseURL } from "../config";
+import ReactMarkdown from "react-markdown";
+import StoryEditor from "./StoryEditor"; // ✅ your reusable editor
 import "./StoryDetail.css";
 
 const StoryDetail = () => {
@@ -21,17 +23,14 @@ const StoryDetail = () => {
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    // Fetch story from Redux or API
     const fetchStory = async () => {
       setLoading(true);
       try {
-        // Try pulling from Redux first
         const existingStory = stories.find((s) => s.id === parseInt(id));
         if (existingStory) {
           setStory(existingStory);
           setTranslations(existingStory.translations);
         } else {
-          // Otherwise fetch from API
           const response = await fetch(`${baseURL}/api/stories/${id}`);
           if (!response.ok) throw new Error(t("Failed to fetch story data"));
           const data = await response.json();
@@ -72,14 +71,9 @@ const StoryDetail = () => {
     });
   };
 
-  // Log changes as user types
   const handleTranslationChange = (idx, field, value) => {
     setTranslations((prev) =>
-      prev.map((tr, i) => {
-        if (i !== idx) return tr;
-        const updated = { ...tr, [field]: value };
-        return updated;
-      })
+      prev.map((tr, i) => (i !== idx ? tr : { ...tr, [field]: value }))
     );
   };
 
@@ -112,10 +106,10 @@ const StoryDetail = () => {
               />
 
               <label>{t("Content")}</label>
-              <textarea
+              <StoryEditor
                 value={translation.content || ""}
-                onChange={(e) =>
-                  handleTranslationChange(idx, "content", e.target.value)
+                onChange={(newMarkdown) =>
+                  handleTranslationChange(idx, "content", newMarkdown)
                 }
               />
 
@@ -166,11 +160,12 @@ const StoryDetail = () => {
               )}
             </figure>
           )}
-          <p className="story-detail__content">{content}</p>
+          <div className="story-detail__content">
+            <ReactMarkdown>{content}</ReactMarkdown>
+          </div>
         </>
       )}
 
-      {/* Authors Section */}
       <div className="story-detail__authors">
         <h3>{t("Written by")}</h3>
         {story.authors.length > 0 ? (
@@ -201,7 +196,6 @@ const StoryDetail = () => {
         )}
       </div>
 
-      {/* Admin Actions */}
       {user?.admin && (
         <div className="story-detail__admin-actions">
           <button onClick={() => setEditMode(!editMode)}>

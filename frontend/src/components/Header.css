@@ -10,16 +10,16 @@
 }
 
 a {
-  text-decoration: none; /* Removes underlining */
-  color: var(--text-color); /* Default link color (black) */
-  transition: color 0.3s; /* Smooth transition for hover effect */
+  text-decoration: none;
+  color: var(--text-color);
+  transition: color 0.3s;
 }
 
 a:hover {
-  color: var(--secondary-text-color); /* Gray color on hover */
+  color: var(--secondary-text-color);
 }
 
-/* Basic header styling */
+/* Header container */
 .header {
   display: flex;
   flex-direction: column;
@@ -42,29 +42,31 @@ a:hover {
   box-sizing: border-box;
 }
 
-/* Left section: WeatherTime */
+/* Left section (weather) */
 .header__left {
   flex: 0.8;
   display: flex;
   justify-content: flex-start;
 }
 
-/* Center section for title, language switcher, and nav */
+/* Center (logo, lang switcher, nav) */
 .header__center {
   flex: 4;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-/* Right section: TransitInfo */
+/* Right section (subway info) */
 .header__right {
   flex: 1;
   display: flex;
   justify-content: flex-end;
 }
 
-/* Logo styling */
+/* Logo */
 .header__logo h1 a {
   font-family: var(--font-family-logo);
   font-size: var(--font-size-logo);
@@ -73,17 +75,16 @@ a:hover {
   margin: 0;
 }
 
-/* Language switcher styling */
+/* Language switcher */
 .header__language-switcher {
-  margin-top: -25px;
   display: flex;
-  /* gap: 10px; */
+  margin-top: -25px;
 }
 
 .header__language-switcher button {
   padding: 8px 12px;
   background-color: var(--primary-color);
-  color: #ffffff;
+  color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -97,52 +98,10 @@ a:hover {
   outline: none;
 }
 
-/* Navigation styling */
-.header__nav ul {
-  display: flex;
-  gap: 20px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.header__nav a,
-.header__auth-link {
-  color: var(--primary-color);
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s;
-}
-
-.header__auth-link {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.header__nav a:hover,
-.header__auth-link:hover,
-.header__nav a:focus,
-.header__auth-link:focus {
-  text-decoration: none;
-  outline: none;
-}
-
-/* Weather and transit information styling */
-.weather-time,
-.transit-info {
-  text-align: left;
-  font-size: 0.9rem;
-  color: var(--secondary-text-color);
-}
-
-.transit-info {
-  text-align: right;
-}
-
 /* Sections navigation */
 .header__sections-nav {
-  margin-top: 10px;
+  flex-shrink: 1;
+  max-width: 100%;
 }
 
 .header__sections-nav ul {
@@ -152,23 +111,27 @@ a:hover {
   padding: 0;
   margin: 0 10px;
   gap: 8px;
+  font-size: 0.9rem;
+  justify-content: center;
+}
+
+.header__sections-nav li {
+  white-space: nowrap;
 }
 
 .header__sections-nav a {
   text-decoration: none;
   color: #000000;
-  font-size: 0.9rem;
   transition: color 0.3s;
 }
 
 .header__sections-nav a:hover,
 .header__sections-nav a:focus {
-  text-decoration: none;
+  color: var(--primary-color-hover);
   outline: none;
-  color: #a32800;
 }
 
-/* Hamburger Menu */
+/* Hamburger toggle */
 .hamburger-menu {
   display: none;
   background: none;
@@ -178,6 +141,7 @@ a:hover {
   cursor: pointer;
 }
 
+/* Mobile adjustments */
 @media (max-width: 768px) {
   .hamburger-menu {
     display: block;
@@ -190,35 +154,18 @@ a:hover {
 
   .header__content {
     flex-direction: column;
+    align-items: center;
   }
 
-  .header__left {
-    order: -1;
+  .header__left,
+  .header__right {
     justify-content: center;
-    margin-bottom: 10px;
+    margin: 10px 0;
   }
 
   .header__center {
-    order: 0;
-  }
-
-  .header__right {
-    order: 1;
-    justify-content: center;
-    margin-top: 10px;
-  }
-
-  .header__nav ul,
-  .header__sections-nav ul {
-    display: none;
     flex-direction: column;
-    align-items: center;
     gap: 10px;
-  }
-
-  .header__nav.open ul,
-  .header__sections-nav.open ul {
-    display: flex;
   }
 
   .header__logo h1 {
@@ -226,8 +173,26 @@ a:hover {
   }
 
   .header__language-switcher {
-    margin-bottom: 15px;
+    margin: 0;
   }
+
+  .header__sections-nav ul {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .header__sections-nav.open ul {
+    display: flex;
+  }
+}
+
+.header__branding {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 
 @media (max-width: 480px) {
@@ -236,8 +201,6 @@ a:hover {
   }
 
   .header__sections-nav ul {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+    font-size: 0.85rem;
   }
 }

@@ -12,15 +12,12 @@ const Header = () => {
   const dispatch = useDispatch();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Redux state
   const sections = useSelector((state) => state.sections.items);
 
-  // Fetch sections on initial load
   useEffect(() => {
     dispatch(fetchSections());
   }, [dispatch]);
 
-  // Filter translations for the current language with a safe check
   const filteredSections = sections.map((section) => {
     const translation = section.translations?.find(
       (t) => t.language === i18n.language
@@ -35,30 +32,34 @@ const Header = () => {
   return (
     <header className="header">
       <div className="header__content">
-        {/* Left section: Weather */}
+        {/* Left: Weather */}
         <div className="header__left">
           <WeatherTime />
         </div>
 
-        {/* Center section: Logo, Language Switcher, Navigation */}
+        {/* Center: Logo, Language Switcher, Navigation */}
         <div className="header__center">
-          <div className="header__logo">
-            <h1>
-              <a href="/" className="header__logo-link">
-                {t("The Sunset Post")}
-              </a>
-            </h1>
+          <div className="header__branding">
+            <div className="header__logo">
+              <h1>
+                <a href="/" className="header__logo-link">
+                  {t("The Sunset Post")}
+                </a>
+              </h1>
+            </div>
+
+            <div className="header__language-switcher">
+              <LanguageSwitcher />
+            </div>
           </div>
 
-          <div className="header__language-switcher">
-            <LanguageSwitcher />
-          </div>
           <button
             className="hamburger-menu"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             {menuOpen ? "\u2715" : "\u2630"}
           </button>
+
           <nav className={`header__sections-nav ${menuOpen ? "open" : ""}`}>
             <ul>
               {filteredSections.length > 0 ? (
@@ -74,7 +75,7 @@ const Header = () => {
           </nav>
         </div>
 
-        {/* Right section: Subway Info and Transit Info */}
+        {/* Right: Subway Info */}
         <div className="header__right">
           <div className="header__info">
             <SubwayInfo />
