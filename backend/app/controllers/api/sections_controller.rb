@@ -44,6 +44,7 @@ class Api::SectionsController < ApplicationController
     def story_json(story)
         {
           id: story.id,
+          slug: story.slug,
           image_url: story.image.attached? ? url_for(story.image) : nil,
           translations: story.story_translations.map do |translation|
             {
@@ -55,6 +56,6 @@ class Api::SectionsController < ApplicationController
           end
         }
     end
-      
+        
 end
   

@@ -49,10 +49,10 @@ const SectionDetail = () => {
     const translation =
       story.translations.find((t) => t.language === language) || {};
 
-    const { id: translationId, ...safeTranslation } = translation; // Exclude translation.id
+    const { id: translationId, ...safeTranslation } = translation;
     return {
       ...story,
-      ...safeTranslation, // Merge safely without overwriting story.id
+      ...safeTranslation,
     };
   });
 
@@ -65,7 +65,10 @@ const SectionDetail = () => {
         {translatedStories.length > 0 ? (
           translatedStories.map((story) => (
             <li key={story.id} className="section-story-item">
-              <Link to={`/stories/${story.id}`} className="section-story-link">
+              <Link
+                to={`/stories/${story.slug || story.id}`}
+                className="section-story-link"
+              >
                 {story.image_url && (
                   <img
                     src={story.image_url}
@@ -74,7 +77,7 @@ const SectionDetail = () => {
                   />
                 )}
                 <h3>{story.title}</h3>
-                <p>{story.content.split(" ").slice(0, 25).join(" ")}...</p>
+                <p>{story.content?.split(" ").slice(0, 25).join(" ")}...</p>
               </Link>
             </li>
           ))
