@@ -66,7 +66,7 @@ function App() {
             }
           />
           <Route
-            path="/sections/:id"
+            path="/sections/:name"
             element={
               <MainLayout>
                 <SectionDetail />

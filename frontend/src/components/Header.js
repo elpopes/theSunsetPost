@@ -68,7 +68,9 @@ const Header = () => {
               {filteredSections.length > 0 ? (
                 filteredSections.map((section) => (
                   <li key={section.id}>
-                    <a href={`/sections/${section.id}`}>{section.name}</a>
+                    <a href={`/sections/${section.name.toLowerCase()}`}>
+                      {section.name}
+                    </a>
                   </li>
                 ))
               ) : (

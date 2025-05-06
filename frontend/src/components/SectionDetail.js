@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { fetchSectionById } from "../features/sections/sectionsSlice";
+import { fetchSectionByName } from "../features/sections/sectionsSlice";
 import "./SectionDetail.css";
 
 const SectionDetail = () => {
-  const { id } = useParams();
+  const { name } = useParams();
   const { t, i18n } = useTranslation();
   const language = i18n.language;
   const dispatch = useDispatch();
@@ -16,10 +16,10 @@ const SectionDetail = () => {
   const error = useSelector((state) => state.sections.error);
 
   useEffect(() => {
-    if (id) {
-      dispatch(fetchSectionById(id));
+    if (name) {
+      dispatch(fetchSectionByName(name));
     }
-  }, [id, dispatch]);
+  }, [name, dispatch]);
 
   if (status === "loading") {
     return <p>{t("loading")}</p>;

@@ -5,9 +5,11 @@ class Api::SectionsController < ApplicationController
       render json: sections.map { |section| section_json(section) }
     end
   
-    # GET /api/sections/:id
-    def show
-      section = Section.includes(:section_translations, stories: [:story_translations]).find_by(id: params[:id])
+    # GET /api/sections/:name
+    def show_by_name
+      section = Section
+        .includes(:section_translations, stories: [:story_translations])
+        .find_by("LOWER(name) = ?", params[:name].downcase)
   
       if section
         render json: section_json(section, include_stories: true)
@@ -42,20 +44,19 @@ class Api::SectionsController < ApplicationController
   
     # Format story for JSON response (same logic as in StoriesController)
     def story_json(story)
-        {
-          id: story.id,
-          slug: story.slug,
-          image_url: story.image.attached? ? url_for(story.image) : nil,
-          translations: story.story_translations.map do |translation|
-            {
-              id: translation.id,
-              title: translation.title,
-              content: translation.content,
-              language: translation.language
-            }
-          end
-        }
+      {
+        id: story.id,
+        slug: story.slug,
+        image_url: story.image.attached? ? url_for(story.image) : nil,
+        translations: story.story_translations.map do |translation|
+          {
+            id: translation.id,
+            title: translation.title,
+            content: translation.content,
+            language: translation.language
+          }
+        end
+      }
     end
-        
 end
   
