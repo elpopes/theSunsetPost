@@ -59,7 +59,10 @@ const StoriesList = () => {
         <ul className="stories-list">
           {filteredStories.map((story) => (
             <li key={story.id} className="story-item">
-              <Link to={`/stories/${story.id}`} className="story-link">
+              <Link
+                to={`/stories/${story.slug || story.id}`}
+                className="story-link"
+              >
                 {story.image_url && (
                   <img
                     src={story.image_url}
