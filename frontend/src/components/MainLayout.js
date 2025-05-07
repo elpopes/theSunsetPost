@@ -26,10 +26,10 @@ const MainLayout = ({ children }) => {
     <div className="main-layout">
       <Header /> {/* Full-width header */}
       {isMobile && (
-        <div className="ad-space">
-          <h4>{t("Advertisement", "Advertisement")}</h4>
+        <div className="info-space">
+          <h4>{t("Community Spotlight")}</h4>
           <p>
-            <Link to="/contact">{t("Your Ad Here", "Your Ad Here")}</Link>
+            <Link to="/contact">{t("Contact us to feature your message")}</Link>
           </p>
         </div>
       )}
@@ -37,10 +37,12 @@ const MainLayout = ({ children }) => {
         <div className="main-layout__content">{children}</div>
         {!isMobile && (
           <aside className="main-layout__sidebar">
-            <div className="ad-space">
-              <h4>{t("Advertisement", "Advertisement")}</h4>
+            <div className="info-space">
+              <h4>{t("Community Spotlight")}</h4>
               <p>
-                <Link to="/contact">{t("Your Ad Here", "Your Ad Here")}</Link>{" "}
+                <Link to="/contact">
+                  {t("Contact us to feature your message")}
+                </Link>
               </p>
             </div>
           </aside>
