@@ -25,8 +25,9 @@ const Header = () => {
     );
     return {
       ...section,
-      name: translation ? translation.name : section.name,
-      description: translation ? translation.description : section.description,
+      displayName: translation?.name || section.name,
+      description: translation?.description || section.description,
+      urlName: section.name, // still in English for routing
     };
   });
 
@@ -68,8 +69,8 @@ const Header = () => {
               {filteredSections.length > 0 ? (
                 filteredSections.map((section) => (
                   <li key={section.id}>
-                    <a href={`/sections/${section.name.toLowerCase()}`}>
-                      {section.name}
+                    <a href={`/sections/${section.urlName.toLowerCase()}`}>
+                      {section.displayName}
                     </a>
                   </li>
                 ))

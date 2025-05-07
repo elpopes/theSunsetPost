@@ -10,7 +10,7 @@ import LoginForm from "./components/LoginForm";
 import PostForm from "./components/PostForm";
 import ContactForm from "./components/ContactForm";
 import About from "./components/About";
-import Footer from "./components/Footer"; // Import the new Footer component
+import Footer from "./components/Footer";
 import { login } from "./features/auth/authSlice";
 
 function App() {
@@ -98,7 +98,7 @@ function App() {
             }
           />
         </Routes>
-        <Footer /> {/* Add Footer component here */}
+        <Footer />
       </div>
     </BrowserRouter>
   );
