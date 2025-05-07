@@ -6,26 +6,24 @@ import translationES from "./locales/es/translation.json";
 import translationZH from "./locales/zh/translation.json";
 
 const resources = {
-  en: {
-    translation: translationEN,
-  },
-  es: {
-    translation: translationES,
-  },
-  zh: {
-    translation: translationZH,
-  },
+  en: { translation: translationEN },
+  es: { translation: translationES },
+  zh: { translation: translationZH }, // generic Chinese
+  "zh-CN": { translation: translationZH }, // Simplified Chinese fallback
+  "zh-TW": { translation: translationZH }, // Traditional Chinese fallback (if needed)
 };
 
-i18n
-  .use(initReactI18next) // passes i18n down to react-i18next
-  .init({
-    resources,
-    lng: "en", // default language
-    fallbackLng: "en", // if translation is missing, fallback to English
-    interpolation: {
-      escapeValue: false, // react already safes from xss
-    },
-  });
+i18n.use(initReactI18next).init({
+  resources,
+  lng: "en",
+  fallbackLng: {
+    "zh-CN": ["zh"],
+    "zh-TW": ["zh"],
+    default: ["en"],
+  },
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
 export default i18n;

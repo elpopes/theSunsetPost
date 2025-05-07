@@ -32,11 +32,13 @@ const StoriesList = () => {
       );
 
       const title = translation?.title || story.title || t("Untitled Story");
-      const content =
-        (translation?.content || story.content || t("No content available."))
-          .split(" ")
-          .slice(0, 26)
-          .join(" ") + "…";
+      const rawContent =
+        translation?.content || story.content || t("No content available.");
+
+      const isCJK = ["zh", "zh-CN", "zh-TW"].includes(language);
+      const content = isCJK
+        ? rawContent.substring(0, 100) + "…"
+        : rawContent.split(" ").slice(0, 26).join(" ") + "…";
 
       return {
         ...story,
