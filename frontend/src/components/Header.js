@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import masthead from "../assets/sunset-post-masthead.png";
 import "./Header.css";
 import { useTranslation } from "react-i18next";
@@ -27,7 +28,7 @@ const Header = () => {
       ...section,
       displayName: translation?.name || section.name,
       description: translation?.description || section.description,
-      urlName: section.name, // still in English for routing
+      urlName: section.name, // English identifier for URL
     };
   });
 
@@ -43,13 +44,13 @@ const Header = () => {
         <div className="header__center">
           <div className="header__branding">
             <div className="header__logo">
-              <a href="/" className="header__logo-link">
+              <Link to={`/${i18n.language}`} className="header__logo-link">
                 <img
                   src={masthead}
                   alt="The Sunset Post logo"
                   className="header__logo-image"
                 />
-              </a>
+              </Link>
             </div>
 
             <div className="header__language-switcher">
@@ -69,9 +70,13 @@ const Header = () => {
               {filteredSections.length > 0 ? (
                 filteredSections.map((section) => (
                   <li key={section.id}>
-                    <a href={`/sections/${section.urlName.toLowerCase()}`}>
+                    <Link
+                      to={`/${
+                        i18n.language
+                      }/sections/${section.urlName.toLowerCase()}`}
+                    >
                       {section.displayName}
-                    </a>
+                    </Link>
                   </li>
                 ))
               ) : (

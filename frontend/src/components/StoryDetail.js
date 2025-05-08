@@ -5,7 +5,8 @@ import { useTranslation } from "react-i18next";
 import { deleteStory, editStory } from "../features/stories/storiesSlice";
 import { baseURL } from "../config";
 import ReactMarkdown from "react-markdown";
-import StoryEditor from "./StoryEditor"; // ✅ your reusable editor
+import StoryEditor from "./StoryEditor";
+import { Helmet } from "react-helmet";
 import "./StoryDetail.css";
 
 const StoryDetail = () => {
@@ -87,9 +88,16 @@ const StoryDetail = () => {
   const title = currentTranslation?.title || story.title;
   const content = currentTranslation?.content || story.content;
   const caption = currentTranslation?.caption || "";
+  const metaDescription =
+    currentTranslation?.meta_description || "The Sunset Post";
 
   return (
     <div className="story-detail">
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={metaDescription} />
+      </Helmet>
+
       {editMode ? (
         <form onSubmit={(e) => e.preventDefault()}>
           {translations.map((translation, idx) => (

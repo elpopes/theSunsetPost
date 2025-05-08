@@ -66,7 +66,7 @@ const SectionDetail = () => {
           translatedStories.map((story) => (
             <li key={story.id} className="section-story-item">
               <Link
-                to={`/stories/${story.slug || story.id}`}
+                to={`/${i18n.language}/stories/${story.slug || story.id}`}
                 className="section-story-link"
               >
                 {story.image_url && (
@@ -84,7 +84,9 @@ const SectionDetail = () => {
         ) : (
           <p>
             {t("no_stories.development")}{" "}
-            <Link to="/contact">{t("no_stories.contact_link")}</Link>
+            <Link to={`/${i18n.language}/contact`}>
+              {t("no_stories.contact_link")}
+            </Link>
           </p>
         )}
       </ul>

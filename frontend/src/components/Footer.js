@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { logout } from "../features/auth/authSlice";
 import "./Footer.css";
 
@@ -8,11 +9,9 @@ const Footer = () => {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
 
-  // Redux state
   const sections = useSelector((state) => state.sections.items);
   const user = useSelector((state) => state.auth.user);
 
-  // Filter translations for the current language
   const filteredSections = sections.map((section) => {
     const translation = section.translations?.find(
       (t) => t.language === i18n.language
@@ -35,19 +34,19 @@ const Footer = () => {
         {/* The Sunset Post Column */}
         <div className="footer__column">
           <h2 className="footer__logo">
-            <a href="/" className="footer__logo-link">
+            <Link to={`/${i18n.language}`} className="footer__logo-link">
               {t("The Sunset Post")}
-            </a>
+            </Link>
           </h2>
           <ul>
             <li>
-              <a href="/">{t("home")}</a>
+              <Link to={`/${i18n.language}`}>{t("home")}</Link>
             </li>
             <li>
-              <a href="/about">{t("about")}</a>
+              <Link to={`/${i18n.language}/about`}>{t("about")}</Link>
             </li>
             <li>
-              <a href="/contact">{t("contact")}</a>
+              <Link to={`/${i18n.language}/contact`}>{t("contact")}</Link>
             </li>
           </ul>
         </div>
@@ -59,7 +58,13 @@ const Footer = () => {
             {filteredSections.length > 0 ? (
               filteredSections.map((section) => (
                 <li key={section.id}>
-                  <a href={`/sections/${section.id}`}>{section.name}</a>
+                  <Link
+                    to={`/${
+                      i18n.language
+                    }/sections/${section.name.toLowerCase()}`}
+                  >
+                    {section.name}
+                  </Link>
                 </li>
               ))
             ) : (
@@ -73,16 +78,22 @@ const Footer = () => {
           <h2 className="footer__heading">{t("Contact_Us")}</h2>
           <ul>
             <li>
-              <a href="/contact">{t("Advertise with Us")}</a>
+              <Link to={`/${i18n.language}/contact`}>
+                {t("Advertise with Us")}
+              </Link>
             </li>
             <li>
-              <a href="/contact">{t("Post in Classifieds")}</a>
+              <Link to={`/${i18n.language}/contact`}>
+                {t("Post in Classifieds")}
+              </Link>
             </li>
             <li>
-              <a href="/contact">{t("Careers")}</a>
+              <Link to={`/${i18n.language}/contact`}>{t("Careers")}</Link>
             </li>
             <li>
-              <a href="/contact">{t("Letters to the Editor")}</a>
+              <Link to={`/${i18n.language}/contact`}>
+                {t("Letters to the Editor")}
+              </Link>
             </li>
           </ul>
         </div>
@@ -95,7 +106,7 @@ const Footer = () => {
               <>
                 {user.admin && (
                   <li>
-                    <a href="/post">{t("post")}</a>
+                    <Link to={`/${i18n.language}/post`}>{t("post")}</Link>
                   </li>
                 )}
                 <li>
@@ -107,10 +118,10 @@ const Footer = () => {
             ) : (
               <>
                 <li>
-                  <a href="/signup">{t("sign_up")}</a>
+                  <Link to={`/${i18n.language}/signup`}>{t("sign_up")}</Link>
                 </li>
                 <li>
-                  <a href="/login">{t("login")}</a>
+                  <Link to={`/${i18n.language}/login`}>{t("login")}</Link>
                 </li>
               </>
             )}
@@ -118,7 +129,6 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Footer Bottom */}
       <div className="footer__bottom">
         <p>sunsetpost.org © 2024-2025 {t("The Sunset Post")}</p>
       </div>
