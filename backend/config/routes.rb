@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
     root to: ->(env) { [200, { "Content-Type" => "text/plain" }, ["API is live"]] }
-  
+    
+    get "/preview/stories/:slug", to: "previews#story"
+    
     namespace :api do
       get 'sections/name/:name', to: 'sections#show_by_name'
       resources :sections, only: [:index]

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= @translation.title %> | The Sunset Post</title>
+  <meta name="description" content="<%= @translation.meta_description.presence || 'The Sunset Post' %>">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="<%= @translation.title %>" />
+  <meta property="og:description" content="<%= @translation.meta_description.presence || 'The Sunset Post' %>" />
+  <meta property="og:image" content="<%= @image_url %>" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="<%= request.original_url %>" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="<%= @translation.title %>" />
+  <meta name="twitter:description" content="<%= @translation.meta_description.presence || 'The Sunset Post' %>" />
+  <meta name="twitter:image" content="<%= @image_url %>" />
+
+  <!-- Redirect for users (but not bots) -->
+  <script>
+    window.location.replace("/stories/<%= @story.slug %>");
+  </script>
+</head>
+<body>
+  <p>Redirecting to <%= @translation.title %>...</p>
+</body>
+</html>
