@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import masthead from "../assets/sunset-post-masthead.png";
+import masthead from "../assets/MastHead.svg";
 import "./Header.css";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";

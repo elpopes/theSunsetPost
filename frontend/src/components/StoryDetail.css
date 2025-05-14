@@ -39,7 +39,10 @@
   font-size: clamp(1rem, 3vw, 1.1rem);
   color: #555;
   line-height: 1.6;
-  white-space: pre-wrap;
+}
+
+.story-detail__content p {
+  margin-bottom: 1.2em;
 }
 
 .story-detail__content figure {

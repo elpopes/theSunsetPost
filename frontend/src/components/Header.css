@@ -63,12 +63,11 @@ a:hover {
 }
 
 .header__logo-image {
-  width: 100%;
-  max-width: 600px;
-  height: auto;
+  width: 250%;
   display: block;
-  margin: 0 auto;
-  box-sizing: border-box;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .header__logo h1 a {
@@ -82,7 +81,7 @@ a:hover {
 
 .header__language-switcher {
   display: flex;
-  margin-top: 12px;
+  margin-top: -1rem;
   gap: 8px;
 }
 
@@ -150,7 +149,7 @@ a:hover {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 965px) {
   .hamburger-menu {
     display: block;
   }
