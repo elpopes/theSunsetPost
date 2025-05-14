@@ -42,6 +42,27 @@
   white-space: pre-wrap;
 }
 
+.story-detail__content figure {
+  display: block;
+  margin: 1.5em auto;
+  padding: 0 30px;
+  box-sizing: border-box;
+}
+
+.story-detail__content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.story-detail__content figcaption {
+  font-size: 0.9rem;
+  color: #888;
+  font-style: italic;
+  margin-top: 0.5em;
+  text-align: left;
+}
+
 .story-detail__translations {
   margin-top: 30px;
 }

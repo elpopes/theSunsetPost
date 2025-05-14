@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import { deleteStory, editStory } from "../features/stories/storiesSlice";
 import { baseURL } from "../config";
 import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 import StoryEditor from "./StoryEditor";
 import { Helmet } from "react-helmet";
 import "./StoryDetail.css";
@@ -168,8 +170,30 @@ const StoryDetail = () => {
               )}
             </figure>
           )}
+
           <div className="story-detail__content">
-            <ReactMarkdown>{content}</ReactMarkdown>
+            <ReactMarkdown
+              rehypePlugins={[rehypeRaw]}
+              remarkPlugins={[remarkGfm]}
+              components={{
+                img: ({ node, ...props }) => (
+                  <figure>
+                    <img
+                      {...props}
+                      alt={props.alt}
+                      style={{ maxWidth: "100%", height: "auto" }}
+                    />
+                    {props.alt && (
+                      <figcaption className="story-detail__caption">
+                        {props.alt}
+                      </figcaption>
+                    )}
+                  </figure>
+                ),
+              }}
+            >
+              {content}
+            </ReactMarkdown>
           </div>
         </>
       )}

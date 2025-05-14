@@ -1,5 +1,5 @@
 class Api::StoriesController < ApplicationController
-    before_action :authenticate_request, only: [:create, :update, :destroy]
+    before_action :authenticate_request, only: [:create, :update, :destroy, :upload_image]
   
     # GET /api/stories
     def index
@@ -103,6 +103,23 @@ class Api::StoriesController < ApplicationController
         render json: { error: "Story not found" }, status: :not_found
       end
     end
+
+    def upload_image
+        unless params[:image].present?
+          return render json: { error: "No image file provided" }, status: :bad_request
+        end
+    
+        blob = ActiveStorage::Blob.create_and_upload!(
+          io: params[:image],
+          filename: params[:image].original_filename,
+          content_type: params[:image].content_type
+        )
+    
+        render json: { url: url_for(blob) }, status: :ok
+      rescue => e
+        Rails.logger.error "Image upload failed: #{e.message}"
+        render json: { error: "Upload failed" }, status: :internal_server_error
+    end    
   
     private
   
