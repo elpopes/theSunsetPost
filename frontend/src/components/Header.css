@@ -42,7 +42,6 @@ a:hover {
 }
 
 .header__left {
-  flex: 0.8;
   display: flex;
   justify-content: flex-start;
 }
@@ -57,7 +56,6 @@ a:hover {
 }
 
 .header__right {
-  flex: 1;
   display: flex;
   justify-content: flex-end;
 }
@@ -81,7 +79,6 @@ a:hover {
 
 .header__language-switcher {
   display: flex;
-  margin-top: -1rem;
   gap: 8px;
 }
 

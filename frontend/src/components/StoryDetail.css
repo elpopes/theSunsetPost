@@ -89,6 +89,10 @@
   margin-top: 20px;
 }
 
+.story-detail__authors h3 {
+  margin-bottom: 12px;
+}
+
 .story-detail__author {
   display: flex;
   align-items: center;
