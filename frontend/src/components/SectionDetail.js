@@ -77,7 +77,11 @@ const SectionDetail = () => {
                   />
                 )}
                 <h3>{story.title}</h3>
-                <p>{story.content?.split(" ").slice(0, 25).join(" ")}...</p>
+                <p>
+                  {language === "zh"
+                    ? `${story.content?.slice(0, 60)}...`
+                    : `${story.content?.split(" ").slice(0, 25).join(" ")}...`}
+                </p>
               </Link>
             </li>
           ))

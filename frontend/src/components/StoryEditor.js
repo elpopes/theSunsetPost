@@ -61,9 +61,23 @@ const StoryEditor = ({ value, onChange }) => {
 
       const data = await res.json();
 
-      // When Toast UI calls `callback(url, altText)`, altText is set by the "Description" field.
-      // So we just return the URL here — the editor handles the rest.
-      callback(data.url, blob.name.replace(/\.[^/.]+$/, "")); // fallback alt if Toast doesn’t handle it
+      // Call the Toast UI callback (let it insert the image)
+      callback(data.url, blob.name.replace(/\.[^/.]+$/, ""));
+
+      // Patch the caption in a microtask to grab the actual "alt" from the inserted image
+      setTimeout(() => {
+        const editorEl = editorRef.current?.getInstance()?.getRootElement?.();
+        const imgs = editorEl?.querySelectorAll("img");
+        const lastImg = imgs?.[imgs.length - 1];
+        if (
+          lastImg &&
+          lastImg.alt &&
+          lastImg.alt === blob.name.replace(/\.[^/.]+$/, "")
+        ) {
+          // Toast UI didn't provide a caption — optionally replace or clear it
+          lastImg.alt = ""; // or set it to a default caption if desired
+        }
+      }, 100);
     } catch (err) {
       console.error("Image upload failed:", err);
     }

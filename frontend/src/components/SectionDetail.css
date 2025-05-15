@@ -38,10 +38,11 @@
 }
 
 .section-story-image {
-  width: 100%; /* Ensures the image takes up the full width of its container */
-  height: auto; /* Maintains aspect ratio */
-  max-height: 200px; /* Adds a limit to the height */
-  object-fit: cover; /* Ensures the image scales properly within the container */
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  max-height: none;
+  display: block;
 }
 
 .section-story-item h3 {
