@@ -5,7 +5,11 @@
   padding: 8px;
   margin: 5px auto;
   border-radius: 8px;
-  max-width: 300px;
+  width: 180px;
+  min-width: 180px;
+  min-height: 120px;
+  box-sizing: border-box;
+  overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 

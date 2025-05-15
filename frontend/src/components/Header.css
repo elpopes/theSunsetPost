@@ -61,7 +61,7 @@ a:hover {
 }
 
 .header__logo-image {
-  width: 250%;
+  width: 200%;
   display: block;
   position: relative;
   left: 50%;
@@ -146,7 +146,7 @@ a:hover {
   }
 }
 
-@media (max-width: 965px) {
+@media (max-width: 1150px) {
   .hamburger-menu {
     display: block;
   }

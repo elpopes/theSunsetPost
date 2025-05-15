@@ -1,4 +1,3 @@
-/* src/components/LanguageSwitcher.css */
 .language-switcher {
   display: flex;
   gap: 10px;
@@ -17,4 +16,10 @@
 
 .language-switcher button:hover {
   background-color: #a32800;
+}
+
+.language-switcher button:focus,
+.language-switcher button:active {
+  outline: none;
+  background-color: #771000;
 }

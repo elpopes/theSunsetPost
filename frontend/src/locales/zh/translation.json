@@ -17,7 +17,7 @@
     "Train": "列车",
     "Now arriving": "即将到达",
     "min": "分钟",
-    "Community Spotlight": "社区焦点",
+    "Community Spotlight": "社区亮点",
     "Contact us to feature your message": "联系我们以展示您的信息",
     "Written by": "作者",
     "no_stories": {
@@ -35,7 +35,7 @@
   },
     "contact_page": {
         "title": "联系我们",
-        "welcome_text": "我们很想听到您的消息！如有任何问题、反馈或仅仅是打招呼，请随时使用以下表单联系我们。",
+        "welcome_text": "欢迎联系我们！如有任何问题、反馈或仅仅是打招呼，请随时使用以下表单联系我们。",
         "recruitment_text": "我们还在寻找有才华的作家、摄影师和销售人员加入我们的团队。如果您感兴趣，请在您的信息中告诉我们！",
         "name_label": "您的姓名",
         "name_placeholder": "请输入您的姓名",
@@ -53,8 +53,8 @@
         "Contact_Us": "联系我们",
         "Account": "账户",
         "Advertise with Us": "与我们广告",
-        "Post in Classifieds": "发布分类广告",
-        "Careers": "职业",
+        "Post in Classifieds": "发布到分类信息",
+        "Careers": "职业招聘信息",
         "Letters to the Editor": "给编辑的信"
   }
   
