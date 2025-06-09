@@ -44,7 +44,11 @@ const Header = () => {
         <div className="header__center">
           <div className="header__branding">
             <div className="header__logo">
-              <Link to={`/${i18n.language}`} className="header__logo-link">
+              <Link
+                to={`/${i18n.language}`}
+                className="header__logo-link"
+                onClick={() => setMenuOpen(false)}
+              >
                 <img
                   src={masthead}
                   alt="The Sunset Post logo"
@@ -74,6 +78,7 @@ const Header = () => {
                       to={`/${
                         i18n.language
                       }/sections/${section.urlName.toLowerCase()}`}
+                      onClick={() => setMenuOpen(false)}
                     >
                       {section.displayName}
                     </Link>
