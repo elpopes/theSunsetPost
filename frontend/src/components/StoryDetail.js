@@ -98,6 +98,10 @@ const StoryDetail = () => {
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={metaDescription} />
+        <link
+          rel="canonical"
+          href={`https://www.sunsetpost.org/stories/${story.id}`}
+        />
       </Helmet>
 
       {editMode ? (
