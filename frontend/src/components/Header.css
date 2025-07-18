@@ -150,8 +150,14 @@ a:hover {
 
 @media (max-width: 768px) {
   .header__logo-image {
-    width: auto;
+    width: 100%;
     max-width: 85vw;
+    height: auto;
+    min-height: 50px;
+    display: block;
+    margin: 0 auto;
+    left: 0;
+    transform: none;
   }
 }
 
@@ -238,5 +244,18 @@ a:hover {
 
   .header__sections-nav ul {
     font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header__logo-image {
+    width: 100%;
+    max-width: 85vw;
+    height: auto;
+    min-height: 40px;
+    display: block;
+    margin: 0 auto;
+    left: 0;
+    transform: none;
   }
 }
