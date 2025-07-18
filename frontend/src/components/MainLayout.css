@@ -76,3 +76,27 @@
     padding: 10px;
   }
 }
+
+/* Ensure full height and spacing for ad block */
+.reach-image {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+
+/* External link under the ad box */
+.info-link {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+.info-link a {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+.info-link a:hover {
+  color: var(--primary-color-hover);
+}
