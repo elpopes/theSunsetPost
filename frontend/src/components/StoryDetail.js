@@ -100,7 +100,7 @@ const StoryDetail = () => {
         <meta name="description" content={metaDescription} />
         <link
           rel="canonical"
-          href={`https://www.sunsetpost.org/stories/${story.id}`}
+          href={`https://www.sunsetpost.org/stories/${story.slug}`}
         />
       </Helmet>
 
