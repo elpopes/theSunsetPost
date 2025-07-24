@@ -14,24 +14,25 @@
   flex: 3;
   padding: clamp(10px, 2vw, 20px);
 }
-
 .main-layout__sidebar {
   flex: 1;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  padding: clamp(10px, 2vw, 15px);
-  border-radius: 5px;
+  background-color: transparent;
+  padding: 0;
 }
 
 .info-space {
   background-color: #e6e6e6;
-  padding: 16px;
-  border-radius: 5px;
+  padding: 0px;
+  border-radius: 4px;
   text-align: center;
-  font-size: clamp(0.85rem, 2.5vw, 1rem);
-  transition: all 0.3s ease-in-out;
+  margin-bottom: 8px;
   box-sizing: border-box;
-  margin-top: 8px;
+}
+
+.info-link {
+  margin-top: 4px;
+  padding: 0 4px;
+  text-align: center;
 }
 
 .info-space h4 {
