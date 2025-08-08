@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { fetchSectionByName } from "../features/sections/sectionsSlice";
+import ReactMarkdown from "react-markdown";
 import "./SectionDetail.css";
 
 const SectionDetail = () => {
@@ -63,28 +64,43 @@ const SectionDetail = () => {
 
       <ul className="section-stories">
         {translatedStories.length > 0 ? (
-          translatedStories.map((story) => (
-            <li key={story.id} className="section-story-item">
-              <Link
-                to={`/${i18n.language}/stories/${story.slug || story.id}`}
-                className="section-story-link"
-              >
-                {story.image_url && (
-                  <img
-                    src={story.image_url}
-                    alt={story.title}
-                    className="section-story-image"
-                  />
-                )}
-                <h3>{story.title}</h3>
-                <p>
-                  {language === "zh"
-                    ? `${story.content?.slice(0, 60)}...`
-                    : `${story.content?.split(" ").slice(0, 25).join(" ")}...`}
-                </p>
-              </Link>
-            </li>
-          ))
+          translatedStories.map((story) => {
+            const isCJK = ["zh", "zh-CN", "zh-TW"].includes(language);
+            const snippet = isCJK
+              ? story.content?.slice(0, 60) + "..."
+              : story.content?.split(" ").slice(0, 25).join(" ") + "...";
+
+            return (
+              <li key={story.id} className="section-story-item">
+                <Link
+                  to={`/${i18n.language}/stories/${story.slug || story.id}`}
+                  className="section-story-link"
+                >
+                  {story.image_url && (
+                    <img
+                      src={story.image_url}
+                      alt={story.title}
+                      className="section-story-image"
+                    />
+                  )}
+                  <h3>{story.title}</h3>
+                </Link>
+                <div className="section-story-snippet">
+                  <ReactMarkdown
+                    components={{
+                      a: ({ node, children, ...props }) => (
+                        <a {...props} target="_blank" rel="noopener noreferrer">
+                          {children}
+                        </a>
+                      ),
+                    }}
+                  >
+                    {snippet}
+                  </ReactMarkdown>
+                </div>
+              </li>
+            );
+          })
         ) : (
           <p>
             {t("no_stories.development")}{" "}

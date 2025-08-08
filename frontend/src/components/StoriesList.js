@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchStories } from "../features/stories/storiesSlice";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 import "./StoriesList.css";
 
 const StoriesList = () => {
@@ -61,20 +62,39 @@ const StoriesList = () => {
         <ul className="stories-list">
           {filteredStories.map((story) => (
             <li key={story.id} className="story-item">
-              <Link
-                to={`/${i18n.language}/stories/${story.slug || story.id}`}
-                className="story-link"
-              >
-                {story.image_url && (
+              {story.image_url && (
+                <Link
+                  to={`/${i18n.language}/stories/${story.slug || story.id}`}
+                  className="story-image-link"
+                >
                   <img
                     src={story.image_url}
                     alt={story.title}
                     className="story-image"
                   />
-                )}
-                <h3 className="story-title">{story.title}</h3>
-                <p className="story-content">{story.content}</p>
-              </Link>
+                </Link>
+              )}
+              <h3 className="story-title">
+                <Link
+                  to={`/${i18n.language}/stories/${story.slug || story.id}`}
+                  className="story-link"
+                >
+                  {story.title}
+                </Link>
+              </h3>
+              <div className="story-content">
+                <ReactMarkdown
+                  components={{
+                    a: ({ node, children, ...props }) => (
+                      <a {...props} target="_blank" rel="noopener noreferrer">
+                        {children}
+                      </a>
+                    ),
+                  }}
+                >
+                  {story.content}
+                </ReactMarkdown>
+              </div>
             </li>
           ))}
         </ul>
