@@ -180,6 +180,13 @@ const StoryDetail = () => {
               rehypePlugins={[rehypeRaw]}
               remarkPlugins={[remarkGfm]}
               components={{
+                // open markdown links in a new tab
+                a: ({ node, children, ...props }) => (
+                  <a {...props} target="_blank" rel="noopener noreferrer">
+                    {children}
+                  </a>
+                ),
+                // keep your image -> figure renderer
                 img: ({ node, ...props }) => (
                   <figure>
                     <img
