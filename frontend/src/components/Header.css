@@ -14,7 +14,6 @@ a {
   color: var(--text-color);
   transition: color 0.3s;
 }
-
 a:hover {
   color: var(--secondary-text-color);
 }
@@ -61,12 +60,11 @@ a:hover {
 }
 
 .header__logo-image {
-  width: 200%;
-  max-width: none;
   display: block;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
+  height: auto;
+  margin: 0 auto;
+  width: clamp(320px, 40vw, 980px);
+  max-width: 100%;
 }
 
 .header__logo h1 a {
@@ -74,8 +72,7 @@ a:hover {
   font-size: var(--font-size-logo);
   color: var(--primary-color);
   font-weight: bold;
-  margin: 0;
-  margin: 20px;
+  margin: 20px 0;
 }
 
 .header__language-switcher {
@@ -83,7 +80,6 @@ a:hover {
   gap: 8px;
   justify-content: center;
 }
-
 .header__language-switcher button {
   padding: 8px 12px;
   background-color: var(--primary-color);
@@ -94,7 +90,6 @@ a:hover {
   font-size: 0.875rem;
   transition: background-color 0.3s;
 }
-
 .header__language-switcher button:hover,
 .header__language-switcher button:focus {
   background-color: var(--primary-color-hover);
@@ -105,7 +100,6 @@ a:hover {
   flex-shrink: 1;
   max-width: 100%;
 }
-
 .header__sections-nav ul {
   display: flex;
   flex-wrap: nowrap;
@@ -116,17 +110,14 @@ a:hover {
   font-size: 0.9rem;
   justify-content: center;
 }
-
 .header__sections-nav li {
   white-space: nowrap;
 }
-
 .header__sections-nav a {
   text-decoration: none;
   color: #000000;
   transition: color 0.3s;
 }
-
 .header__sections-nav a:hover,
 .header__sections-nav a:focus {
   color: var(--primary-color-hover);
@@ -140,32 +131,6 @@ a:hover {
   color: var(--primary-color);
   font-size: 2rem;
   cursor: pointer;
-}
-
-@media (max-width: 1024px) {
-  .header__logo-image {
-    width: 100%;
-    max-width: 90vw;
-  }
-}
-
-@media (max-width: 768px) {
-  .header__logo-image {
-    width: 100%;
-    max-width: 85vw;
-    height: auto;
-    min-height: 50px;
-    display: block;
-    margin: 0 auto;
-    left: 0;
-    transform: none;
-  }
-}
-
-@media (max-width: 992px) {
-  .header__logo-image {
-    max-width: 90vw;
-  }
 }
 
 @media (max-width: 1150px) {
@@ -223,7 +188,6 @@ a:hover {
     gap: 10px;
     flex-wrap: wrap;
   }
-
   .header__sections-nav.open ul {
     display: flex;
   }
@@ -243,21 +207,7 @@ a:hover {
   .header {
     padding: 15px;
   }
-
   .header__sections-nav ul {
     font-size: 0.85rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .header__logo-image {
-    width: 100%;
-    max-width: 85vw;
-    height: auto;
-    min-height: 40px;
-    display: block;
-    margin: 0 auto;
-    left: 0;
-    transform: none;
   }
 }
