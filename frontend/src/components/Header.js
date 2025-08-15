@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import masthead from "../assets/MastHead.svg";
+import mastheadEn from "../assets/MastHead.svg";
+import mastheadEs from "../assets/MastHeadEs.svg";
+import mastheadZh from "../assets/MastHeadZh.svg";
 import "./Header.css";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -20,27 +22,37 @@ const Header = () => {
     dispatch(fetchSections());
   }, [dispatch]);
 
+  // preload to avoid flicker when switching languages
+  useEffect(() => {
+    [mastheadEn, mastheadEs, mastheadZh].forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
+  const normLang = (lng) =>
+    lng?.startsWith("es") ? "es" : lng?.startsWith("zh") ? "zh" : "en";
+
+  const logoByLang = { en: mastheadEn, es: mastheadEs, zh: mastheadZh };
+  const logoSrc = logoByLang[normLang(i18n.language)];
+
   const filteredSections = sections.map((section) => {
-    const translation = section.translations?.find(
-      (t) => t.language === i18n.language
-    );
+    const tr = section.translations?.find((x) => x.language === i18n.language);
     return {
       ...section,
-      displayName: translation?.name || section.name,
-      description: translation?.description || section.description,
-      urlName: section.name, // English identifier for URL
+      displayName: tr?.name || section.name,
+      description: tr?.description || section.description,
+      urlName: section.name,
     };
   });
 
   return (
     <header className="header">
       <div className="header__content">
-        {/* Left: Weather */}
         <div className="header__left">
           <WeatherTime />
         </div>
 
-        {/* Center: Logo, Language Switcher, Navigation */}
         <div className="header__center">
           <div className="header__branding">
             <div className="header__logo">
@@ -50,13 +62,12 @@ const Header = () => {
                 onClick={() => setMenuOpen(false)}
               >
                 <img
-                  src={masthead}
-                  alt="The Sunset Post logo"
+                  src={logoSrc}
+                  alt={t("The Sunset Post masthead")}
                   className="header__logo-image"
                 />
               </Link>
             </div>
-
             <div className="header__language-switcher">
               <LanguageSwitcher />
             </div>
@@ -91,7 +102,6 @@ const Header = () => {
           </nav>
         </div>
 
-        {/* Right: Subway Info */}
         <div className="header__right">
           <div className="header__info">
             <SubwayInfo />
