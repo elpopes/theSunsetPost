@@ -81,6 +81,7 @@ a:hover {
 .header__language-switcher {
   display: flex;
   gap: 8px;
+  justify-content: center;
 }
 
 .header__language-switcher button {
@@ -220,6 +221,7 @@ a:hover {
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
   }
 
   .header__sections-nav.open ul {
