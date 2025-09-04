@@ -1,3 +1,19 @@
+.story-detail__content,
+.story-detail__content p,
+.story-detail__content li,
+.story-detail__content a,
+.story-detail__content figcaption {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  word-wrap: break-word;
+}
+
+.story-detail__content pre,
+.story-detail__content code {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 .story-detail {
   max-width: 800px;
   margin: 0 auto;
