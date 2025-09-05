@@ -1,13 +1,11 @@
-import React from "react";
+import React, { useMemo, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-// Dojo (existing)
 import dojoSmartEn from "../assets/outreach/Dojo-Smartreach-En.png";
 import dojoSmartEs from "../assets/outreach/Dojo-Smartreach-Es.png";
 import dojoSmartZh from "../assets/outreach/Dojo-Smartreach-Zh.png";
 
-// Maria’s Bistro (new)
 import mbSmartEn from "../assets/outreach/MariasBistro-Smartreach-En.png";
 import mbSmartEs from "../assets/outreach/MariasBistro-Smartreach-Es.png";
 import mbSmartZh from "../assets/outreach/MariasBistro-Smartreach-Zh.png";
@@ -55,16 +53,35 @@ const sponsorsSmartreach = [
   },
 ];
 
-const pickSponsor = () => {
-  // deterministic daily rotation (change to Math.random() for per-load)
-  const day = new Date().getDate();
-  return sponsorsSmartreach[day % sponsorsSmartreach.length];
-};
-
 const InfoBlockMobile = ({ lang }) => {
   const { t } = useTranslation();
-  const sponsor = pickSponsor();
-  const banner = sponsor.byLang[lang] || sponsor.byLang.en;
+  const { pathname } = useLocation();
+  const lastShownIdRef = useRef(null);
+
+  const pick = useMemo(() => {
+    const arr = [...sponsorsSmartreach];
+    // shuffle
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    // avoid repeating the same sponsor consecutively
+    let chosen = arr[0];
+    if (
+      lastShownIdRef.current &&
+      arr.length > 1 &&
+      chosen.id === lastShownIdRef.current
+    ) {
+      chosen = arr[1];
+    }
+    return chosen;
+  }, [pathname]);
+
+  useEffect(() => {
+    lastShownIdRef.current = pick.id;
+  }, [pick]);
+
+  const banner = pick.byLang[lang] || pick.byLang.en;
 
   return (
     <>
