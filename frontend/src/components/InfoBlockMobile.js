@@ -58,14 +58,16 @@ const InfoBlockMobile = ({ lang }) => {
   const { pathname } = useLocation();
   const lastShownIdRef = useRef(null);
 
+  const stablePath = useMemo(() => {
+    return pathname.replace(/^\/(en|es|zh)(?=\/|$)/, "") || "/";
+  }, [pathname]);
+
   const pick = useMemo(() => {
     const arr = [...sponsorsSmartreach];
-    // shuffle
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
-    // avoid repeating the same sponsor consecutively
     let chosen = arr[0];
     if (
       lastShownIdRef.current &&
@@ -75,7 +77,7 @@ const InfoBlockMobile = ({ lang }) => {
       chosen = arr[1];
     }
     return chosen;
-  }, [pathname]);
+  }, [stablePath]);
 
   useEffect(() => {
     lastShownIdRef.current = pick.id;
