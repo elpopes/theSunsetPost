@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FiSearch } from "react-icons/fi";
+import { baseURL } from "../config";
 import "./SearchBar.css";
 
 const SearchBar = () => {
@@ -58,7 +59,9 @@ const SearchBar = () => {
         limit: "5",
       });
 
-      fetch(`/api/search?${params.toString()}`, { signal: controller.signal })
+      fetch(`${baseURL}/api/search?${params.toString()}`, {
+        signal: controller.signal,
+      })
         .then((res) => {
           if (!res.ok) throw new Error("Search failed");
           return res.json();

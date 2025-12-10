@@ -1,3 +1,4 @@
+// src/components/Header.js
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import mastheadEn from "../assets/MastHead.svg";
@@ -10,6 +11,7 @@ import WeatherTime from "./WeatherTime";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSections } from "../features/sections/sectionsSlice";
 import SubwayInfo from "./SubwayInfo";
+import SearchBar from "./SearchBar";
 
 const Header = () => {
   const { t, i18n } = useTranslation();
@@ -68,8 +70,14 @@ const Header = () => {
                 />
               </Link>
             </div>
-            <div className="header__language-switcher">
-              <LanguageSwitcher />
+
+            <div className="header__language-row">
+              <div className="header__language-switcher">
+                <LanguageSwitcher />
+              </div>
+              <div className="header__search">
+                <SearchBar />
+              </div>
             </div>
           </div>
 

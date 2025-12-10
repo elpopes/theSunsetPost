@@ -3,6 +3,7 @@ class Api::SearchController < ApplicationController
 
   skip_before_action :authenticate_admin!, only: [:index], raise: false
 
+  # GET /api/search?q=query[&language=en][&limit=5]
   def index
     query    = params[:q].to_s.strip
     language = params[:language].presence
@@ -16,26 +17,25 @@ class Api::SearchController < ApplicationController
     trimmed_query = query[0, 200]
 
     translations = StoryTranslation
-        .includes(:story)
-        .where.not(title: [nil, ""])
-        .yield_self { |rel| language ? rel.where(language: language) : rel }
-        .where(search_sql, q: "%#{trimmed_query}%")
-        .order(created_at: :desc)
-        .limit(limit)
+      .includes(:story)
+      .where.not(title: [nil, ""])
+      .yield_self { |rel| language ? rel.where(language: language) : rel }
+      .where(search_sql, q: "%#{trimmed_query}%")
+      .order(created_at: :desc)
+      .limit(limit)
 
     results = translations.map { |t| serialize_translation(t) }
 
     render json: { results: results }
   rescue => e
     Rails.logger.error("Search error: #{e.class} - #{e.message}")
-        render json: { error: "Search is temporarily unavailable." }, status: :internal_server_error
+    render json: { error: "Search is temporarily unavailable." }, status: :internal_server_error
   end
-
 
   private
 
-  # Search in multiple text fields on story_translations.
-  def translation_search_sql
+  # IMPORTANT: name must match what we call in `index` (`search_sql`)
+  def search_sql
     <<~SQL.squish
       title ILIKE :q
       OR content ILIKE :q
@@ -48,14 +48,16 @@ class Api::SearchController < ApplicationController
     story = translation.story
 
     {
-      id: story.id,
-      type: "story",
-      title: translation.title,
-      language: translation.language,
-      slug: story.slug,
-      url: story_url_for(story),
-      published_at: story.created_at, 
-      snippet: build_snippet(translation)
+      id:           story.id,
+      type:         "story",
+      title:        translation.title,
+      language:     translation.language,
+      slug:         story.slug,
+      url:          story_url_for(story),
+      published_at: story.created_at,
+      snippet:      build_snippet(translation),
+      # uncomment if you want thumbs in suggestions:
+      # image_url:   story_image_url(story),
     }
   end
 
@@ -64,12 +66,17 @@ class Api::SearchController < ApplicationController
     "/stories/#{slug_or_id}"
   end
 
+  # Optional helper if you decide to return image_url
+  def story_image_url(story)
+    return nil unless story.respond_to?(:image) && story.image.attached?
+    url_for(story.image)
+  end
+
   def build_snippet(translation)
     raw = translation.content.to_s
 
     # Strip HTML if content is rich text.
     text = ActionView::Base.full_sanitizer.sanitize(raw).squish
-
     return "" if text.blank?
 
     text.length > 200 ? "#{text[0, 197]}..." : text

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { baseURL } from "../config";
 
 const SearchPage = () => {
   const { lang } = useParams(); // from route like "/:lang/search"
@@ -30,7 +31,7 @@ const SearchPage = () => {
 
     const params = new URLSearchParams({ q: trimmed, language: apiLanguage });
 
-    fetch(`/api/search?${params.toString()}`)
+    fetch(`${baseURL}/api/search?${params.toString()}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error(`Search request failed with status ${res.status}`);

@@ -12,8 +12,9 @@ import ContactForm from "./components/ContactForm";
 import About from "./components/About";
 import Footer from "./components/Footer";
 import LanguageHandler from "./components/LanguageHandler";
+import SearchPage from "./components/SearchPage"; // 👈 NEW
 import { login } from "./features/auth/authSlice";
-import { initGA, logPageView } from "./analytics"; // 👈 GA setup
+import { initGA, logPageView } from "./analytics";
 
 // Nested component to handle GA tracking on route change
 const AppRoutes = () => {
@@ -103,6 +104,15 @@ const AppRoutes = () => {
             </MainLayout>
           }
         />
+        <Route
+          path="/:lang/search"
+          element={
+            <MainLayout>
+              <LanguageHandler />
+              <SearchPage />
+            </MainLayout>
+          }
+        />
 
         {/* Legacy routes */}
         <Route
@@ -166,6 +176,14 @@ const AppRoutes = () => {
           element={
             <MainLayout>
               <SectionDetail />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/search"
+          element={
+            <MainLayout>
+              <SearchPage />
             </MainLayout>
           }
         />
