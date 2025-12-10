@@ -1,0 +1,90 @@
+.masthead-search {
+  position: relative;
+}
+
+.masthead-search__icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.masthead-search__icon {
+  width: 20px;
+  height: 20px;
+}
+
+.masthead-search__bubble {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 0.4rem;
+  min-width: 220px;
+  max-width: 320px;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  padding: 0.4rem;
+}
+
+.masthead-search__form {
+  margin-bottom: 0.25rem;
+}
+
+.masthead-search__input {
+  width: 100%;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.masthead-search__status {
+  font-size: 0.8rem;
+  padding: 0.25rem 0.1rem;
+}
+
+.masthead-search__status--error {
+  color: #b00020;
+}
+
+.masthead-search__status--empty {
+  color: #666;
+}
+
+.masthead-search__suggestions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.masthead-search__suggestions-item + .masthead-search__suggestions-item {
+  border-top: 1px solid #eee;
+}
+
+.masthead-search__suggestion {
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  padding: 0.35rem 0.1rem;
+  cursor: pointer;
+}
+
+.masthead-search__suggestion-title {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.masthead-search__suggestion-snippet {
+  display: block;
+  font-size: 0.8rem;
+  color: #555;
+}

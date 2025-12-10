@@ -1,76 +1,175 @@
-# app/controllers/api/search_controller.rb
-class Api::SearchController < ApplicationController
+# app/controllers/api/stories_controller.rb
+class Api::StoriesController < ApplicationController
+  before_action :authenticate_request, only: [:create, :update, :destroy, :upload_image]
 
-  # GET /api/search?q=query[&language=en]
+  # GET /api/stories
   def index
-    query    = params[:q].to_s.strip
-    language = params[:language].presence
+    @stories = Story.includes(:story_translations, :authors, :sections).order(created_at: :desc)
+    render json: @stories.map { |story| story_json(story) }
+  end
 
-    # Empty query -> no results, no error.
-    return render json: { results: [] } if query.blank?
+  # GET /api/stories/:id_or_slug
+  def show
+    @story = Story.includes(:story_translations, :authors, :sections).find_by_identifier(params[:id])
+    if @story
+      render json: story_json(@story)
+    else
+      render json: { error: "Story not found" }, status: :not_found
+    end
+  end
 
-    trimmed_query = query[0, 200]
+  # POST /api/stories
+  def create
+    @story = Story.new
 
-    translations = StoryTranslation
-      .includes(:story)
-      .where.not(title: [nil, ""])
-      .yield_self { |rel| language ? rel.where(language: language) : rel }
-      .where(search_sql, q: "%#{trimmed_query}%")
-      .order(created_at: :desc)
-      .limit(50)
+    @story.image.attach(params[:image]) if params[:image].present?
 
-    results = translations.map { |t| serialize_translation(t) }
+    begin
+      translations = JSON.parse(params[:translations])
+      translations.each do |translation|
+        @story.story_translations.build(
+          title: translation["title"],
+          content: translation["content"],
+          meta_description: translation["meta_description"],
+          caption: translation["caption"],
+          language: translation["language"]
+        )
+      end
+    rescue JSON::ParserError
+      return render json: { error: "Invalid translations format" }, status: :unprocessable_entity
+    end
 
-    render json: { results: results }
+    @story.authors = Author.where(id: JSON.parse(params[:author_ids])) if params[:author_ids].present?
+    @story.sections = Section.where(id: JSON.parse(params[:section_ids])) if params[:section_ids].present?
+
+    if @story.save
+      render json: story_json(@story), status: :created
+    else
+      render json: { errors: @story.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  # PATCH/PUT /api/stories/:id_or_slug
+  def update
+    @story = Story.find_by(id: params[:id])
+    unless @story
+      return render json: { error: "Story not found" }, status: :not_found
+    end
+
+    # 1. Destroy old translations and rebuild if translations are provided
+    if params[:translations].present?
+      @story.story_translations.destroy_all
+      begin
+        translations = JSON.parse(params[:translations])
+        translations.each do |translation|
+          @story.story_translations.build(
+            title: translation["title"],
+            content: translation["content"],
+            meta_description: translation["meta_description"],
+            caption: translation["caption"],
+            language: translation["language"]
+          )
+        end
+      rescue JSON::ParserError
+        return render json: { error: "Invalid translations format" }, status: :unprocessable_entity
+      end
+    end
+
+    # 2. Only update the image if a new one is provided
+    if params[:image].present?
+      @story.image.attach(params[:image])
+    end
+
+    # 3. Generate a slug if it's missing
+    if @story.slug.blank?
+      default_title = @story.story_translations.find_by(language: "en")&.title ||
+                      @story.story_translations.first&.title
+      @story.slug = default_title.to_s.parameterize if default_title.present?
+    end
+
+    # 4. Save and return updated story
+    if @story.save
+      render json: story_json(@story), status: :ok
+    else
+      render json: { errors: @story.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  # DELETE /api/stories/:id_or_slug
+  def destroy
+    @story = Story.find_by_identifier(params[:id])
+    if @story
+      @story.destroy
+      render json: { message: "Story deleted successfully" }, status: :ok
+    else
+      render json: { error: "Story not found" }, status: :not_found
+    end
+  end
+
+  def upload_image
+    unless params[:image].present?
+      return render json: { error: "No image file provided" }, status: :bad_request
+    end
+
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: params[:image],
+      filename: params[:image].original_filename,
+      content_type: params[:image].content_type
+    )
+
+    render json: { url: url_for(blob) }, status: :ok
   rescue => e
-    Rails.logger.error("Search error: #{e.class} - #{e.message}")
-    render json: { error: "Search is temporarily unavailable." }, status: :internal_server_error
+    Rails.logger.error "Image upload failed: #{e.message}"
+    render json: { error: "Upload failed" }, status: :internal_server_error
   end
 
   private
 
-  # Search across the main text fields on story_translations.
-  def search_sql
-    <<~SQL.squish
-      title ILIKE :q
-      OR content ILIKE :q
-      OR meta_description ILIKE :q
-      OR caption ILIKE :q
-    SQL
+  def authenticate_request
+    header = request.headers["Authorization"]
+    token = header.split(" ").last if header
+
+    begin
+      decoded = JWT.decode(token, JWT_SECRET_KEY, true, algorithm: "HS256")
+      @current_user = User.find(decoded[0]["user_id"])
+    rescue JWT::DecodeError, ActiveRecord::RecordNotFound
+      render json: { error: "Unauthorized access" }, status: :unauthorized
+    end
   end
 
-  def serialize_translation(translation)
-    story = translation.story
-
+  def story_json(story)
     {
       id: story.id,
-      type: "story",
       slug: story.slug,
-      url: story_url_for(story),
-      title: translation.title,
-      language: translation.language,
-      created_at: story.created_at,
-      image_url: story_image_url(story),
-      snippet: build_snippet(translation)
+      image_url: story.image.attached? ? url_for(story.image) : nil,
+      translations: story.story_translations.map do |tr|
+        {
+          id: tr.id,
+          title: tr.title,
+          content: tr.content,
+          meta_description: tr.meta_description,
+          caption: tr.caption,
+          language: tr.language
+        }
+      end,
+      authors: story.authors.map do |author|
+        {
+          id: author.id,
+          name: author.name,
+          bio: author.translated_bio(I18n.locale.to_s),
+          image_url: author.image.attached? ? url_for(author.image) : nil,
+          translations: author.author_translations.map do |tr|
+            { language: tr.language, bio: tr.bio }
+          end
+        }
+      end,
+      sections: story.sections.map do |section|
+        {
+          id: section.id,
+          name: section.name,
+          description: section.description
+        }
+      end
     }
-  end
-
-  def story_url_for(story)
-    slug_or_id = story.slug.presence || story.id
-    "/stories/#{slug_or_id}"
-  end
-
-  def story_image_url(story)
-    return nil unless story.respond_to?(:image) && story.image.attached?
-    url_for(story.image)
-  end
-
-  def build_snippet(translation)
-    raw = translation.content.to_s
-    # Strip HTML and collapse whitespace.
-    text = ActionView::Base.full_sanitizer.sanitize(raw).squish
-    return "" if text.blank?
-
-    text.length > 200 ? "#{text[0, 197]}..." : text
   end
 end

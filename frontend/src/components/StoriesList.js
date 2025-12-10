@@ -9,19 +9,23 @@ import "./StoriesList.css";
 const StoriesList = () => {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
-  const stories = useSelector((state) => state.stories.items);
-  const status = useSelector((state) => state.stories.status);
-  const error = useSelector((state) => state.stories.error);
+
+  const stories = useSelector((state) => state.stories?.items);
+  const status = useSelector((state) => state.stories?.status);
+  const error = useSelector((state) => state.stories?.error);
 
   const language = i18n.language;
 
   useEffect(() => {
-    if (status === "idle") {
+    if (status === "idle" || !status) {
       dispatch(fetchStories());
     }
   }, [status, dispatch]);
 
-  const filteredStories = stories
+  // Ensure we always work with an array to avoid .filter() crashes
+  const safeStories = Array.isArray(stories) ? stories : [];
+
+  const filteredStories = safeStories
     .filter((story) => {
       const sectionNames = story.sections?.map((section) => section.name) || [];
       const isClassifieds = sectionNames.includes("Classifieds");
@@ -29,7 +33,7 @@ const StoriesList = () => {
     })
     .map((story) => {
       const translation = story.translations?.find(
-        (t) => t.language === language
+        (tr) => tr.language === language
       );
 
       const title = translation?.title || story.title || t("Untitled Story");
@@ -58,7 +62,7 @@ const StoriesList = () => {
 
       {status === "loading" && <p>{t("Loading stories...")}</p>}
 
-      {status === "succeeded" && filteredStories.length > 0 ? (
+      {status === "succeeded" && filteredStories.length > 0 && (
         <ul className="stories-list">
           {filteredStories.map((story) => (
             <li key={story.id} className="story-item">
@@ -98,9 +102,13 @@ const StoriesList = () => {
             </li>
           ))}
         </ul>
-      ) : (
+      )}
+
+      {status === "succeeded" && filteredStories.length === 0 && !error && (
         <p>{t("No stories available.")}</p>
       )}
+
+      {!status && !error && <p>{t("Loading stories...")}</p>}
     </section>
   );
 };

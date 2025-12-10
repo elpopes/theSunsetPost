@@ -4,29 +4,33 @@ class Api::SearchController < ApplicationController
   skip_before_action :authenticate_admin!, only: [:index], raise: false
 
   def index
-    query   = params[:q].to_s.strip
-    lang    = params[:language].presence
+    query    = params[:q].to_s.strip
+    language = params[:language].presence
+    limit    = params[:limit].presence&.to_i
 
-    # Empty or whitespace-only query: no results, no error.
     return render json: { results: [] } if query.blank?
+
+    # keep limit within a sane range
+    limit = 50 if limit.nil? || limit <= 0 || limit > 50
 
     trimmed_query = query[0, 200]
 
     translations = StoryTranslation
-      .includes(:story)
-      .where.not(title: [nil, ""])
-      .yield_self { |rel| lang ? rel.where(language: lang) : rel }
-      .where(translation_search_sql, q: "%#{trimmed_query}%")
-      .order(created_at: :desc)
-      .limit(50)
+        .includes(:story)
+        .where.not(title: [nil, ""])
+        .yield_self { |rel| language ? rel.where(language: language) : rel }
+        .where(search_sql, q: "%#{trimmed_query}%")
+        .order(created_at: :desc)
+        .limit(limit)
 
     results = translations.map { |t| serialize_translation(t) }
 
     render json: { results: results }
   rescue => e
     Rails.logger.error("Search error: #{e.class} - #{e.message}")
-    render json: { error: "Search is temporarily unavailable." }, status: :internal_server_error
+        render json: { error: "Search is temporarily unavailable." }, status: :internal_server_error
   end
+
 
   private
 
