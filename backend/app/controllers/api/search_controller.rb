@@ -1,12 +1,13 @@
 # app/controllers/api/search_controller.rb
 class Api::SearchController < ApplicationController
 
-  # GET /api/search?q=query[&language=en]
-  def index
-    query    = params[:q].to_s.strip
-    language = params[:language].presence
+  skip_before_action :authenticate_admin!, only: [:index], raise: false
 
-    # Empty query -> no results, no error.
+  def index
+    query   = params[:q].to_s.strip
+    lang    = params[:language].presence
+
+    # Empty or whitespace-only query: no results, no error.
     return render json: { results: [] } if query.blank?
 
     trimmed_query = query[0, 200]
@@ -14,8 +15,8 @@ class Api::SearchController < ApplicationController
     translations = StoryTranslation
       .includes(:story)
       .where.not(title: [nil, ""])
-      .yield_self { |rel| language ? rel.where(language: language) : rel }
-      .where(search_sql, q: "%#{trimmed_query}%")
+      .yield_self { |rel| lang ? rel.where(language: lang) : rel }
+      .where(translation_search_sql, q: "%#{trimmed_query}%")
       .order(created_at: :desc)
       .limit(50)
 
@@ -29,8 +30,8 @@ class Api::SearchController < ApplicationController
 
   private
 
-  # Search across the main text fields on story_translations.
-  def search_sql
+  # Search in multiple text fields on story_translations.
+  def translation_search_sql
     <<~SQL.squish
       title ILIKE :q
       OR content ILIKE :q
@@ -45,12 +46,11 @@ class Api::SearchController < ApplicationController
     {
       id: story.id,
       type: "story",
-      slug: story.slug,
-      url: story_url_for(story),
       title: translation.title,
       language: translation.language,
-      created_at: story.created_at,
-      image_url: story_image_url(story),
+      slug: story.slug,
+      url: story_url_for(story),
+      published_at: story.created_at, 
       snippet: build_snippet(translation)
     }
   end
@@ -60,15 +60,12 @@ class Api::SearchController < ApplicationController
     "/stories/#{slug_or_id}"
   end
 
-  def story_image_url(story)
-    return nil unless story.respond_to?(:image) && story.image.attached?
-    url_for(story.image)
-  end
-
   def build_snippet(translation)
     raw = translation.content.to_s
-    # Strip HTML and collapse whitespace.
+
+    # Strip HTML if content is rich text.
     text = ActionView::Base.full_sanitizer.sanitize(raw).squish
+
     return "" if text.blank?
 
     text.length > 200 ? "#{text[0, 197]}..." : text
