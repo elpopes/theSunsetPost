@@ -14,6 +14,7 @@ a {
   color: var(--text-color);
   transition: color 0.3s;
 }
+
 a:hover {
   color: var(--secondary-text-color);
 }
@@ -75,12 +76,15 @@ a:hover {
   margin: 20px 0;
 }
 
+/* Row that holds search, language switcher, and socials */
 .header__language-row {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  flex-wrap: nowrap;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 4px;
 }
 
 .header__search {
@@ -88,11 +92,13 @@ a:hover {
   align-items: center;
 }
 
+/* Language switcher buttons */
 .header__language-switcher {
   display: flex;
   gap: 8px;
   justify-content: center;
 }
+
 .header__language-switcher button {
   padding: 8px 12px;
   background-color: var(--primary-color);
@@ -102,17 +108,23 @@ a:hover {
   cursor: pointer;
   font-size: 0.875rem;
   transition: background-color 0.3s;
+  white-space: nowrap; /* keep 中文 from breaking */
+  min-width: 48px; /* keeps buttons from looking squished */
+  text-align: center;
 }
+
 .header__language-switcher button:hover,
 .header__language-switcher button:focus {
   background-color: var(--primary-color-hover);
   outline: none;
 }
 
+/* Sections nav */
 .header__sections-nav {
   flex-shrink: 1;
   max-width: 100%;
 }
+
 .header__sections-nav ul {
   display: flex;
   flex-wrap: nowrap;
@@ -123,20 +135,24 @@ a:hover {
   font-size: 0.9rem;
   justify-content: center;
 }
+
 .header__sections-nav li {
   white-space: nowrap;
 }
+
 .header__sections-nav a {
   text-decoration: none;
   color: #000000;
   transition: color 0.3s;
 }
+
 .header__sections-nav a:hover,
 .header__sections-nav a:focus {
   color: var(--primary-color-hover);
   outline: none;
 }
 
+/* Mobile hamburger */
 .hamburger-menu {
   display: none;
   background: none;
@@ -146,6 +162,18 @@ a:hover {
   cursor: pointer;
 }
 
+/* Branding block (logo + row) */
+.header__branding {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 16px;
+}
+
+/* Responsive tweaks */
 @media (max-width: 1150px) {
   .hamburger-menu {
     display: block;
@@ -180,16 +208,6 @@ a:hover {
     padding: 0;
   }
 
-  .header__branding {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 100%;
-    padding: 0 16px;
-    box-sizing: border-box;
-  }
-
   .header__logo h1 {
     font-size: var(--font-size-logo-mobile);
   }
@@ -201,26 +219,22 @@ a:hover {
     gap: 10px;
     flex-wrap: wrap;
   }
+
   .header__sections-nav.open ul {
     display: flex;
   }
-}
-
-.header__branding {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0 16px;
 }
 
 @media (max-width: 480px) {
   .header {
     padding: 15px;
   }
+
   .header__sections-nav ul {
     font-size: 0.85rem;
+  }
+
+  .header__language-row {
+    gap: 6px;
   }
 }

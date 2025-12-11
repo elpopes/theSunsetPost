@@ -1,0 +1,28 @@
+.header__socials {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header__socials a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  border: none;
+  border-radius: 0;
+  background: none;
+  color: #000;
+  font-size: 1.3rem; /* tweak if you want bigger/smaller */
+  text-decoration: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.header__socials a:hover,
+.header__socials a:focus {
+  color: var(--primary-color-hover);
+  outline: none;
+}

@@ -13,8 +13,8 @@
 }
 
 .masthead-search__icon {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
 }
 
 .masthead-search__bubble {
@@ -30,6 +30,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   z-index: 1000;
   padding: 0.4rem;
+  overflow: visible;
 }
 
 .masthead-search__form {
@@ -58,33 +59,70 @@
 
 .masthead-search__suggestions {
   list-style: none;
-  margin: 0;
+  margin: 0.25rem 0 0 0;
   padding: 0;
   max-height: 250px;
   overflow-y: auto;
+  background: #ffffff;
+  border-radius: 3px;
 }
 
-.masthead-search__suggestions-item + .masthead-search__suggestions-item {
+.masthead-search__suggestions-item {
   border-top: 1px solid #eee;
+}
+
+.masthead-search__suggestions-item:first-child {
+  border-top: none;
 }
 
 .masthead-search__suggestion {
   width: 100%;
   text-align: left;
   border: none;
-  background: none;
-  padding: 0.35rem 0.1rem;
+  background: #ffffff;
+  padding: 0.4rem 0.3rem;
   cursor: pointer;
+  display: block;
+  color: #000000 !important;
 }
 
+/* Hover state */
+.masthead-search__suggestion:hover,
+.masthead-search__suggestion:focus {
+  background: #f5f5f5;
+  outline: none;
+}
+
+/* The title text itself */
 .masthead-search__suggestion-title {
   display: block;
   font-size: 0.9rem;
   font-weight: 600;
+  color: #000000 !important; /* <- and also on the span */
 }
 
-.masthead-search__suggestion-snippet {
+/* The clickable row */
+.masthead-search__suggestion {
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: #ffffff; /* not transparent */
+  padding: 0.4rem 0.3rem;
+  cursor: pointer;
+  color: #000000; /* force dark text */
+  display: block; /* ensure it takes full width/height */
+}
+
+.masthead-search__suggestion:hover,
+.masthead-search__suggestion:focus {
+  background: #f5f5f5;
+  outline: none;
+}
+
+/* The title text itself */
+.masthead-search__suggestion-title {
   display: block;
-  font-size: 0.8rem;
-  color: #555;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #000000; /* explicit, just in case */
 }

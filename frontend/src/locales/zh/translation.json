@@ -55,6 +55,12 @@
         "Advertise with Us": "与我们广告",
         "Post in Classifieds": "发布到分类信息",
         "Careers": "职业招聘信息",
-        "Letters to the Editor": "给编辑的信"
+        "Letters to the Editor": "给编辑的信",
+        "Search stories": "搜索文章",
+        "No results yet": "暂无结果",
+        "Searching": "正在搜索",
+        "Search results for": "搜索结果",
+        "Error fetching suggestions": "获取搜索建议时出错",
+        "Error fetching search results": "获取搜索结果时出错"
   }
   

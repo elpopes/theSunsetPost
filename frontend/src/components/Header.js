@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchSections } from "../features/sections/sectionsSlice";
 import SubwayInfo from "./SubwayInfo";
 import SearchBar from "./SearchBar";
+import SocialLinks from "./SocialLinks";
 
 const Header = () => {
   const { t, i18n } = useTranslation();
@@ -24,7 +25,6 @@ const Header = () => {
     dispatch(fetchSections());
   }, [dispatch]);
 
-  // preload to avoid flicker when switching languages
   useEffect(() => {
     [mastheadEn, mastheadEs, mastheadZh].forEach((src) => {
       const img = new Image();
@@ -71,12 +71,18 @@ const Header = () => {
               </Link>
             </div>
 
+            {/* search + language + socials all centered in one row */}
             <div className="header__language-row">
+              <div className="header__search">
+                <SearchBar />
+              </div>
+
               <div className="header__language-switcher">
                 <LanguageSwitcher />
               </div>
-              <div className="header__search">
-                <SearchBar />
+
+              <div className="header__socials-wrapper">
+                <SocialLinks />
               </div>
             </div>
           </div>
