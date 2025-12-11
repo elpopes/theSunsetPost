@@ -9,13 +9,14 @@ const LanguageSwitcher = () => {
   const navigate = useNavigate();
 
   const changeLanguage = (lng) => {
-    if (i18n.language === lng) return; // avoid reprocessing if already selected
+    if (i18n.language === lng) return;
 
     i18n.changeLanguage(lng);
+
     const pathWithoutLang = location.pathname.replace(/^\/(en|es|zh)/, "");
     const newPath = `/${lng}${pathWithoutLang || "/"}`;
 
-    navigate(newPath, { replace: true }); // React-router navigation (no reload)
+    navigate(`${newPath}${location.search}`, { replace: true });
   };
 
   return (

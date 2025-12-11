@@ -1,3 +1,4 @@
+// src/components/SearchBar.js
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -8,7 +9,7 @@ import "./SearchBar.css";
 const SearchBar = () => {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestions, setSuggestions] = useState([]); // decorated with displayTitle
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -55,7 +56,6 @@ const SearchBar = () => {
 
       const params = new URLSearchParams({
         q: trimmed,
-        language: currentLang,
         limit: "5",
       });
 
@@ -67,7 +67,24 @@ const SearchBar = () => {
           return res.json();
         })
         .then((data) => {
-          setSuggestions(Array.isArray(data.results) ? data.results : []);
+          const raw = Array.isArray(data.results) ? data.results : [];
+
+          // Pick the title in the current language (like SectionDetail)
+          const mapped = raw.map((story) => {
+            const tr =
+              story.translations?.find((t) => t.language === currentLang) ||
+              story.translations?.[0] ||
+              {};
+
+            const displayTitle = tr.title || story.slug || t("Untitled Story");
+
+            return {
+              ...story,
+              displayTitle,
+            };
+          });
+
+          setSuggestions(mapped);
         })
         .catch((err) => {
           if (err.name === "AbortError") return;
@@ -81,7 +98,7 @@ const SearchBar = () => {
       clearTimeout(timeoutId);
       controller.abort();
     };
-  }, [query, currentLang, open, t]);
+  }, [query, open, currentLang, t]);
 
   const handleIconClick = () => {
     setOpen((prev) => !prev);
@@ -105,6 +122,7 @@ const SearchBar = () => {
     setOpen(false);
     setQuery("");
     setSuggestions([]);
+    // `item.url` comes from the API like "/stories/slug"
     navigate(`/${currentLang}${item.url}`);
   };
 
@@ -151,7 +169,7 @@ const SearchBar = () => {
             <ul className="masthead-search__suggestions">
               {suggestions.map((item) => (
                 <li
-                  key={`${item.type}-${item.id}-${item.slug || "noslug"}`}
+                  key={`${item.id}-${item.slug || "noslug"}`}
                   className="masthead-search__suggestions-item"
                 >
                   <button
@@ -160,7 +178,7 @@ const SearchBar = () => {
                     onClick={() => handleSuggestionClick(item)}
                   >
                     <span className="masthead-search__suggestion-title">
-                      {item.title}
+                      {item.displayTitle}
                     </span>
                   </button>
                 </li>

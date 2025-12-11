@@ -2,30 +2,32 @@
 class Api::SearchController < ApplicationController
   skip_before_action :authenticate_admin!, only: [:index], raise: false
 
-  # GET /api/search?q=query[&language=en][&limit=5]
+  # GET /api/search?q=query[&limit=20]
   def index
-    query    = params[:q].to_s.strip
-    language = params[:language].presence
-    limit    = params[:limit].presence&.to_i
+    query = params[:q].to_s.strip
+    limit = params[:limit].presence&.to_i
 
     return render json: { results: [] } if query.blank?
 
-    # keep limit within a sane range
-    limit = 50 if limit.nil? || limit <= 0 || limit > 50
+    # sane story limit
+    limit = 20 if limit.nil? || limit <= 0 || limit > 50
 
     trimmed_query = query[0, 200]
 
-    translations = StoryTranslation
-      .includes(story: :authors) # eager-load stories + authors
-      .left_joins(story: :authors) # so we can search authors.name
-      .where.not(title: [nil, ""])
-      .yield_self { |rel| language ? rel.where(language: language) : rel }
+    # First, find matching story_ids via translations + authors
+    story_ids = StoryTranslation
+      .left_joins(story: :authors)
       .where(search_sql, q: "%#{trimmed_query}%")
-      .order(created_at: :desc)
-      .distinct # avoid duplicates when multiple authors match
+      .distinct
       .limit(limit)
+      .pluck(:story_id)
 
-    results = translations.map { |t| serialize_translation(t) }
+    # Then load those stories with all translations + authors
+    stories = Story
+      .includes(:story_translations, :authors)
+      .where(id: story_ids)
+
+    results = stories.map { |story| serialize_story(story) }
 
     render json: { results: results }
   rescue => e
@@ -46,19 +48,23 @@ class Api::SearchController < ApplicationController
     SQL
   end
 
-  def serialize_translation(translation)
-    story = translation.story
-
+  def serialize_story(story)
     {
-      id:           story.id,
-      type:         "story",
-      title:        translation.title,
-      language:     translation.language,
-      slug:         story.slug,
-      url:          story_url_for(story),
-      published_at: story.created_at,
-      snippet:      build_snippet(translation),
-      image_url:    story_image_url(story)
+      id:    story.id,
+      slug:  story.slug,
+      url:   story_url_for(story),
+      image_url: story_image_url(story),
+      translations: story.story_translations.map do |tr|
+        {
+          id:              tr.id,
+          language:        tr.language,
+          title:           tr.title,
+          content:         tr.content,
+          meta_description: tr.meta_description,
+          caption:         tr.caption
+        }
+      end,
+      authors: story.authors.map { |a| { id: a.id, name: a.name } }
     }
   end
 
@@ -70,12 +76,5 @@ class Api::SearchController < ApplicationController
   def story_image_url(story)
     return nil unless story.respond_to?(:image) && story.image.attached?
     url_for(story.image)
-  end
-
-  def build_snippet(translation)
-    raw = translation.content.to_s
-    text = ActionView::Base.full_sanitizer.sanitize(raw).squish
-    return "" if text.blank?
-    text.length > 200 ? "#{text[0, 197]}..." : text
   end
 end

@@ -9,16 +9,18 @@ import "./SearchPage.css";
 const SearchPage = () => {
   const { t, i18n } = useTranslation();
   const [searchParams] = useSearchParams();
-  const [results, setResults] = useState([]);
+
+  const [stories, setStories] = useState([]);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
 
   const query = (searchParams.get("q") || "").trim();
-  const currentLang = i18n.language || "en";
+  const language = i18n.language;
 
+  // Fetch once per query; we don't depend on language here.
   useEffect(() => {
     if (!query) {
-      setResults([]);
+      setStories([]);
       setStatus("idle");
       setError("");
       return;
@@ -33,8 +35,7 @@ const SearchPage = () => {
 
         const params = new URLSearchParams({
           q: query,
-          language: currentLang,
-          limit: "20", // 👈 cap full search at 20
+          limit: "20",
         });
 
         const res = await fetch(`${baseURL}/api/search?${params.toString()}`, {
@@ -42,7 +43,8 @@ const SearchPage = () => {
         });
         if (!res.ok) throw new Error("Search failed");
         const data = await res.json();
-        setResults(Array.isArray(data.results) ? data.results : []);
+
+        setStories(Array.isArray(data.results) ? data.results : []);
         setStatus("succeeded");
       } catch (err) {
         if (err.name === "AbortError") return;
@@ -55,7 +57,22 @@ const SearchPage = () => {
     fetchResults();
 
     return () => controller.abort();
-  }, [query, currentLang, t]);
+  }, [query, t]);
+
+  // Now, like SectionDetail, build language-specific view
+  const translatedStories = stories.map((story) => {
+    const translation =
+      story.translations?.find((tr) => tr.language === language) ||
+      story.translations?.[0] ||
+      {};
+
+    const { id: translationId, ...safeTranslation } = translation;
+
+    return {
+      ...story,
+      ...safeTranslation,
+    };
+  });
 
   return (
     <section className="search-page">
@@ -73,55 +90,59 @@ const SearchPage = () => {
         </p>
       )}
 
-      {status === "succeeded" && results.length === 0 && (
+      {status === "succeeded" && translatedStories.length === 0 && (
         <p className="search-page__status">{t("No results yet")}</p>
       )}
 
-      {status === "succeeded" && results.length > 0 && (
+      {status === "succeeded" && translatedStories.length > 0 && (
         <ul className="search-page__results">
-          {results.map((item) => (
-            <li
-              key={`${item.type}-${item.id}-${item.slug || "noslug"}`}
-              className="search-page__result"
-            >
-              <Link
-                to={`/${currentLang}${item.url}`}
-                className="search-page__result-link"
-              >
-                {item.image_url && (
-                  <img
-                    src={item.image_url}
-                    alt={item.title}
-                    className="search-page__thumb"
-                  />
-                )}
+          {translatedStories.map((story) => {
+            const isCJK = ["zh", "zh-CN", "zh-TW"].includes(language);
+            const snippet = isCJK
+              ? story.content?.slice(0, 60) + "..."
+              : story.content?.split(" ").slice(0, 25).join(" ") + "...";
 
-                <div className="search-page__result-text">
-                  <h3 className="search-page__result-title">{item.title}</h3>
-
-                  {item.snippet && (
-                    <div className="search-page__result-snippet">
-                      <ReactMarkdown
-                        components={{
-                          a: ({ node, children, ...props }) => (
-                            <a
-                              {...props}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {children}
-                            </a>
-                          ),
-                        }}
-                      >
-                        {item.snippet}
-                      </ReactMarkdown>
-                    </div>
+            return (
+              <li key={story.id} className="search-page__result">
+                <Link
+                  to={`/${language}/stories/${story.slug || story.id}`}
+                  className="search-page__result-link"
+                >
+                  {story.image_url && (
+                    <img
+                      src={story.image_url}
+                      alt={story.title}
+                      className="search-page__thumb"
+                    />
                   )}
-                </div>
-              </Link>
-            </li>
-          ))}
+
+                  <div className="search-page__result-text">
+                    <h3 className="search-page__result-title">{story.title}</h3>
+
+                    {snippet && (
+                      <div className="search-page__result-snippet">
+                        <ReactMarkdown
+                          components={{
+                            a: ({ node, children, ...props }) => (
+                              <a
+                                {...props}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {children}
+                              </a>
+                            ),
+                          }}
+                        >
+                          {snippet}
+                        </ReactMarkdown>
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       )}
     </section>
