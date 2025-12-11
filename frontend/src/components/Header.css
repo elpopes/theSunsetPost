@@ -75,6 +75,19 @@ a:hover {
   margin: 20px 0;
 }
 
+.header__language-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.header__search {
+  display: flex;
+  align-items: center;
+}
+
 .header__language-switcher {
   display: flex;
   gap: 8px;

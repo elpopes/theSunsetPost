@@ -1,138 +1,130 @@
 // src/components/SearchPage.js
 import React, { useEffect, useState } from "react";
-import { useSearchParams, useParams, Link } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import ReactMarkdown from "react-markdown";
 import { baseURL } from "../config";
+import "./SearchPage.css";
 
 const SearchPage = () => {
-  const { lang } = useParams(); // from route like "/:lang/search"
+  const { t, i18n } = useTranslation();
   const [searchParams] = useSearchParams();
-  const query = searchParams.get("q") || "";
-
-  const { i18n } = useTranslation();
   const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
 
-  const apiLanguage = lang || i18n.language || "en";
+  const query = (searchParams.get("q") || "").trim();
+  const currentLang = i18n.language || "en";
 
   useEffect(() => {
-    const trimmed = query.trim();
-
-    if (!trimmed) {
+    if (!query) {
       setResults([]);
+      setStatus("idle");
       setError("");
-      setLoading(false);
       return;
     }
 
-    setLoading(true);
-    setError("");
+    const controller = new AbortController();
 
-    const params = new URLSearchParams({ q: trimmed, language: apiLanguage });
+    const fetchResults = async () => {
+      try {
+        setStatus("loading");
+        setError("");
 
-    fetch(`${baseURL}/api/search?${params.toString()}`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Search request failed with status ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
+        const params = new URLSearchParams({
+          q: query,
+          language: currentLang,
+          limit: "20", // 👈 cap full search at 20
+        });
+
+        const res = await fetch(`${baseURL}/api/search?${params.toString()}`, {
+          signal: controller.signal,
+        });
+        if (!res.ok) throw new Error("Search failed");
+        const data = await res.json();
         setResults(Array.isArray(data.results) ? data.results : []);
-      })
-      .catch((err) => {
+        setStatus("succeeded");
+      } catch (err) {
+        if (err.name === "AbortError") return;
         console.error("Search error:", err);
-        setError("There was a problem loading search results.");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [query, apiLanguage]);
+        setError(t("Error fetching search results"));
+        setStatus("failed");
+      }
+    };
 
-  const hasQuery = query.trim().length > 0;
+    fetchResults();
+
+    return () => controller.abort();
+  }, [query, currentLang, t]);
 
   return (
-    <main className="search-page">
-      <header className="search-page__header">
-        <h1 className="search-page__title">
-          {hasQuery ? `Search results for “${query}”` : "Search"}
-        </h1>
-      </header>
+    <section className="search-page">
+      <h2 className="search-page__title">
+        {t("Search results for")} “{query}”
+      </h2>
 
-      {loading && (
-        <p className="search-page__status search-page__status--loading">
-          Searching…
-        </p>
+      {status === "loading" && (
+        <p className="search-page__status">{t("Searching")}…</p>
       )}
 
-      {!loading && error && (
+      {error && (
         <p className="search-page__status search-page__status--error">
           {error}
         </p>
       )}
 
-      {!loading && !error && hasQuery && results.length === 0 && (
-        <p className="search-page__status search-page__status--empty">
-          No results found.
-        </p>
+      {status === "succeeded" && results.length === 0 && (
+        <p className="search-page__status">{t("No results yet")}</p>
       )}
 
-      {!loading && !error && !hasQuery && (
-        <p className="search-page__status search-page__status--empty">
-          Enter a word or phrase in the search box to find stories.
-        </p>
-      )}
-
-      {!loading && !error && results.length > 0 && (
-        <ul className="search-page__list">
+      {status === "succeeded" && results.length > 0 && (
+        <ul className="search-page__results">
           {results.map((item) => (
             <li
-              key={`${item.type}-${item.id}-${item.language || "xx"}`}
-              className="search-page__item"
+              key={`${item.type}-${item.id}-${item.slug || "noslug"}`}
+              className="search-page__result"
             >
               <Link
-                to={`/${apiLanguage}${item.url}`}
-                className="search-page__link"
+                to={`/${currentLang}${item.url}`}
+                className="search-page__result-link"
               >
-                <article className="search-page__card">
-                  {item.image_url && (
-                    <div className="search-page__image-wrapper">
-                      <img
-                        src={item.image_url}
-                        alt={item.title || "Story image"}
-                        className="search-page__image"
-                      />
+                {item.image_url && (
+                  <img
+                    src={item.image_url}
+                    alt={item.title}
+                    className="search-page__thumb"
+                  />
+                )}
+
+                <div className="search-page__result-text">
+                  <h3 className="search-page__result-title">{item.title}</h3>
+
+                  {item.snippet && (
+                    <div className="search-page__result-snippet">
+                      <ReactMarkdown
+                        components={{
+                          a: ({ node, children, ...props }) => (
+                            <a
+                              {...props}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {children}
+                            </a>
+                          ),
+                        }}
+                      >
+                        {item.snippet}
+                      </ReactMarkdown>
                     </div>
                   )}
-
-                  <div className="search-page__content">
-                    <h2 className="search-page__item-title">{item.title}</h2>
-
-                    <div className="search-page__meta">
-                      {item.language && (
-                        <span className="search-page__meta-item">
-                          {item.language.toUpperCase()}
-                        </span>
-                      )}
-                      {item.created_at && (
-                        <span className="search-page__meta-item">
-                          {new Date(item.created_at).toLocaleDateString()}
-                        </span>
-                      )}
-                    </div>
-
-                    {item.snippet && (
-                      <p className="search-page__snippet">{item.snippet}</p>
-                    )}
-                  </div>
-                </article>
+                </div>
               </Link>
             </li>
           ))}
         </ul>
       )}
-    </main>
+    </section>
   );
 };
 

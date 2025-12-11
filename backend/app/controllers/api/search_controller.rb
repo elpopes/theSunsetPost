@@ -1,6 +1,5 @@
 # app/controllers/api/search_controller.rb
 class Api::SearchController < ApplicationController
-
   skip_before_action :authenticate_admin!, only: [:index], raise: false
 
   # GET /api/search?q=query[&language=en][&limit=5]
@@ -17,11 +16,13 @@ class Api::SearchController < ApplicationController
     trimmed_query = query[0, 200]
 
     translations = StoryTranslation
-      .includes(:story)
+      .includes(story: :authors) # eager-load stories + authors
+      .left_joins(story: :authors) # so we can search authors.name
       .where.not(title: [nil, ""])
       .yield_self { |rel| language ? rel.where(language: language) : rel }
       .where(search_sql, q: "%#{trimmed_query}%")
       .order(created_at: :desc)
+      .distinct # avoid duplicates when multiple authors match
       .limit(limit)
 
     results = translations.map { |t| serialize_translation(t) }
@@ -34,13 +35,14 @@ class Api::SearchController < ApplicationController
 
   private
 
-  # IMPORTANT: name must match what we call in `index` (`search_sql`)
+  # Search in multiple text fields on story_translations + author name.
   def search_sql
     <<~SQL.squish
-      title ILIKE :q
-      OR content ILIKE :q
-      OR meta_description ILIKE :q
-      OR caption ILIKE :q
+      story_translations.title ILIKE :q
+      OR story_translations.content ILIKE :q
+      OR story_translations.meta_description ILIKE :q
+      OR story_translations.caption ILIKE :q
+      OR authors.name ILIKE :q
     SQL
   end
 
@@ -56,8 +58,7 @@ class Api::SearchController < ApplicationController
       url:          story_url_for(story),
       published_at: story.created_at,
       snippet:      build_snippet(translation),
-      # uncomment if you want thumbs in suggestions:
-      # image_url:   story_image_url(story),
+      image_url:    story_image_url(story)
     }
   end
 
@@ -66,7 +67,6 @@ class Api::SearchController < ApplicationController
     "/stories/#{slug_or_id}"
   end
 
-  # Optional helper if you decide to return image_url
   def story_image_url(story)
     return nil unless story.respond_to?(:image) && story.image.attached?
     url_for(story.image)
@@ -74,11 +74,8 @@ class Api::SearchController < ApplicationController
 
   def build_snippet(translation)
     raw = translation.content.to_s
-
-    # Strip HTML if content is rich text.
     text = ActionView::Base.full_sanitizer.sanitize(raw).squish
     return "" if text.blank?
-
     text.length > 200 ? "#{text[0, 197]}..." : text
   end
 end

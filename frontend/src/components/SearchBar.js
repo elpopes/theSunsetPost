@@ -151,7 +151,7 @@ const SearchBar = () => {
             <ul className="masthead-search__suggestions">
               {suggestions.map((item) => (
                 <li
-                  key={`${item.type}-${item.id}-${item.language || "xx"}`}
+                  key={`${item.type}-${item.id}-${item.slug || "noslug"}`}
                   className="masthead-search__suggestions-item"
                 >
                   <button
@@ -162,11 +162,6 @@ const SearchBar = () => {
                     <span className="masthead-search__suggestion-title">
                       {item.title}
                     </span>
-                    {item.snippet && (
-                      <span className="masthead-search__suggestion-snippet">
-                        {item.snippet}
-                      </span>
-                    )}
                   </button>
                 </li>
               ))}
