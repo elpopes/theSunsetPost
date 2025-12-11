@@ -14,15 +14,21 @@
   border-radius: 0;
   background: none;
   color: #000;
-  font-size: 1.3rem; /* tweak if you want bigger/smaller */
+  font-size: 1.3rem;
   text-decoration: none;
   padding: 0;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: color 0.15s ease, transform 0.15s ease;
 }
 
-.header__socials a:hover,
-.header__socials a:focus {
-  color: var(--primary-color-hover);
+.header__socials a:hover {
+  color: #555;
+  transform: translateY(-1px);
+}
+
+.header__socials a:focus,
+.header__socials a:active {
+  color: #000;
+  transform: none;
   outline: none;
 }

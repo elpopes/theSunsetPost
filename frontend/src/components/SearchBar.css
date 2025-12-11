@@ -12,11 +12,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  color: #000;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.masthead-search__icon-button:hover {
+  color: #555;
+  transform: translateY(-1px);
+}
+
+.masthead-search__icon-button:focus,
+.masthead-search__icon-button:active {
+  color: #000;
+  transform: none;
+  outline: none;
 }
 
 .masthead-search__icon {
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
 }
 
 .masthead-search__bubble {
@@ -34,7 +49,6 @@
   padding: 0.4rem;
 }
 
-/* MOBILE: keep the bubble fully on-screen */
 @media (max-width: 600px) {
   .masthead-search__bubble {
     left: 0;
