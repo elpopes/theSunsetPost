@@ -61,6 +61,8 @@
         "Searching": "正在搜索",
         "Search results for": "搜索结果",
         "Error fetching suggestions": "获取搜索建议时出错",
-        "Error fetching search results": "获取搜索结果时出错"
+        "Error fetching search results": "获取搜索结果时出错",
+        "Load more stories": "更多文章"
+
   }
   
