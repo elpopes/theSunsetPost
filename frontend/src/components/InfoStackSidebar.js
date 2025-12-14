@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 
@@ -63,6 +63,15 @@ const outreachImageByLang = {
   zh: localReachZH,
 };
 
+const shuffle = (arr) => {
+  const out = [...arr];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+};
+
 const InfoStackSidebar = ({ lang }) => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
@@ -71,13 +80,29 @@ const InfoStackSidebar = ({ lang }) => {
     return pathname.replace(/^\/(en|es|zh)(?=\/|$)/, "") || "/";
   }, [pathname]);
 
-  const order = useMemo(() => {
+  const lastFirstIdRef = useRef(null);
+  const [order, setOrder] = useState(() => sponsors.map((s) => s.id));
+
+  useEffect(() => {
     const ids = sponsors.map((s) => s.id);
-    for (let i = ids.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [ids[i], ids[j]] = [ids[j], ids[i]];
+
+    if (ids.length <= 1) {
+      setOrder(ids);
+      lastFirstIdRef.current = ids[0] || null;
+      return;
     }
-    return ids;
+
+    let shuffled = shuffle(ids);
+
+    if (lastFirstIdRef.current && shuffled[0] === lastFirstIdRef.current) {
+      const alt = shuffled.findIndex((x) => x !== lastFirstIdRef.current);
+      if (alt > 0) {
+        [shuffled[0], shuffled[alt]] = [shuffled[alt], shuffled[0]];
+      }
+    }
+
+    setOrder(shuffled);
+    lastFirstIdRef.current = shuffled[0];
   }, [stablePath]);
 
   const outreach = outreachImageByLang[lang] || localReachEN;
@@ -88,6 +113,7 @@ const InfoStackSidebar = ({ lang }) => {
         const s = sponsors.find((x) => x.id === id);
         const variant = s?.byLang?.[lang] || s?.byLang?.en;
         if (!variant) return null;
+
         return (
           <div className="info-space" key={id}>
             <a href={variant.link} target="_blank" rel="noopener noreferrer">
@@ -95,7 +121,8 @@ const InfoStackSidebar = ({ lang }) => {
                 src={variant.image}
                 alt={variant.alt}
                 className="reach-image"
-                style={{ maxWidth: "100%", height: "auto" }}
+                loading="lazy"
+                decoding="async"
               />
             </a>
           </div>
@@ -108,7 +135,8 @@ const InfoStackSidebar = ({ lang }) => {
             src={outreach}
             alt={t("Advertise with us")}
             className="reach-image"
-            style={{ maxWidth: "100%", height: "auto" }}
+            loading="lazy"
+            decoding="async"
           />
         </Link>
       </div>

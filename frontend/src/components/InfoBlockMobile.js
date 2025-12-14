@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useEffect } from "react";
+import React, { useMemo, useRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 
@@ -62,28 +62,33 @@ const InfoBlockMobile = ({ lang }) => {
     return pathname.replace(/^\/(en|es|zh)(?=\/|$)/, "") || "/";
   }, [pathname]);
 
-  const pick = useMemo(() => {
-    const arr = [...sponsorsSmartreach];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    let chosen = arr[0];
-    if (
-      lastShownIdRef.current &&
-      arr.length > 1 &&
-      chosen.id === lastShownIdRef.current
-    ) {
-      chosen = arr[1];
-    }
-    return chosen;
-  }, [stablePath]);
+  const [pick, setPick] = useState(() => sponsorsSmartreach[0] || null);
 
   useEffect(() => {
-    lastShownIdRef.current = pick.id;
-  }, [pick]);
+    const arr = sponsorsSmartreach;
 
-  const banner = pick.byLang[lang] || pick.byLang.en;
+    if (arr.length === 0) {
+      setPick(null);
+      lastShownIdRef.current = null;
+      return;
+    }
+
+    if (arr.length === 1) {
+      setPick(arr[0]);
+      lastShownIdRef.current = arr[0].id;
+      return;
+    }
+
+    const lastId = lastShownIdRef.current;
+    const candidates = lastId ? arr.filter((s) => s.id !== lastId) : arr;
+    const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+
+    setPick(chosen);
+    lastShownIdRef.current = chosen.id;
+  }, [stablePath]);
+
+  const banner = pick?.byLang?.[lang] || pick?.byLang?.en;
+  if (!banner) return null;
 
   return (
     <>
@@ -93,10 +98,12 @@ const InfoBlockMobile = ({ lang }) => {
             src={banner.image}
             alt={banner.alt}
             className="reach-image"
-            style={{ maxWidth: "100%", height: "auto" }}
+            loading="lazy"
+            decoding="async"
           />
         </a>
       </div>
+
       <p className="info-link">
         <Link to={`/${lang}/contact`}>
           {t("Contact us to feature your message")}

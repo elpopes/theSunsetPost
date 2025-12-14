@@ -1,71 +1,84 @@
-/* Main container styling */
 .subway-info {
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
-  padding: 8px;
+  padding: 6px;
   margin: 5px auto;
   border-radius: 8px;
-  width: 180px;
-  min-width: 180px;
-  min-height: 120px;
+  width: 172px;
+  min-width: 172px;
+  height: 132px;
   box-sizing: border-box;
   overflow: hidden;
+  position: relative;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Header styling */
 .subway-info__header {
   font-size: 0.8rem;
   color: #0056b3;
-  margin-bottom: 10px;
+  margin: 0 0 6px 0;
+  line-height: 1.1;
   text-align: center;
   font-weight: bold;
 }
 
-/* Loading and error messages */
+.subway-info__updating {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 0.7rem;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
 .subway-info p {
   font-size: 0.8rem;
   color: #333;
   text-align: center;
-  margin: 5px 0;
+  margin: 4px 0;
 }
 
-/* List styling */
-.subway-info ul {
+.subway-info__list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-/* Individual train entry */
-.subway-info li {
+.subway-info__item {
   background: #fff;
-  margin: 5px 0;
-  padding: 5px 10px;
+  margin: 4px 0;
   border-radius: 5px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 78px;
   align-items: center;
+  min-height: 24px;
 }
 
-/* Train route name */
-.subway-info li h4 {
+.subway-info__route {
   font-size: 0.7rem;
   color: #0056b3;
   margin: 0;
   font-weight: bold;
 }
 
-/* Arrival time styling */
-.subway-info li span {
+.subway-info__eta {
   font-size: 0.7rem;
   color: #666;
   text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  width: 78px;
 }
 
-/* Styling for "Now arriving" */
-.subway-info li span.now-arriving {
+.subway-info__eta.now-arriving {
   color: #d9534f;
   font-weight: bold;
+}
+
+.subway-info__skeleton .row {
+  height: 24px;
+  margin: 4px 0;
+  border-radius: 5px;
+  background: #e9e9e9;
 }
