@@ -10,7 +10,35 @@ import mbSmartEn from "../assets/outreach/MariasBistro-Smartreach-En.png";
 import mbSmartEs from "../assets/outreach/MariasBistro-Smartreach-Es.png";
 import mbSmartZh from "../assets/outreach/MariasBistro-Smartreach-Zh.png";
 
+import subscriptionSmartEn from "../assets/outreach/Subscription-Smartreach-En.png";
+import subscriptionSmartEs from "../assets/outreach/Subscription-Smartreach-Es.png";
+import subscriptionSmartZh from "../assets/outreach/Subscription-Smartreach-Zh.png";
+
+const SUBSCRIPTION_LINK = "https://buy.stripe.com/9B65kDcIjdtvg16cCZbQY04";
+
 const sponsorsSmartreach = [
+  {
+    id: "subscription",
+    byLang: {
+      en: {
+        image: subscriptionSmartEn,
+        alt: "Subscribe to the Sunset Post",
+        link: SUBSCRIPTION_LINK,
+      },
+      es: {
+        image: subscriptionSmartEs,
+        alt: "Suscríbete al Sunset Post",
+        link: SUBSCRIPTION_LINK,
+      },
+      zh: {
+        image: subscriptionSmartZh,
+        alt: "订阅 the Sunset Post",
+        link: SUBSCRIPTION_LINK,
+      },
+    },
+  },
+
+  // existing
   {
     id: "dojo",
     byLang: {
