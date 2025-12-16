@@ -14,7 +14,14 @@ import subscriptionSmartEn from "../assets/outreach/Subscription-Smartreach-En.p
 import subscriptionSmartEs from "../assets/outreach/Subscription-Smartreach-Es.png";
 import subscriptionSmartZh from "../assets/outreach/Subscription-Smartreach-Zh.png";
 
+import venmoSmartEn from "../assets/outreach/Venmo-Smartreach-En.png";
+import venmoSmartEs from "../assets/outreach/Venmo-Smartreach-Es.png";
+import venmoSmartZh from "../assets/outreach/Venmo-Smartreach-Zh.png";
+
 const SUBSCRIPTION_LINK = "https://buy.stripe.com/9B65kDcIjdtvg16cCZbQY04";
+
+const VENMO_LINK =
+  "https://www.paypal.com/qrcodes/venmocs/27e4b8c5-829d-4347-b684-46e3983b8c4f?created=1765840714&printed=true";
 
 const sponsorsSmartreach = [
   {
@@ -32,13 +39,33 @@ const sponsorsSmartreach = [
       },
       zh: {
         image: subscriptionSmartZh,
-        alt: "订阅 the Sunset Post",
+        alt: "订阅the Sunset Post",
         link: SUBSCRIPTION_LINK,
       },
     },
   },
 
-  // existing
+  {
+    id: "venmo",
+    byLang: {
+      en: {
+        image: venmoSmartEn,
+        alt: "Support local journalism",
+        link: VENMO_LINK,
+      },
+      es: {
+        image: venmoSmartEs,
+        alt: "¡Apoya el periodismo local!",
+        link: VENMO_LINK,
+      },
+      zh: {
+        image: venmoSmartZh,
+        alt: "支持本地新闻！",
+        link: VENMO_LINK,
+      },
+    },
+  },
+
   {
     id: "dojo",
     byLang: {

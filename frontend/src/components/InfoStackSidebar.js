@@ -14,11 +14,18 @@ import subEn from "../assets/outreach/Subscription-Localreach-En.png";
 import subEs from "../assets/outreach/Subscription-Localreach-Es.png";
 import subZh from "../assets/outreach/Subscription-Localreach-Zh.png";
 
+import venmoEn from "../assets/outreach/Venmo-Localreach-En.png";
+import venmoEs from "../assets/outreach/Venmo-Localreach-Es.png";
+import venmoZh from "../assets/outreach/Venmo-Localreach-Zh.png";
+
 import localReachEN from "../assets/outreach/localreach-en.svg";
 import localReachES from "../assets/outreach/localreach-es.svg";
 import localReachZH from "../assets/outreach/localreach-zh.svg";
 
 const STRIPE_SUBSCRIBE_URL = "https://buy.stripe.com/9B65kDcIjdtvg16cCZbQY04";
+
+const VENMO_URL =
+  "https://www.paypal.com/qrcodes/venmocs/27e4b8c5-829d-4347-b684-46e3983b8c4f?created=1765840714&printed=true";
 
 const placements = [
   {
@@ -72,20 +79,43 @@ const placements = [
     byLang: {
       en: {
         image: subEn,
-        alt: "Subscribe",
+        alt: "Subscribe to the Sunset Post",
         href: STRIPE_SUBSCRIBE_URL,
         external: true,
       },
       es: {
         image: subEs,
-        alt: "Subscribe",
+        alt: "Suscríbete al Sunset Post",
         href: STRIPE_SUBSCRIBE_URL,
         external: true,
       },
       zh: {
         image: subZh,
-        alt: "Subscribe",
+        alt: "订阅the Sunset Post",
         href: STRIPE_SUBSCRIBE_URL,
+        external: true,
+      },
+    },
+  },
+  {
+    id: "venmo",
+    byLang: {
+      en: {
+        image: venmoEn,
+        alt: "Support local journalism",
+        href: VENMO_URL,
+        external: true,
+      },
+      es: {
+        image: venmoEs,
+        alt: "¡Apoya el periodismo local!",
+        href: VENMO_URL,
+        external: true,
+      },
+      zh: {
+        image: venmoZh,
+        alt: "支持本地新闻！",
+        href: VENMO_URL,
         external: true,
       },
     },
