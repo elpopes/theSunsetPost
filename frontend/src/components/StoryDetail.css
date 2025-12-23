@@ -61,6 +61,32 @@
   margin-bottom: 1.2em;
 }
 
+.story-detail__content ul,
+.story-detail__content ol {
+  margin: 0 0 1.2em 0;
+  padding-left: 0;
+  list-style-position: inside;
+}
+
+.story-detail__content li {
+  margin: 0.35em 0;
+  padding-left: 0.6em;
+  text-indent: -0.6em;
+}
+
+/* Nested list indentation */
+.story-detail__content ul ul,
+.story-detail__content ul ol,
+.story-detail__content ol ul,
+.story-detail__content ol ol {
+  margin: 0.4em 0 0.4em 0;
+  padding-left: 1.2em;
+}
+
+.story-detail__content li > p {
+  margin: 0.4em 0;
+}
+
 .story-detail__content figure {
   display: block;
   margin: 1.5em auto;
@@ -146,6 +172,13 @@
   }
   .story-detail__content {
     font-size: 1rem;
+  }
+
+  .story-detail__content ul ul,
+  .story-detail__content ul ol,
+  .story-detail__content ol ul,
+  .story-detail__content ol ol {
+    padding-left: 1em;
   }
 }
 
