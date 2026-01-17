@@ -163,14 +163,6 @@
   color: #555;
 }
 
-.classifieds-placeholder h3 {
-  margin-top: 0.5rem;
-}
-
-.classifieds-placeholder p {
-  margin: 0.75rem 0;
-}
-
 @media (max-width: 768px) {
   .story-detail {
     padding: 15px;

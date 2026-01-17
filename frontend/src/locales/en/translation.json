@@ -63,12 +63,14 @@
     "Error fetching suggestions": "Error fetching suggestions",
     "Error fetching search results": "Error fetching search results",
     "Load more stories": "More stories",
+    "or": "or",
       
     "classifieds_placeholder": {
         "headline": "Post a free classified ad for a limited time.",
         "intro": "Do you have an apartment to rent? Looking for a roommate? Hiring, or looking for work? Selling something, giving something away, or offering a service? Want to share a community announcement?",
-        "construction": "This section is under construction. In the meantime, send your listing to editor@sunsetpost.org, or contact us here",
-        "limitations": "Certain limitations apply. Listings are subject to editing for length and clarity. We may not be able to publish every submission. Photos may not appear in print."
+        "construction": "This section is under construction. For now, send your listing by email or through our contact form. Please include a title (60 characters max), your listing text (250 characters max), a category, and the best way to reach you. You may attach one photo (under 1 MB), but photos may not appear in print.",
+        "contact_cta": "Email",
+        "limitations": "Certain limitations apply. Free listings are limited to 250 characters. You must have the rights to any photo you submit, and you are responsible for the content of your listing. Do not include sensitive personal information. the Sunset Post may edit submissions for length and clarity, and we reserve the right not to publish, decline, remove, or shorten any listing at our discretion. While listings are translated so they can appear online in English, Spanish, and Chinese, space and community response may mean that classifieds in the print newspaper appear only in the language in which they were submitted."
     }
     
 }

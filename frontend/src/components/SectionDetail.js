@@ -122,14 +122,22 @@ const SectionDetail = () => {
               return (
                 <div className="classifieds-placeholder">
                   <h3>{t("classifieds_placeholder.headline")}</h3>
+
                   <p>{t("classifieds_placeholder.intro")}</p>
+
+                  <p>{t("classifieds_placeholder.construction")}</p>
+
                   <p>
-                    {t("classifieds_placeholder.construction")}{" "}
+                    <a href="mailto:editor@sunsetpost.org">
+                      {t("classifieds_placeholder.contact_cta")}:
+                      editor@sunsetpost.org
+                    </a>{" "}
+                    {t("or")}{" "}
                     <Link to={`/${i18n.language}/contact`}>
                       {t("no_stories.contact_link")}
                     </Link>
-                    .
                   </p>
+
                   <p>{t("classifieds_placeholder.limitations")}</p>
                 </div>
               );
