@@ -63,52 +63,77 @@ const SectionDetail = () => {
       <p>{currentTranslation.description}</p>
 
       <ul className="section-stories">
-        {translatedStories.length > 0 ? (
-          translatedStories.map((story) => {
-            const isCJK = ["zh", "zh-CN", "zh-TW"].includes(language);
-            const snippet = isCJK
-              ? story.content?.slice(0, 60) + "..."
-              : story.content?.split(" ").slice(0, 25).join(" ") + "...";
+        {translatedStories.length > 0
+          ? translatedStories.map((story) => {
+              const isCJK = ["zh", "zh-CN", "zh-TW"].includes(language);
+              const snippet = isCJK
+                ? story.content?.slice(0, 60) + "..."
+                : story.content?.split(" ").slice(0, 25).join(" ") + "...";
 
-            return (
-              <li key={story.id} className="section-story-item">
-                <Link
-                  to={`/${i18n.language}/stories/${story.slug || story.id}`}
-                  className="section-story-link"
-                >
-                  {story.image_url && (
-                    <img
-                      src={story.image_url}
-                      alt={story.title}
-                      className="section-story-image"
-                    />
-                  )}
-                  <h3>{story.title}</h3>
-                </Link>
-                <div className="section-story-snippet">
-                  <ReactMarkdown
-                    components={{
-                      a: ({ node, children, ...props }) => (
-                        <a {...props} target="_blank" rel="noopener noreferrer">
-                          {children}
-                        </a>
-                      ),
-                    }}
+              return (
+                <li key={story.id} className="section-story-item">
+                  <Link
+                    to={`/${i18n.language}/stories/${story.slug || story.id}`}
+                    className="section-story-link"
                   >
-                    {snippet}
-                  </ReactMarkdown>
+                    {story.image_url && (
+                      <img
+                        src={story.image_url}
+                        alt={story.title}
+                        className="section-story-image"
+                      />
+                    )}
+                    <h3>{story.title}</h3>
+                  </Link>
+                  <div className="section-story-snippet">
+                    <ReactMarkdown
+                      components={{
+                        a: ({ node, children, ...props }) => (
+                          <a
+                            {...props}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {children}
+                          </a>
+                        ),
+                      }}
+                    >
+                      {snippet}
+                    </ReactMarkdown>
+                  </div>
+                </li>
+              );
+            })
+          : (() => {
+              const isClassifieds = section?.name === "Classifieds";
+
+              if (!isClassifieds) {
+                return (
+                  <p>
+                    {t("no_stories.development")}{" "}
+                    <Link to={`/${i18n.language}/contact`}>
+                      {t("no_stories.contact_link")}
+                    </Link>
+                  </p>
+                );
+              }
+
+              return (
+                <div className="classifieds-placeholder">
+                  <h3>{t("classifieds_placeholder.headline")}</h3>
+                  <p>{t("classifieds_placeholder.intro")}</p>
+                  <p>
+                    {t("classifieds_placeholder.construction")}{" "}
+                    <Link to={`/${i18n.language}/contact`}>
+                      {t("no_stories.contact_link")}
+                    </Link>
+                    .
+                  </p>
+                  <p>{t("classifieds_placeholder.limitations")}</p>
                 </div>
-              </li>
-            );
-          })
-        ) : (
-          <p>
-            {t("no_stories.development")}{" "}
-            <Link to={`/${i18n.language}/contact`}>
-              {t("no_stories.contact_link")}
-            </Link>
-          </p>
-        )}
+              );
+            })()}
       </ul>
     </div>
   );

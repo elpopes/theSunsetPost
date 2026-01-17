@@ -62,7 +62,15 @@
         "Search results for": "搜索结果",
         "Error fetching suggestions": "获取搜索建议时出错",
         "Error fetching search results": "获取搜索结果时出错",
-        "Load more stories": "更多文章"
+        "Load more stories": "更多文章",
 
-  }
+    "classifieds_placeholder": {
+        "headline": "限时免费发布分类广告。",
+        "intro": "你有房屋出租信息吗？在找室友吗？正在招聘，或者在找工作吗？想出售物品、免费送出物品，或者提供服务吗？想发布社区公告吗？",
+        "construction": "本栏目正在建设中。请先将广告内容发送至editor@sunsetpost.org，或通过以下页面联系我们",
+        "limitations": "部分限制适用。我们可能会对内容进行长度与表达清晰度方面的编辑，也可能无法发布所有投稿。照片不一定会出现在纸质版中。"
+        }
+
+
+}
   

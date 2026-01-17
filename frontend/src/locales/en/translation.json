@@ -62,7 +62,14 @@
     "Search results for": "Search results for",
     "Error fetching suggestions": "Error fetching suggestions",
     "Error fetching search results": "Error fetching search results",
-    "Load more stories": "More stories"
+    "Load more stories": "More stories",
+      
+    "classifieds_placeholder": {
+        "headline": "Post a free classified ad for a limited time.",
+        "intro": "Do you have an apartment to rent? Looking for a roommate? Hiring, or looking for work? Selling something, giving something away, or offering a service? Want to share a community announcement?",
+        "construction": "This section is under construction. In the meantime, send your listing to editor@sunsetpost.org, or contact us here",
+        "limitations": "Certain limitations apply. Listings are subject to editing for length and clarity. We may not be able to publish every submission. Photos may not appear in print."
+    }
     
 }
   

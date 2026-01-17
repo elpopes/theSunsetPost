@@ -62,6 +62,13 @@
     "Search results for": "Resultados de búsqueda para",
     "Error fetching suggestions": "Error al obtener sugerencias",
     "Error fetching search results": "Error al obtener resultados de búsqueda",
-    "Load more stories": "Más historias"
+    "Load more stories": "Más historias",
+
+    "classifieds_placeholder": {
+        "headline": "Publica un anuncio clasificado gratis por tiempo limitado.",
+        "intro": "¿Tienes un apartamento en renta? ¿Buscas compañero de cuarto? ¿Estás contratando, o buscando trabajo? ¿Vendes algo, regalas algo, u ofreces un servicio? ¿Quieres compartir un anuncio comunitario?",
+        "construction": "Esta sección está en construcción. Por ahora, envía tu anuncio a editor@sunsetpost.org, o contáctanos aquí",
+        "limitations": "Se aplican ciertas limitaciones. Los anuncios pueden ser editados por longitud y claridad. Es posible que no podamos publicar todos los envíos. Las fotos pueden no aparecer en la edición impresa."
+    }
   }
   
