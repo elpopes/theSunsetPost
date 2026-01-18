@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_05_05_220402) do
+ActiveRecord::Schema[7.1].define(version: 2026_01_18_215800) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -65,6 +65,71 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_05_220402) do
     t.text "bio"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "classified_categories", force: :cascade do |t|
+    t.string "slug", null: false
+    t.integer "position", null: false
+    t.boolean "active", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "classified_category_translations", force: :cascade do |t|
+    t.bigint "classified_category_id", null: false
+    t.string "language"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["classified_category_id", "language"], name: "idx_on_classified_category_id_language_3b2e067262", unique: true
+    t.index ["classified_category_id"], name: "idx_on_classified_category_id_a0aaf0d7a1"
+  end
+
+  create_table "classified_subcategories", force: :cascade do |t|
+    t.bigint "classified_category_id", null: false
+    t.string "slug", null: false
+    t.integer "position", null: false
+    t.boolean "active", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["classified_category_id"], name: "index_classified_subcategories_on_classified_category_id"
+  end
+
+  create_table "classified_subcategory_translations", force: :cascade do |t|
+    t.bigint "classified_subcategory_id", null: false
+    t.string "language"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["classified_subcategory_id", "language"], name: "idx_on_classified_subcategory_id_language_66c2dda437", unique: true
+    t.index ["classified_subcategory_id"], name: "idx_on_classified_subcategory_id_a37d186a49"
+  end
+
+  create_table "classified_translations", force: :cascade do |t|
+    t.bigint "classified_id", null: false
+    t.string "language"
+    t.string "title"
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["classified_id", "language"], name: "index_classified_translations_on_classified_id_and_language", unique: true
+    t.index ["classified_id"], name: "index_classified_translations_on_classified_id"
+  end
+
+  create_table "classifieds", force: :cascade do |t|
+    t.string "slug", null: false
+    t.integer "status"
+    t.datetime "posted_at"
+    t.datetime "expires_at"
+    t.string "submitter_email"
+    t.text "admin_notes"
+    t.bigint "classified_category_id", null: false
+    t.bigint "classified_subcategory_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["classified_category_id"], name: "index_classifieds_on_classified_category_id"
+    t.index ["classified_subcategory_id"], name: "index_classifieds_on_classified_subcategory_id"
+    t.index ["slug"], name: "index_classifieds_on_slug", unique: true
   end
 
   create_table "section_stories", force: :cascade do |t|
@@ -125,6 +190,12 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_05_220402) do
   add_foreign_key "author_stories", "authors"
   add_foreign_key "author_stories", "stories"
   add_foreign_key "author_translations", "authors"
+  add_foreign_key "classified_category_translations", "classified_categories"
+  add_foreign_key "classified_subcategories", "classified_categories"
+  add_foreign_key "classified_subcategory_translations", "classified_subcategories"
+  add_foreign_key "classified_translations", "classifieds"
+  add_foreign_key "classifieds", "classified_categories"
+  add_foreign_key "classifieds", "classified_subcategories"
   add_foreign_key "section_stories", "sections"
   add_foreign_key "section_stories", "stories"
   add_foreign_key "section_translations", "sections"

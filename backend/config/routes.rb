@@ -15,6 +15,11 @@ Rails.application.routes.draw do
     resources :stories, only: [:index, :show, :create, :update, :destroy]
     resources :authors, only: [:index, :show, :create]
 
+    resources :classifieds, only: [:index, :show, :create, :update, :destroy]
+    resources :classified_categories, only: [:index, :create, :update, :destroy]
+    resources :classified_subcategories, only: [:create, :update, :destroy]
+
+
     # API endpoints
     get 'transit', to: 'transit#get_transit_info'
     get 'weather', to: 'weather#fetch_weather'
