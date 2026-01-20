@@ -1,3 +1,4 @@
+// src/store.js
 import { configureStore } from "@reduxjs/toolkit";
 import storiesReducer from "./features/stories/storiesSlice";
 import authReducer from "./features/auth/authSlice";
@@ -9,6 +10,6 @@ export const store = configureStore({
     stories: storiesReducer,
     auth: authReducer,
     sections: sectionsReducer,
-    classfieds: classifiedsReducer,
+    classifieds: classifiedsReducer,
   },
 });

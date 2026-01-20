@@ -1,3 +1,4 @@
+// src/components/Footer.js
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -13,14 +14,18 @@ const Footer = () => {
   const user = useSelector((state) => state.auth.user);
 
   const filteredSections = sections.map((section) => {
-    const translation = section.translations?.find(
-      (t) => t.language === i18n.language
-    );
+    const tr = section.translations?.find((x) => x.language === i18n.language);
     return {
       ...section,
-      name: translation ? translation.name : section.name,
+      displayName: tr?.name || section.name,
+      urlName: section.name, // stable route key (not translated)
     };
   });
+
+  const isClassifiedsSection = (section) => {
+    const urlName = (section?.urlName || "").toLowerCase();
+    return urlName === "classifieds";
+  };
 
   const handleLogout = () => {
     dispatch(logout());
@@ -59,11 +64,13 @@ const Footer = () => {
               filteredSections.map((section) => (
                 <li key={section.id}>
                   <Link
-                    to={`/${
-                      i18n.language
-                    }/sections/${section.name.toLowerCase()}`}
+                    to={
+                      isClassifiedsSection(section)
+                        ? `/${i18n.language}/classifieds`
+                        : `/${i18n.language}/sections/${section.urlName.toLowerCase()}`
+                    }
                   >
-                    {section.name}
+                    {section.displayName}
                   </Link>
                 </li>
               ))

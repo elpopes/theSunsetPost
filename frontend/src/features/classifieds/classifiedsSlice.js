@@ -1,3 +1,4 @@
+// src/features/classifieds/classifiedsSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { baseURL } from "../../config";
 
@@ -16,6 +17,41 @@ const jsonHeaders = (token) => ({
   ...authHeaders(token),
 });
 
+// We’re using FormData for classifieds (so photos work now or later)
+// and JSON for taxonomy (categories/subcategories).
+const buildClassifiedFormData = (classified) => {
+  const fd = new FormData();
+
+  // Scalars (root-level FormData keys expected by the classifieds controller)
+  const scalarKeys = [
+    "status",
+    "posted_at",
+    "expires_at",
+    "submitter_email",
+    "admin_notes",
+    "classified_category_id",
+    "classified_subcategory_id",
+  ];
+
+  scalarKeys.forEach((key) => {
+    const val = classified?.[key];
+    if (val === undefined || val === null || val === "") return;
+    fd.append(key, String(val));
+  });
+
+  // Translations JSON string
+  // Expecting: [{ language: "en", title: "...", body: "..." }, ...]
+  const translations = classified?.translations || [];
+  fd.append("translations", JSON.stringify(translations));
+
+  // Optional photo file
+  if (classified?.photo) {
+    fd.append("photo", classified.photo);
+  }
+
+  return fd;
+};
+
 // --------------------
 // Public
 // --------------------
@@ -25,8 +61,13 @@ export const fetchClassifiedCategories = createAsyncThunk(
   async ({ lang }) => {
     const l = normalizeLang(lang);
     const res = await fetch(`${baseURL}/api/classified_categories?lang=${l}`);
-    if (!res.ok) throw new Error("Failed to fetch classified categories");
-    return res.json(); // returns array of categories (not wrapped)
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      throw new Error(
+        err?.errors?.join(", ") || "Failed to fetch classified categories",
+      );
+    }
+    return res.json(); // array (not wrapped)
   },
 );
 
@@ -41,8 +82,11 @@ export const fetchClassifieds = createAsyncThunk(
     if (limit) qs.set("limit", String(limit));
 
     const res = await fetch(`${baseURL}/api/classifieds?${qs.toString()}`);
-    if (!res.ok) throw new Error("Failed to fetch classifieds");
-    return res.json(); // returns array of classifieds (not wrapped)
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      throw new Error(err?.errors?.join(", ") || "Failed to fetch classifieds");
+    }
+    return res.json(); // array (not wrapped)
   },
 );
 
@@ -51,28 +95,34 @@ export const fetchClassifiedByIdOrSlug = createAsyncThunk(
   async ({ idOrSlug, lang }) => {
     const l = normalizeLang(lang);
     const res = await fetch(`${baseURL}/api/classifieds/${idOrSlug}?lang=${l}`);
-    if (!res.ok) throw new Error("Failed to fetch classified");
-    return res.json(); // returns detail object (not wrapped)
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      throw new Error(err?.errors?.join(", ") || "Failed to fetch classified");
+    }
+    return res.json(); // detail object (not wrapped)
   },
 );
 
 // --------------------
-// Admin: Classifieds
+// Admin: Classifieds (FormData)
 // --------------------
-// NOTE: Your controller expects params.require(:classified)
-// so we send { classified: { ... } }
 
 export const createClassified = createAsyncThunk(
   "classifieds/createClassified",
   async ({ classified, token, lang }) => {
     const l = normalizeLang(lang);
+
     const res = await fetch(`${baseURL}/api/classifieds?lang=${l}`, {
       method: "POST",
-      headers: jsonHeaders(token),
-      body: JSON.stringify({ classified }),
+      headers: authHeaders(token),
+      body: buildClassifiedFormData(classified),
     });
 
-    if (!res.ok) throw new Error("Failed to create classified");
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      throw new Error(err?.errors?.join(", ") || "Failed to create classified");
+    }
+
     const data = await res.json();
     return data.classified; // unwrap
   },
@@ -82,13 +132,18 @@ export const updateClassified = createAsyncThunk(
   "classifieds/updateClassified",
   async ({ id, classified, token, lang }) => {
     const l = normalizeLang(lang);
+
     const res = await fetch(`${baseURL}/api/classifieds/${id}?lang=${l}`, {
       method: "PUT",
-      headers: jsonHeaders(token),
-      body: JSON.stringify({ classified }),
+      headers: authHeaders(token),
+      body: buildClassifiedFormData(classified),
     });
 
-    if (!res.ok) throw new Error("Failed to update classified");
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      throw new Error(err?.errors?.join(", ") || "Failed to update classified");
+    }
+
     const data = await res.json();
     return data.classified; // unwrap
   },
@@ -102,13 +157,16 @@ export const deleteClassified = createAsyncThunk(
       headers: authHeaders(token),
     });
 
-    if (!res.ok) throw new Error("Failed to delete classified");
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      throw new Error(err?.errors?.join(", ") || "Failed to delete classified");
+    }
     return id;
   },
 );
 
 // --------------------
-// Admin: Categories
+// Admin: Categories (JSON)
 // --------------------
 
 export const createClassifiedCategory = createAsyncThunk(
@@ -121,7 +179,11 @@ export const createClassifiedCategory = createAsyncThunk(
       body: JSON.stringify({ classified_category: category }),
     });
 
-    if (!res.ok) throw new Error("Failed to create category");
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      throw new Error(err?.errors?.join(", ") || "Failed to create category");
+    }
+
     const data = await res.json();
     return data.category; // unwrap
   },
@@ -140,7 +202,11 @@ export const updateClassifiedCategory = createAsyncThunk(
       },
     );
 
-    if (!res.ok) throw new Error("Failed to update category");
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      throw new Error(err?.errors?.join(", ") || "Failed to update category");
+    }
+
     const data = await res.json();
     return data.category; // unwrap
   },
@@ -154,18 +220,21 @@ export const deleteClassifiedCategory = createAsyncThunk(
       headers: authHeaders(token),
     });
 
-    if (!res.ok) throw new Error("Failed to delete category");
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      throw new Error(err?.errors?.join(", ") || "Failed to delete category");
+    }
     return id;
   },
 );
 
 // --------------------
-// Admin: Subcategories
+// Admin: Subcategories (JSON + refetch categories)
 // --------------------
 
 export const createClassifiedSubcategory = createAsyncThunk(
   "classifieds/createClassifiedSubcategory",
-  async ({ subcategory, token, lang }) => {
+  async ({ subcategory, token, lang }, { dispatch }) => {
     const l = normalizeLang(lang);
     const res = await fetch(
       `${baseURL}/api/classified_subcategories?lang=${l}`,
@@ -176,15 +245,22 @@ export const createClassifiedSubcategory = createAsyncThunk(
       },
     );
 
-    if (!res.ok) throw new Error("Failed to create subcategory");
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      throw new Error(
+        err?.errors?.join(", ") || "Failed to create subcategory",
+      );
+    }
+
     const data = await res.json();
+    dispatch(fetchClassifiedCategories({ lang: l }));
     return data.subcategory; // unwrap
   },
 );
 
 export const updateClassifiedSubcategory = createAsyncThunk(
   "classifieds/updateClassifiedSubcategory",
-  async ({ id, subcategory, token, lang }) => {
+  async ({ id, subcategory, token, lang }, { dispatch }) => {
     const l = normalizeLang(lang);
     const res = await fetch(
       `${baseURL}/api/classified_subcategories/${id}?lang=${l}`,
@@ -195,21 +271,36 @@ export const updateClassifiedSubcategory = createAsyncThunk(
       },
     );
 
-    if (!res.ok) throw new Error("Failed to update subcategory");
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      throw new Error(
+        err?.errors?.join(", ") || "Failed to update subcategory",
+      );
+    }
+
     const data = await res.json();
+    dispatch(fetchClassifiedCategories({ lang: l }));
     return data.subcategory; // unwrap
   },
 );
 
 export const deleteClassifiedSubcategory = createAsyncThunk(
   "classifieds/deleteClassifiedSubcategory",
-  async ({ id, token }) => {
+  async ({ id, token, lang }, { dispatch }) => {
+    const l = normalizeLang(lang);
     const res = await fetch(`${baseURL}/api/classified_subcategories/${id}`, {
       method: "DELETE",
       headers: authHeaders(token),
     });
 
-    if (!res.ok) throw new Error("Failed to delete subcategory");
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      throw new Error(
+        err?.errors?.join(", ") || "Failed to delete subcategory",
+      );
+    }
+
+    dispatch(fetchClassifiedCategories({ lang: l }));
     return id;
   },
 );
@@ -231,6 +322,9 @@ const classifiedsSlice = createSlice({
     clearSelectedClassified(state) {
       state.selected = null;
       state.selectedStatus = "idle";
+    },
+    clearClassifiedsError(state) {
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
@@ -281,14 +375,21 @@ const classifiedsSlice = createSlice({
       .addCase(createClassified.fulfilled, (state, action) => {
         state.classifieds = [action.payload, ...state.classifieds];
       })
+      .addCase(createClassified.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
 
       // Update classified
       .addCase(updateClassified.fulfilled, (state, action) => {
         const updated = action.payload;
         const idx = state.classifieds.findIndex((c) => c.id === updated.id);
         if (idx !== -1) state.classifieds[idx] = updated;
-        if (state.selected && state.selected.id === updated.id)
+        if (state.selected && state.selected.id === updated.id) {
           state.selected = updated;
+        }
+      })
+      .addCase(updateClassified.rejected, (state, action) => {
+        state.error = action.error.message;
       })
 
       // Delete classified
@@ -296,13 +397,20 @@ const classifiedsSlice = createSlice({
         state.classifieds = state.classifieds.filter(
           (c) => c.id !== action.payload,
         );
-        if (state.selected && state.selected.id === action.payload)
+        if (state.selected && state.selected.id === action.payload) {
           state.selected = null;
+        }
+      })
+      .addCase(deleteClassified.rejected, (state, action) => {
+        state.error = action.error.message;
       })
 
       // Create category
       .addCase(createClassifiedCategory.fulfilled, (state, action) => {
         state.categories = [...state.categories, action.payload];
+      })
+      .addCase(createClassifiedCategory.rejected, (state, action) => {
+        state.error = action.error.message;
       })
 
       // Update category
@@ -311,20 +419,34 @@ const classifiedsSlice = createSlice({
         const idx = state.categories.findIndex((c) => c.id === updated.id);
         if (idx !== -1) state.categories[idx] = updated;
       })
+      .addCase(updateClassifiedCategory.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
 
       // Delete category
       .addCase(deleteClassifiedCategory.fulfilled, (state, action) => {
         state.categories = state.categories.filter(
           (c) => c.id !== action.payload,
         );
-      });
+      })
+      .addCase(deleteClassifiedCategory.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
 
-    // Subcategory create/update/delete:
-    // Your categories index returns nested subcategories, so the simplest move is:
-    // after any subcategory mutation, just refetch categories.
-    // We still return the subcategory for UI, but we don't attempt deep state surgery here.
+      // Subcategory mutations (we refetch categories in thunks)
+      .addCase(createClassifiedSubcategory.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(updateClassifiedSubcategory.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(deleteClassifiedSubcategory.rejected, (state, action) => {
+        state.error = action.error.message;
+      });
   },
 });
 
-export const { clearSelectedClassified } = classifiedsSlice.actions;
+export const { clearSelectedClassified, clearClassifiedsError } =
+  classifiedsSlice.actions;
+
 export default classifiedsSlice.reducer;

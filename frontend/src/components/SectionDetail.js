@@ -1,5 +1,6 @@
+// src/components/SectionDetail.js
 import React, { useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { fetchSectionByName } from "../features/sections/sectionsSlice";
@@ -16,11 +17,17 @@ const SectionDetail = () => {
   const status = useSelector((state) => state.sections.status);
   const error = useSelector((state) => state.sections.error);
 
+  const isClassifiedsRoute = (name || "").toLowerCase() === "classifieds";
+
   useEffect(() => {
-    if (name) {
+    if (name && !isClassifiedsRoute) {
       dispatch(fetchSectionByName(name));
     }
-  }, [name, dispatch]);
+  }, [name, isClassifiedsRoute, dispatch]);
+
+  if (isClassifiedsRoute) {
+    return <Navigate to={`/${i18n.language}/classifieds`} replace />;
+  }
 
   if (status === "loading") {
     return <p>{t("loading")}</p>;
@@ -39,22 +46,18 @@ const SectionDetail = () => {
     return <p>{t("Section not found.")}</p>;
   }
 
-  const currentTranslation = section.translations.find(
-    (t) => t.language === language
+  const currentTranslation = section.translations?.find(
+    (tr) => tr.language === language,
   ) || {
     name: section.name,
     description: section.description,
   };
 
-  const translatedStories = section.stories.map((story) => {
+  const translatedStories = (section.stories || []).map((story) => {
     const translation =
-      story.translations.find((t) => t.language === language) || {};
-
+      story.translations?.find((tr) => tr.language === language) || {};
     const { id: translationId, ...safeTranslation } = translation;
-    return {
-      ...story,
-      ...safeTranslation,
-    };
+    return { ...story, ...safeTranslation };
   });
 
   return (
@@ -63,85 +66,53 @@ const SectionDetail = () => {
       <p>{currentTranslation.description}</p>
 
       <ul className="section-stories">
-        {translatedStories.length > 0
-          ? translatedStories.map((story) => {
-              const isCJK = ["zh", "zh-CN", "zh-TW"].includes(language);
-              const snippet = isCJK
-                ? story.content?.slice(0, 60) + "..."
-                : story.content?.split(" ").slice(0, 25).join(" ") + "...";
+        {translatedStories.length > 0 ? (
+          translatedStories.map((story) => {
+            const isCJK = ["zh", "zh-CN", "zh-TW"].includes(language);
+            const snippet = isCJK
+              ? (story.content || "").slice(0, 60) + "..."
+              : (story.content || "").split(" ").slice(0, 25).join(" ") + "...";
 
-              return (
-                <li key={story.id} className="section-story-item">
-                  <Link
-                    to={`/${i18n.language}/stories/${story.slug || story.id}`}
-                    className="section-story-link"
+            return (
+              <li key={story.id} className="section-story-item">
+                <Link
+                  to={`/${i18n.language}/stories/${story.slug || story.id}`}
+                  className="section-story-link"
+                >
+                  {story.image_url && (
+                    <img
+                      src={story.image_url}
+                      alt={story.title}
+                      className="section-story-image"
+                    />
+                  )}
+                  <h3>{story.title}</h3>
+                </Link>
+
+                <div className="section-story-snippet">
+                  <ReactMarkdown
+                    components={{
+                      a: ({ children, ...props }) => (
+                        <a {...props} target="_blank" rel="noopener noreferrer">
+                          {children}
+                        </a>
+                      ),
+                    }}
                   >
-                    {story.image_url && (
-                      <img
-                        src={story.image_url}
-                        alt={story.title}
-                        className="section-story-image"
-                      />
-                    )}
-                    <h3>{story.title}</h3>
-                  </Link>
-                  <div className="section-story-snippet">
-                    <ReactMarkdown
-                      components={{
-                        a: ({ node, children, ...props }) => (
-                          <a
-                            {...props}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {children}
-                          </a>
-                        ),
-                      }}
-                    >
-                      {snippet}
-                    </ReactMarkdown>
-                  </div>
-                </li>
-              );
-            })
-          : (() => {
-              const isClassifieds = section?.name === "Classifieds";
-
-              if (!isClassifieds) {
-                return (
-                  <p>
-                    {t("no_stories.development")}{" "}
-                    <Link to={`/${i18n.language}/contact`}>
-                      {t("no_stories.contact_link")}
-                    </Link>
-                  </p>
-                );
-              }
-
-              return (
-                <div className="classifieds-placeholder">
-                  <h3>{t("classifieds_placeholder.headline")}</h3>
-
-                  <p>{t("classifieds_placeholder.intro")}</p>
-
-                  <p>{t("classifieds_placeholder.construction")}</p>
-
-                  <p>
-                    <a href="mailto:editor@sunsetpost.org">
-                      {t("classifieds_placeholder.contact_cta")}:
-                      editor@sunsetpost.org
-                    </a>{" "}
-                    {t("or")}{" "}
-                    <Link to={`/${i18n.language}/contact`}>
-                      {t("no_stories.contact_link")}
-                    </Link>
-                  </p>
-
-                  <p>{t("classifieds_placeholder.limitations")}</p>
+                    {snippet}
+                  </ReactMarkdown>
                 </div>
-              );
-            })()}
+              </li>
+            );
+          })
+        ) : (
+          <p>
+            {t("no_stories.development")}{" "}
+            <Link to={`/${i18n.language}/contact`}>
+              {t("no_stories.contact_link")}
+            </Link>
+          </p>
+        )}
       </ul>
     </div>
   );

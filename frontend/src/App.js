@@ -1,6 +1,15 @@
+// src/App.js
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+  useParams,
+} from "react-router-dom";
 import { useDispatch } from "react-redux";
+
 import MainLayout from "./components/MainLayout";
 import StoriesList from "./components/StoriesList";
 import StoryDetail from "./components/StoryDetail";
@@ -12,9 +21,17 @@ import ContactForm from "./components/ContactForm";
 import About from "./components/About";
 import Footer from "./components/Footer";
 import LanguageHandler from "./components/LanguageHandler";
-import SearchPage from "./components/SearchPage"; // 👈 NEW
+import SearchPage from "./components/SearchPage";
+import ClassifiedsPage from "./components/ClassifiedsPage";
+
 import { login } from "./features/auth/authSlice";
 import { initGA, logPageView } from "./analytics";
+
+// Redirect /:lang/sections/classifieds -> /:lang/classifieds
+const ClassifiedsAlias = () => {
+  const { lang } = useParams();
+  return <Navigate to={`/${lang}/classifieds`} replace />;
+};
 
 // Nested component to handle GA tracking on route change
 const AppRoutes = () => {
@@ -114,6 +131,23 @@ const AppRoutes = () => {
           }
         />
 
+        {/* NEW: classifieds */}
+        <Route
+          path="/:lang/classifieds"
+          element={
+            <MainLayout>
+              <LanguageHandler />
+              <ClassifiedsPage />
+            </MainLayout>
+          }
+        />
+
+        {/* Alias so clicking the "Classifieds" section link still works */}
+        <Route
+          path="/:lang/sections/classifieds"
+          element={<ClassifiedsAlias />}
+        />
+
         {/* Legacy routes */}
         <Route
           path="/"
@@ -187,7 +221,22 @@ const AppRoutes = () => {
             </MainLayout>
           }
         />
+
+        {/* Legacy classifieds */}
+        <Route
+          path="/classifieds"
+          element={
+            <MainLayout>
+              <ClassifiedsPage />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/sections/classifieds"
+          element={<Navigate to="/classifieds" replace />}
+        />
       </Routes>
+
       <Footer />
     </div>
   );

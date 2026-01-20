@@ -9,15 +9,20 @@ module Api
       scope = Classified.published_now.includes(
         :classified_category,
         :classified_subcategory,
-        :classified_translations
+        :classified_translations,
+        photo_attachment: :blob
       )
 
       if params[:category].present?
-        scope = scope.joins(:classified_category).where(classified_categories: { slug: params[:category] })
+        scope = scope.joins(:classified_category).where(
+          classified_categories: { slug: params[:category] }
+        )
       end
 
       if params[:subcategory].present?
-        scope = scope.joins(:classified_subcategory).where(classified_subcategories: { slug: params[:subcategory] })
+        scope = scope.joins(:classified_subcategory).where(
+          classified_subcategories: { slug: params[:subcategory] }
+        )
       end
 
       classifieds = scope.limit(limit_param)
@@ -25,24 +30,35 @@ module Api
       render json: classifieds.map { |c| serialize_summary(c, lang) }
     end
 
-    # GET /api/classifieds/:id  (we’ll support slug OR numeric id)
+    # GET /api/classifieds/:id  (supports slug OR numeric id)
     def show
       lang = normalized_lang(params[:lang])
 
-      classified = Classified.published_now.includes(
-        :classified_category,
-        :classified_subcategory,
-        :classified_translations
-      ).find_by(slug: params[:id]) || Classified.published_now.find(params[:id])
+      classified =
+        Classified.published_now.includes(
+          :classified_category,
+          :classified_subcategory,
+          :classified_translations,
+          photo_attachment: :blob
+        ).find_by(slug: params[:id]) || Classified.published_now.find(params[:id])
 
       render json: serialize_detail(classified, lang)
     end
 
-    # POST /api/classifieds
+    # POST /api/classifieds  (FormData-only)
+    # Expects scalar fields at top level + translations JSON string + optional photo
+    #   classified_category_id, classified_subcategory_id, submitter_email, expires_at, status, admin_notes
+    #   translations: JSON string: [{language, title, body}]
+    #   photo: file
     def create
-      classified = Classified.new(classified_params)
+      classified = Classified.new
+      classified.assign_attributes(classified_params)
 
-      if classified.status == "published" && classified.posted_at.blank?
+      normalize_blank_foreign_keys!(classified)
+      apply_translations_json!(classified)
+      attach_photo!(classified)
+
+      if classified.published? && classified.posted_at.blank?
         classified.posted_at = Time.current
       end
 
@@ -53,14 +69,22 @@ module Api
       end
     end
 
-    # PATCH/PUT /api/classifieds/:id
+    # PATCH/PUT /api/classifieds/:id  (FormData-only)
     def update
       classified = Classified.find(params[:id])
+      was_published = classified.published?
 
-      going_live = classified.status != "published" && params.dig(:classified, :status) == "published"
+      classified.assign_attributes(classified_params)
 
-      if classified.update(classified_params)
-        classified.update(posted_at: Time.current) if going_live && classified.posted_at.blank?
+      normalize_blank_foreign_keys!(classified)
+      apply_translations_json!(classified)
+      attach_photo!(classified)
+
+      if classified.save
+        if !was_published && classified.published? && classified.posted_at.blank?
+          classified.update(posted_at: Time.current)
+        end
+
         render json: { classified: serialize_detail(classified, normalized_lang(params[:lang])) }, status: :ok
       else
         render json: { errors: classified.errors.full_messages }, status: :unprocessable_entity
@@ -76,18 +100,42 @@ module Api
 
     private
 
+    # FormData-only scalar params (top-level)
     def classified_params
-      params.require(:classified).permit(
-        :slug,
+      params.permit(
         :status,
         :posted_at,
         :expires_at,
         :submitter_email,
         :admin_notes,
         :classified_category_id,
-        :classified_subcategory_id,
-        classified_translations_attributes: [:id, :language, :title, :body, :_destroy]
+        :classified_subcategory_id
       )
+    end
+
+    # Converts "" -> nil for optional belongs_to to avoid casting/validation weirdness
+    def normalize_blank_foreign_keys!(classified)
+      if classified.classified_subcategory_id.is_a?(String) && classified.classified_subcategory_id.blank?
+        classified.classified_subcategory_id = nil
+      end
+    end
+
+    # Reads params[:translations] JSON string, upserts translations by normalized language
+    def apply_translations_json!(classified)
+      raw = params[:translations].presence || "[]"
+      arr = JSON.parse(raw) rescue []
+
+      arr.each do |t|
+        lang = normalized_lang(t["language"])
+        tr = classified.classified_translations.find_or_initialize_by(language: lang)
+        tr.title = t["title"]
+        tr.body  = t["body"] || t["content"] || ""
+      end
+    end
+
+    def attach_photo!(classified)
+      return unless params[:photo].present?
+      classified.photo.attach(params[:photo])
     end
 
     def serialize_summary(c, lang)
@@ -108,7 +156,8 @@ module Api
           name: c.classified_subcategory.name_for(lang)
         } : nil,
         title: tr&.title,
-        body_snippet: snippet_for(tr&.body)
+        body_snippet: snippet_for(tr&.body),
+        photo_url: c.photo.attached? ? url_for(c.photo) : nil
       }
     end
 
@@ -130,7 +179,8 @@ module Api
           name: c.classified_subcategory.name_for(lang)
         } : nil,
         title: tr&.title,
-        body: tr&.body
+        body: tr&.body,
+        photo_url: c.photo.attached? ? url_for(c.photo) : nil
       }
     end
 

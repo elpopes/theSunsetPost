@@ -48,6 +48,11 @@ const Header = () => {
     };
   });
 
+  const isClassifiedsSection = (section) => {
+    const urlName = (section?.urlName || section?.name || "").toLowerCase();
+    return urlName === "classifieds";
+  };
+
   return (
     <header className="header">
       <div className="header__content">
@@ -71,7 +76,6 @@ const Header = () => {
               </Link>
             </div>
 
-            {/* search + language + socials all centered in one row */}
             <div className="header__language-row">
               <div className="header__search">
                 <SearchBar />
@@ -100,9 +104,11 @@ const Header = () => {
                 filteredSections.map((section) => (
                   <li key={section.id}>
                     <Link
-                      to={`/${
-                        i18n.language
-                      }/sections/${section.urlName.toLowerCase()}`}
+                      to={
+                        isClassifiedsSection(section)
+                          ? `/${i18n.language}/classifieds`
+                          : `/${i18n.language}/sections/${section.urlName.toLowerCase()}`
+                      }
                       onClick={() => setMenuOpen(false)}
                     >
                       {section.displayName}
