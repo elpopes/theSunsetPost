@@ -1,0 +1,84 @@
+/* src/components/ClassifiedDetail.css */
+
+.classified-detail {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.classified-detail-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.classified-detail-back {
+  text-decoration: none;
+}
+
+.classified-detail-back:hover {
+  text-decoration: underline;
+}
+
+.classified-detail-title {
+  margin: 0 0 6px 0;
+}
+
+.classified-detail-meta {
+  margin: 0 0 14px 0;
+}
+
+.classified-detail-date {
+  font-size: 13px;
+  opacity: 0.75;
+  margin-bottom: 6px;
+}
+
+.classified-detail-tagsline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.classified-detail-content {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.classified-detail-body {
+  flex: 1;
+  min-width: 0;
+  white-space: pre-wrap; /* keep line breaks */
+}
+
+.classified-detail-image {
+  flex: 0 0 auto;
+}
+
+.classified-detail-image img {
+  width: 320px;
+  max-width: 320px;
+  height: auto;
+  max-height: 320px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.classified-detail-error {
+  color: #b00020;
+}
+
+@media (max-width: 768px) {
+  .classified-detail-content {
+    flex-direction: column;
+  }
+
+  .classified-detail-image img {
+    width: 100%;
+    max-width: 100%;
+    max-height: 420px;
+  }
+}

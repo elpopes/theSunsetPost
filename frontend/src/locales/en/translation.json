@@ -71,6 +71,17 @@
         "construction": "This section is under construction. For now, send your listing by email or through our contact form. Please include a title (60 characters max), your listing text (250 characters max), a category, and the best way to reach you. You may attach one photo (under 1 MB), but photos may not appear in print.",
         "contact_cta": "Email",
         "limitations": "Certain limitations apply. Free listings are limited to 250 characters. You must have the rights to any photo you submit, and you are responsible for the content of your listing. Do not include sensitive personal information. the Sunset Post may edit submissions for length and clarity, and we reserve the right not to publish, decline, remove, or shorten any listing at our discretion. While listings are translated so they can appear online in English, Spanish, and Chinese, space and community response may mean that classifieds in the print newspaper appear only in the language in which they were submitted."
+    },
+
+    "classifieds": {
+        "title": "Classifieds",
+        "description": "Classified ads for the Sunset Park, Brooklyn community.",
+        "filters": {
+            "category": "Category",
+            "subcategory": "Subcategory",
+            "all": "All"
+        },
+        "Back to Classifieds": "Back to classifieds"
     }
     
 }

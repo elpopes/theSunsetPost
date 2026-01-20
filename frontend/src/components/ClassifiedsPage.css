@@ -1,0 +1,234 @@
+.classifieds-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.classifieds-results {
+  flex: 1;
+  min-width: 0;
+}
+
+.classifieds-title {
+  color: inherit; /* same as other section headings */
+  margin: 0 0 6px 0;
+}
+
+.classifieds-description {
+  margin: 0 0 14px 0;
+  opacity: 0.85;
+}
+
+.classifieds-tagsline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.classifieds-tag-sep {
+  opacity: 0.7;
+}
+
+.classifieds-tag-tile {
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  background: #fff;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.classifieds-tag-tile:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.classifieds-item {
+  align-items: flex-start;
+}
+
+.classifieds-item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.classifieds-item-image {
+  flex: 0 0 auto;
+}
+
+.classifieds-item-image img {
+  width: 180px;
+  height: 140px;
+  max-width: 180px;
+  max-height: 140px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.classifieds-page h1 {
+  margin: 0 0 12px 0;
+  color: inherit;
+}
+
+.classifieds-layout {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.classifieds-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px 12px;
+  border-radius: 999px;
+
+  background: #6f2418; /* darker default */
+  color: #fff;
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.classifieds-cta:hover {
+  background: #8b2f1f; /* lighter hover shade */
+  color: #fff; /* keep text the same */
+  text-decoration: none;
+}
+
+.classifieds-cta:focus {
+  outline: none;
+}
+
+.classifieds-cta:focus-visible {
+  outline: 2px solid rgba(0, 0, 0, 0.35);
+  outline-offset: 2px;
+}
+
+.classifieds-filters {
+  flex: 0 0 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.classifieds-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.classifieds-filters select {
+  padding: 6px;
+  font-size: 14px;
+}
+
+.classifieds-list {
+  flex: 1;
+  min-width: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.classifieds-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+}
+
+.classifieds-item img {
+  width: 180px;
+  height: 140px;
+  max-width: 180px;
+  max-height: 140px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex: 0 0 auto;
+}
+
+.classifieds-item h3 {
+  margin: 0 0 6px 0;
+  font-size: 18px;
+}
+
+.classifieds-item p {
+  margin: 6px 0;
+}
+
+.classifieds-meta {
+  opacity: 0.8;
+  font-size: 13px;
+}
+
+.classifieds-post-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px 12px;
+  border-radius: 999px;
+
+  background: #6f2418;
+  color: #fff;
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.classifieds-post-btn:hover {
+  background: #8b2f1f;
+  color: #fff;
+  text-decoration: none;
+}
+
+.classifieds-post-btn:focus-visible {
+  outline: 2px solid rgba(0, 0, 0, 0.35);
+  outline-offset: 2px;
+}
+
+/* Mobile: stack filters on top + image full width */
+@media (max-width: 768px) {
+  .classifieds-layout {
+    flex-direction: column;
+  }
+
+  .classifieds-filters {
+    width: 100%;
+    flex: none;
+  }
+
+  .classifieds-item {
+    flex-direction: column;
+  }
+
+  .classifieds-item img {
+    width: 100%;
+    height: 220px;
+    max-width: 100%;
+    max-height: 220px;
+  }
+}

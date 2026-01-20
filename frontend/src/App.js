@@ -9,6 +9,7 @@ import {
   useParams,
 } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import MainLayout from "./components/MainLayout";
 import StoriesList from "./components/StoriesList";
@@ -23,14 +24,54 @@ import Footer from "./components/Footer";
 import LanguageHandler from "./components/LanguageHandler";
 import SearchPage from "./components/SearchPage";
 import ClassifiedsPage from "./components/ClassifiedsPage";
-
+import ClassifiedDetail from "./components/ClassifiedDetail";
 import { login } from "./features/auth/authSlice";
 import { initGA, logPageView } from "./analytics";
+
+const normalizeLang = (lng) => {
+  const s = (lng || "en").toLowerCase();
+  if (s.startsWith("es")) return "es";
+  if (s.startsWith("zh")) return "zh";
+  return "en";
+};
 
 // Redirect /:lang/sections/classifieds -> /:lang/classifieds
 const ClassifiedsAlias = () => {
   const { lang } = useParams();
-  return <Navigate to={`/${lang}/classifieds`} replace />;
+  const l = normalizeLang(lang);
+  return <Navigate to={`/${l}/classifieds`} replace />;
+};
+
+// Redirect legacy /classifieds (no lang) -> /{detectedLang}/classifieds
+const LegacyClassifiedsRedirect = () => {
+  const { i18n } = useTranslation();
+
+  const stored =
+    (typeof window !== "undefined" && window.localStorage
+      ? localStorage.getItem("i18nextLng")
+      : null) || "";
+
+  const browser =
+    typeof navigator !== "undefined" ? navigator.language || "" : "";
+
+  const l = normalizeLang(stored || i18n.language || browser || "en");
+  return <Navigate to={`/${l}/classifieds`} replace />;
+};
+
+const LegacyClassifiedDetailRedirect = () => {
+  const { idOrSlug } = useParams();
+  const { i18n } = useTranslation();
+
+  const stored =
+    (typeof window !== "undefined" && window.localStorage
+      ? localStorage.getItem("i18nextLng")
+      : null) || "";
+
+  const browser =
+    typeof navigator !== "undefined" ? navigator.language || "" : "";
+
+  const l = normalizeLang(stored || i18n.language || browser || "en");
+  return <Navigate to={`/${l}/classifieds/${idOrSlug}`} replace />;
 };
 
 // Nested component to handle GA tracking on route change
@@ -48,7 +89,9 @@ const AppRoutes = () => {
   return (
     <div className="app-container">
       <Routes>
+        {/* -------------------- */}
         {/* Language-prefixed routes */}
+        {/* -------------------- */}
         <Route
           path="/:lang"
           element={
@@ -112,6 +155,32 @@ const AppRoutes = () => {
             </MainLayout>
           }
         />
+
+        <Route
+          path="/:lang/classifieds"
+          element={
+            <MainLayout>
+              <LanguageHandler />
+              <ClassifiedsPage />
+            </MainLayout>
+          }
+        />
+
+        <Route
+          path="/:lang/sections/classifieds"
+          element={<ClassifiedsAlias />}
+        />
+
+        <Route
+          path="/:lang/classifieds/:idOrSlug"
+          element={
+            <MainLayout>
+              <LanguageHandler />
+              <ClassifiedDetail />
+            </MainLayout>
+          }
+        />
+
         <Route
           path="/:lang/sections/:name"
           element={
@@ -131,24 +200,9 @@ const AppRoutes = () => {
           }
         />
 
-        {/* NEW: classifieds */}
-        <Route
-          path="/:lang/classifieds"
-          element={
-            <MainLayout>
-              <LanguageHandler />
-              <ClassifiedsPage />
-            </MainLayout>
-          }
-        />
-
-        {/* Alias so clicking the "Classifieds" section link still works */}
-        <Route
-          path="/:lang/sections/classifieds"
-          element={<ClassifiedsAlias />}
-        />
-
+        {/* -------------------- */}
         {/* Legacy routes */}
+        {/* -------------------- */}
         <Route
           path="/"
           element={
@@ -222,18 +276,15 @@ const AppRoutes = () => {
           }
         />
 
-        {/* Legacy classifieds */}
-        <Route
-          path="/classifieds"
-          element={
-            <MainLayout>
-              <ClassifiedsPage />
-            </MainLayout>
-          }
-        />
+        <Route path="/classifieds" element={<LegacyClassifiedsRedirect />} />
         <Route
           path="/sections/classifieds"
-          element={<Navigate to="/classifieds" replace />}
+          element={<LegacyClassifiedsRedirect />}
+        />
+
+        <Route
+          path="/classifieds/:idOrSlug"
+          element={<LegacyClassifiedDetailRedirect />}
         />
       </Routes>
 

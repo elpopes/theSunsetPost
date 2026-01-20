@@ -71,6 +71,17 @@
         "construction": "Esta sección está en construcción. Por ahora, envía tu anuncio por correo electrónico o a través de nuestro formulario de contacto. Incluye un título (máximo 60 caracteres), el texto del anuncio (máximo 250 caracteres), una categoría y la mejor forma de contactarte. Puedes adjuntar una foto (menos de 1 MB), pero es posible que las fotos no aparezcan en la edición impresa.",
         "contact_cta": "Correo electrónico",
         "limitations": "Se aplican ciertas limitaciones. Los anuncios gratis están limitados a 250 caracteres. Debes tener los derechos de cualquier foto que envíes, y eres responsable del contenido de tu anuncio. No incluyas información personal sensible. el Sunset Post puede editar los envíos por longitud y claridad, y se reserva el derecho de no publicar, rechazar, eliminar o acortar cualquier anuncio a su discreción. Aunque los anuncios se traducen para aparecer en línea en inglés, español y chino, el espacio disponible y la respuesta de la comunidad pueden hacer que los clasificados en la edición impresa aparezcan solo en el idioma en que fueron enviados."
-    }
+    },
+    
+    "classifieds": {
+        "title": "Clasificados",
+        "description": "Anuncios clasificados para la comunidad de Sunset Park, Brooklyn.",
+        "filters": {
+            "category": "Categoría",
+            "subcategory": "Subcategoría",
+            "all": "Todos"
+        },
+        "Back to Classifieds": "Volver a clasificados"
+    } 
   }
   
