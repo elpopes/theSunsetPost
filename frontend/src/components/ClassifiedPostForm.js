@@ -21,6 +21,8 @@ const ClassifiedPostForm = () => {
   const [categoryId, setCategoryId] = useState("");
   const [subcategoryId, setSubcategoryId] = useState("");
 
+  const [linkUrl, setLinkUrl] = useState(""); // <-- NEW
+
   const [photo, setPhoto] = useState(null);
   const [message, setMessage] = useState("");
 
@@ -46,7 +48,17 @@ const ClassifiedPostForm = () => {
     setExpiresAt("");
     setCategoryId("");
     setSubcategoryId("");
+    setLinkUrl(""); // <-- NEW
     setPhoto(null);
+  };
+
+  // optional helper: normalize URL input
+  const normalizeHttpUrl = (raw) => {
+    const s = (raw || "").trim();
+    if (!s) return "";
+    // If they paste "example.com", make it https://example.com
+    if (!/^https?:\/\//i.test(s)) return `https://${s}`;
+    return s;
   };
 
   const handleSubmit = async (e) => {
@@ -66,16 +78,30 @@ const ClassifiedPostForm = () => {
       return;
     }
 
+    const normalizedLink = normalizeHttpUrl(linkUrl);
+
+    // optional: if they typed something but it's not http(s), block it early
+    if (normalizedLink && !/^https?:\/\//i.test(normalizedLink)) {
+      setMessage("Please enter a valid http(s) URL.");
+      return;
+    }
+
     const formData = new FormData();
 
     formData.append("classified_category_id", String(categoryId));
-    if (subcategoryId)
+    if (subcategoryId) {
       formData.append("classified_subcategory_id", String(subcategoryId));
+    }
+
     formData.append("submitter_email", submitterEmail.trim());
     formData.append("status", "published");
 
     if (expiresAt) {
       formData.append("expires_at", new Date(expiresAt).toISOString());
+    }
+
+    if (normalizedLink) {
+      formData.append("link_url", normalizedLink); // <-- NEW
     }
 
     formData.append(
@@ -185,6 +211,21 @@ const ClassifiedPostForm = () => {
               </option>
             ))}
           </select>
+        </div>
+
+        {/* NEW: link_url */}
+        <div style={{ marginTop: 10 }}>
+          <label>Link (optional):</label>
+          <input
+            type="url"
+            value={linkUrl}
+            onChange={(e) => setLinkUrl(e.target.value)}
+            placeholder="https://example.com"
+            style={{ width: "100%", marginTop: 4 }}
+          />
+          <div style={{ fontSize: 12, opacity: 0.8, marginTop: 4 }}>
+            This will appear as a “More info” link on the listing.
+          </div>
         </div>
 
         <div style={{ marginTop: 10 }}>

@@ -109,7 +109,8 @@ module Api
         :submitter_email,
         :admin_notes,
         :classified_category_id,
-        :classified_subcategory_id
+        :classified_subcategory_id,
+        :link_url,    
       )
     end
 
@@ -145,6 +146,7 @@ module Api
         slug: c.slug,
         posted_at: c.posted_at || c.created_at,
         expires_at: c.expires_at,
+        link_url: c.link_url,
         category: {
           id: c.classified_category.id,
           slug: c.classified_category.slug,
@@ -162,27 +164,29 @@ module Api
     end
 
     def serialize_detail(c, lang)
-      tr = c.translation_for(lang)
-      {
-        id: c.id,
-        slug: c.slug,
-        posted_at: c.posted_at || c.created_at,
-        expires_at: c.expires_at,
-        category: {
-          id: c.classified_category.id,
-          slug: c.classified_category.slug,
-          name: c.classified_category.name_for(lang)
-        },
-        subcategory: c.classified_subcategory ? {
-          id: c.classified_subcategory.id,
-          slug: c.classified_subcategory.slug,
-          name: c.classified_subcategory.name_for(lang)
-        } : nil,
-        title: tr&.title,
-        body: tr&.body,
-        photo_url: c.photo.attached? ? url_for(c.photo) : nil
-      }
+        tr = c.translation_for(lang)
+        {
+            id: c.id,
+            slug: c.slug,
+            posted_at: c.posted_at || c.created_at,
+            expires_at: c.expires_at,
+            link_url: c.link_url,
+            category: {
+            id: c.classified_category.id,
+            slug: c.classified_category.slug,
+            name: c.classified_category.name_for(lang)
+            },
+            subcategory: c.classified_subcategory ? {
+            id: c.classified_subcategory.id,
+            slug: c.classified_subcategory.slug,
+            name: c.classified_subcategory.name_for(lang)
+            } : nil,
+            title: tr&.title,
+            body: tr&.body,
+            photo_url: c.photo.attached? ? url_for(c.photo) : nil
+        }
     end
+
 
     def snippet_for(body)
       return "" if body.blank?

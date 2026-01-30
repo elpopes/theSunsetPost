@@ -31,6 +31,7 @@ const buildClassifiedFormData = (classified) => {
     "admin_notes",
     "classified_category_id",
     "classified_subcategory_id",
+    "link_url",
   ];
 
   scalarKeys.forEach((key) => {

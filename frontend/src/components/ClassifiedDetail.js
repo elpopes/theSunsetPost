@@ -1,5 +1,4 @@
-// src/components/ClassifiedDetail.js
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -9,6 +8,7 @@ import {
   clearSelectedClassified,
 } from "../features/classifieds/classifiedsSlice";
 import { baseURL as defaultBaseURL } from "../config";
+import ClassifiedEdit from "./ClassifiedEdit";
 import "./ClassifiedDetail.css";
 
 // helper for photo_url that might be absolute or relative
@@ -60,8 +60,11 @@ const ClassifiedDetail = ({ baseURL = defaultBaseURL }) => {
     auth?.user?.accessToken;
   const isAdmin = !!auth?.user?.admin;
 
+  const [editMode, setEditMode] = useState(false);
+
   useEffect(() => {
     if (!idOrSlug) return;
+
     dispatch(fetchClassifiedByIdOrSlug({ idOrSlug, lang }));
 
     return () => {
@@ -83,7 +86,12 @@ const ClassifiedDetail = ({ baseURL = defaultBaseURL }) => {
   const handleDelete = async () => {
     if (!selected?.id) return;
 
-    const ok = window.confirm("Delete this classified? This cannot be undone.");
+    const ok = window.confirm(
+      t(
+        "classifieds.confirmDelete",
+        "Delete this classified? This cannot be undone.",
+      ),
+    );
     if (!ok) return;
 
     const result = await dispatch(deleteClassified({ id: selected.id, token }));
@@ -91,13 +99,6 @@ const ClassifiedDetail = ({ baseURL = defaultBaseURL }) => {
       navigate(backHref);
       window.scrollTo(0, 0);
     }
-  };
-
-  const handleEdit = () => {
-    if (!selected?.id) return;
-    // Adjust these query params if your PostForm expects different names.
-    navigate(`/${lang}/post?postType=classified&id=${selected.id}`);
-    window.scrollTo(0, 0);
   };
 
   if (selectedStatus === "loading") {
@@ -113,7 +114,7 @@ const ClassifiedDetail = ({ baseURL = defaultBaseURL }) => {
       <div className="classified-detail">
         <p className="classified-detail-error">{error}</p>
         <Link className="classified-detail-back" to={backHref}>
-          {t("classifieds.Back to Classifieds", "Back to Classifieds")}
+          {t("classifieds.backToClassifieds", "Back to classifieds")}
         </Link>
       </div>
     );
@@ -124,8 +125,41 @@ const ClassifiedDetail = ({ baseURL = defaultBaseURL }) => {
       <div className="classified-detail">
         <p>{t("not_found", "Not found.")}</p>
         <Link className="classified-detail-back" to={backHref}>
-          {t("classifieds.Back to Classifieds", "Back to Classifieds")}
+          {t("classifieds.backToClassifieds", "Back to classifieds")}
         </Link>
+      </div>
+    );
+  }
+
+  // INLINE EDIT MODE
+  if (editMode && isAdmin) {
+    return (
+      <div className="classified-detail">
+        <div className="classified-detail-top">
+          <button
+            type="button"
+            className="classified-detail-back"
+            onClick={() => setEditMode(false)}
+          >
+            {t("classifieds.backToClassifieds", "Back to classifieds")}
+          </button>
+        </div>
+
+        <h1 className="classified-detail-title">
+          {t("classifieds.editClassified", "Edit classified")}
+        </h1>
+
+        <ClassifiedEdit
+          idOrSlug={idOrSlug}
+          lang={lang}
+          baseURL={baseURL}
+          onCancel={() => setEditMode(false)}
+          onSaved={() => {
+            setEditMode(false);
+            // refresh detail in current language so you see updated title/body/link right away
+            dispatch(fetchClassifiedByIdOrSlug({ idOrSlug, lang }));
+          }}
+        />
       </div>
     );
   }
@@ -137,7 +171,7 @@ const ClassifiedDetail = ({ baseURL = defaultBaseURL }) => {
     <div className="classified-detail">
       <div className="classified-detail-top">
         <Link className="classified-detail-back" to={backHref}>
-          {t("classifieds.Back to Classifieds", "Back to Classifieds")}
+          {t("classifieds.backToClassifieds", "Back to classifieds")}
         </Link>
 
         {isAdmin ? (
@@ -145,10 +179,11 @@ const ClassifiedDetail = ({ baseURL = defaultBaseURL }) => {
             <button
               type="button"
               className="classifieds-cta"
-              onClick={handleEdit}
+              onClick={() => setEditMode(true)}
             >
-              Edit
+              {t("classifieds.edit", "Edit")}
             </button>
+
             <button
               type="button"
               className="classifieds-cta classifieds-cta-danger"
@@ -156,7 +191,7 @@ const ClassifiedDetail = ({ baseURL = defaultBaseURL }) => {
               disabled={!token}
               title={!token ? "Missing auth token" : ""}
             >
-              Delete
+              {t("classifieds.delete", "Delete")}
             </button>
           </div>
         ) : null}
@@ -205,10 +240,11 @@ const ClassifiedDetail = ({ baseURL = defaultBaseURL }) => {
       <div className="classified-detail-content">
         <div className="classified-detail-body">
           <div>{selected.body}</div>
-          {selected.link ? (
-            <p>
-              <a href={selected.link} target="_blank" rel="noreferrer">
-                {selected.link}
+
+          {selected.link_url ? (
+            <p className="classified-detail-link">
+              <a href={selected.link_url} target="_blank" rel="noreferrer">
+                {t("classifieds.moreInfo", "More info")}
               </a>
             </p>
           ) : null}

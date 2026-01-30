@@ -80,8 +80,13 @@
             "category": "类别",
             "subcategory": "子类别",
             "all": "全部"
-        },
-        "Back to Classifieds": "返回分类广告"
-    } 
+    },
+        "Back to Classifieds": "返回分类广告",
+        "backToClassifieds": "返回分类广告",
+        "moreInfo": "更多信息",
+        "edit": "编辑",
+        "delete": "删除",
+        "confirmDelete": "要删除这条分类信息吗？此操作无法撤销。"
+    }
 }
   

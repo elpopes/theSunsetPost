@@ -18,9 +18,11 @@ class Classified < ApplicationRecord
   validates :status, presence: true
   validates :submitter_email, presence: true
   validates :classified_category, presence: true
+  validates :link_url, length: { maximum: 500 }, allow_blank: true
 
   validate :subcategory_belongs_to_category
   validate :photo_size_under_1mb
+  validate :link_url_must_be_http
 
   before_validation :ensure_slug, on: :create
 
@@ -29,6 +31,15 @@ class Classified < ApplicationRecord
       .where("expires_at IS NULL OR expires_at > ?", Time.current)
       .order(posted_at: :desc, created_at: :desc)
   }
+
+    def link_url_must_be_http
+        return if link_url.blank?
+
+        uri = URI.parse(link_url) rescue nil
+        ok = uri && (uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS))
+        errors.add(:link_url, "must be a valid http(s) URL")  unless ok
+    end
+
 
   def expired?
     expires_at.present? && expires_at <= Time.current

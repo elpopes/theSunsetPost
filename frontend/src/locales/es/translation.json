@@ -80,8 +80,13 @@
             "category": "Categoría",
             "subcategory": "Subcategoría",
             "all": "Todos"
-        },
-        "Back to Classifieds": "Volver a clasificados"
-    } 
+    },
+        "Back to Classifieds": "Volver a clasificados",
+        "backToClassifieds": "Volver a clasificados",
+        "moreInfo": "Más información",
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "confirmDelete": "¿Eliminar este clasificado? Esta acción no se puede deshacer."
+    }
   }
   

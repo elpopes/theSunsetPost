@@ -80,8 +80,13 @@
             "category": "Category",
             "subcategory": "Subcategory",
             "all": "All"
-        },
-        "Back to Classifieds": "Back to classifieds"
+    },
+        "Back to Classifieds": "Back to classifieds",
+        "backToClassifieds": "Back to classifieds",
+        "moreInfo": "More info",
+        "edit": "Edit",
+        "delete": "Delete",
+        "confirmDelete": "Delete this classified? This cannot be undone."
     }
     
 }
