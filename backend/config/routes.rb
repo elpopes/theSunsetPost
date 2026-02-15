@@ -8,6 +8,14 @@ Rails.application.routes.draw do
 
   get "/preview/stories/:slug", to: "previews#story"
 
+    # RSS feeds
+    get "/rss.xml", to: "feeds#rss", defaults: { format: "xml" }
+    get "/:lang/rss.xml", to: "feeds#rss",
+    constraints: { lang: /(en|es|zh)/ },
+    defaults: { format: "xml" }
+
+    get "/rss", to: redirect("/rss.xml"), format: false
+
   namespace :api do
     get 'sections/name/:name', to: 'sections#show_by_name'
     resources :sections, only: [:index]
