@@ -18,6 +18,9 @@ import venmoSmartEn from "../assets/outreach/Venmo-Smartreach-En.png";
 import venmoSmartEs from "../assets/outreach/Venmo-Smartreach-Es.png";
 import venmoSmartZh from "../assets/outreach/Venmo-Smartreach-Zh.png";
 
+import useInfoView from "../utils/useInfoView";
+import { logInfoClick } from "../utils/infoEvents";
+
 const SUBSCRIPTION_LINK = "https://buy.stripe.com/9B65kDcIjdtvg16cCZbQY04";
 
 const VENMO_LINK =
@@ -44,7 +47,6 @@ const sponsorsSmartreach = [
       },
     },
   },
-
   {
     id: "venmo",
     byLang: {
@@ -65,7 +67,6 @@ const sponsorsSmartreach = [
       },
     },
   },
-
   {
     id: "dojo",
     byLang: {
@@ -110,12 +111,14 @@ const sponsorsSmartreach = [
 
 const InfoBlockMobile = ({ lang }) => {
   const { t } = useTranslation();
-  const { pathname } = useLocation();
+  const location = useLocation();
   const lastShownIdRef = useRef(null);
 
+  const path = location.pathname + location.search;
+
   const stablePath = useMemo(() => {
-    return pathname.replace(/^\/(en|es|zh)(?=\/|$)/, "") || "/";
-  }, [pathname]);
+    return location.pathname.replace(/^\/(en|es|zh)(?=\/|$)/, "") || "/";
+  }, [location.pathname]);
 
   const [pick, setPick] = useState(() => sponsorsSmartreach[0] || null);
 
@@ -142,13 +145,35 @@ const InfoBlockMobile = ({ lang }) => {
     lastShownIdRef.current = chosen.id;
   }, [stablePath]);
 
-  const banner = pick?.byLang?.[lang] || pick?.byLang?.en;
+  const pickId = pick?.id || "unknown";
+  const banner = pick?.byLang?.[lang] || pick?.byLang?.en || null;
+
+  const infoRef = useInfoView({
+    slot: "mobile_info_banner",
+    info_id: pickId,
+    lng: lang,
+    path,
+  });
+
   if (!banner) return null;
 
   return (
     <>
-      <div className="info-space">
-        <a href={banner.link} target="_blank" rel="noopener noreferrer">
+      <div className="info-space" ref={infoRef}>
+        <a
+          href={banner.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() =>
+            logInfoClick({
+              slot: "mobile_info_banner",
+              info_id: pickId,
+              lng: lang,
+              path,
+              dest: banner.link,
+            })
+          }
+        >
           <img
             src={banner.image}
             alt={banner.alt}

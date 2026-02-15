@@ -22,6 +22,9 @@ import localReachEN from "../assets/outreach/localreach-en.svg";
 import localReachES from "../assets/outreach/localreach-es.svg";
 import localReachZH from "../assets/outreach/localreach-zh.svg";
 
+import useInfoView from "../utils/useInfoView";
+import { logInfoClick } from "../utils/infoEvents";
+
 const STRIPE_SUBSCRIBE_URL = "https://buy.stripe.com/9B65kDcIjdtvg16cCZbQY04";
 
 const VENMO_URL =
@@ -137,13 +140,74 @@ const shuffle = (arr) => {
   return out;
 };
 
+const TrackedInfoTile = ({ variant, id, idx, lang, path }) => {
+  const infoRef = useInfoView({
+    slot: "sidebar_info_stack",
+    info_id: id,
+    lng: lang,
+    path,
+  });
+
+  const isAboveFold = idx < 2;
+
+  const img = (
+    <img
+      src={variant.image}
+      alt={variant.alt}
+      className="sidebar-image"
+      loading={isAboveFold ? "eager" : "lazy"}
+      decoding="async"
+    />
+  );
+
+  return (
+    <div className="info-space" ref={infoRef}>
+      {variant.external ? (
+        <a
+          href={variant.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() =>
+            logInfoClick({
+              slot: "sidebar_info_stack",
+              info_id: id,
+              lng: lang,
+              path,
+              dest: variant.href,
+            })
+          }
+        >
+          {img}
+        </a>
+      ) : (
+        <Link
+          to={`/${lang}${variant.href}`}
+          onClick={() =>
+            logInfoClick({
+              slot: "sidebar_info_stack",
+              info_id: id,
+              lng: lang,
+              path,
+              dest: `/${lang}${variant.href}`,
+            })
+          }
+        >
+          {img}
+        </Link>
+      )}
+    </div>
+  );
+};
+
 const InfoStackSidebar = ({ lang }) => {
   const { t } = useTranslation();
-  const { pathname } = useLocation();
+  const location = useLocation();
+
+  const path = location.pathname + location.search;
 
   const stablePath = useMemo(() => {
-    return pathname.replace(/^\/(en|es|zh)(?=\/|$)/, "") || "/";
-  }, [pathname]);
+    return location.pathname.replace(/^\/(en|es|zh)(?=\/|$)/, "") || "/";
+  }, [location.pathname]);
 
   const placementIds = useMemo(() => placements.map((p) => p.id), []);
   const placementById = useMemo(() => {
@@ -162,7 +226,6 @@ const InfoStackSidebar = ({ lang }) => {
       const prevFirst = prev?.[0] || null;
       let next = shuffle(placementIds);
 
-      // Avoid repeating the same first tile as last render
       if (prevFirst && next[0] === prevFirst) {
         const alt = next.findIndex((x) => x !== prevFirst);
         if (alt > 0) [next[0], next[alt]] = [next[alt], next[0]];
@@ -174,6 +237,13 @@ const InfoStackSidebar = ({ lang }) => {
 
   const outreach = outreachImageByLang[lang] || localReachEN;
 
+  const houseRef = useInfoView({
+    slot: "sidebar_info_house",
+    info_id: "localreach",
+    lng: lang,
+    path,
+  });
+
   return (
     <aside className="main-layout__sidebar">
       {order.map((id, idx) => {
@@ -181,33 +251,31 @@ const InfoStackSidebar = ({ lang }) => {
         const variant = p?.byLang?.[lang] || p?.byLang?.en;
         if (!variant) return null;
 
-        const isAboveFold = idx < 2;
-
-        const img = (
-          <img
-            src={variant.image}
-            alt={variant.alt}
-            className="sidebar-image"
-            loading={isAboveFold ? "eager" : "lazy"}
-            decoding="async"
-          />
-        );
-
         return (
-          <div className="info-space" key={id}>
-            {variant.external ? (
-              <a href={variant.href} target="_blank" rel="noopener noreferrer">
-                {img}
-              </a>
-            ) : (
-              <Link to={`/${lang}${variant.href}`}>{img}</Link>
-            )}
-          </div>
+          <TrackedInfoTile
+            key={id}
+            id={id}
+            idx={idx}
+            variant={variant}
+            lang={lang}
+            path={path}
+          />
         );
       })}
 
-      <div className="info-space">
-        <Link to={`/${lang}/contact`}>
+      <div className="info-space" ref={houseRef}>
+        <Link
+          to={`/${lang}/contact`}
+          onClick={() =>
+            logInfoClick({
+              slot: "sidebar_info_house",
+              info_id: "localreach",
+              lng: lang,
+              path,
+              dest: `/${lang}/contact`,
+            })
+          }
+        >
           <img
             src={outreach}
             alt={t("Advertise with us")}

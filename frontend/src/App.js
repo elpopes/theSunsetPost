@@ -84,7 +84,7 @@ const AppRoutes = () => {
 
   useEffect(() => {
     logPageView(location.pathname + location.search);
-  }, [location]);
+  }, [location.pathname, location.search]);
 
   return (
     <div className="app-container">
