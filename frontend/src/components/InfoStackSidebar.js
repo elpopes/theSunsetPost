@@ -31,9 +31,9 @@ const VENMO_URL =
   "https://www.paypal.com/qrcodes/venmocs/27e4b8c5-829d-4347-b684-46e3983b8c4f?created=1765840714&printed=true";
 
 const OFFSHORE_SIDEBAR_LINKS = {
-  en: "http://wind.ny.gov/?utm_source=SunsetPost&utm_medium=DisplaySidebar&utm_campaign=OffShoreWindEvent&utm_content=OffshoreWind_Sidebar_300x600_en",
-  es: "http://wind.ny.gov/?utm_source=SunsetPost&utm_medium=DisplaySidebar&utm_campaign=OffShoreWindEvent&utm_content=OffshoreWind_Sidebar_300x600_es",
-  zh: "http://wind.ny.gov/?utm_source=SunsetPost&utm_medium=DisplaySidebar&utm_campaign=OffShoreWindEvent&utm_content=OffshoreWind_Sidebar_300x600_man",
+  en: "https://www.nyserda.ny.gov/All-Programs/Offshore-Wind/Announcements-and-Events?utm_source=SunsetPost&utm_medium=DisplaySidebar&utm_campaign=OffShoreWindEvent&utm_content=OffshoreWind_Sidebar_300x600_en",
+  es: "https://www.nyserda.ny.gov/All-Programs/Offshore-Wind/Announcements-and-Events?utm_source=SunsetPost&utm_medium=DisplaySidebar&utm_campaign=OffShoreWindEvent&utm_content=OffshoreWind_Sidebar_300x600_es",
+  zh: "https://www.nyserda.ny.gov/All-Programs/Offshore-Wind/Announcements-and-Events?utm_source=SunsetPost&utm_medium=DisplaySidebar&utm_campaign=OffShoreWindEvent&utm_content=OffshoreWind_Sidebar_300x600_man",
 };
 
 const placements = [
