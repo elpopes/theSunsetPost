@@ -6,9 +6,9 @@ import dojoEn from "../assets/outreach/Dojo-Localreach-En.png";
 import dojoEs from "../assets/outreach/Dojo-Localreach-Es.png";
 import dojoZh from "../assets/outreach/Dojo-Localreach-Zh.png";
 
-import mbEn from "../assets/outreach/MariasBistro-Localreach-En.png";
-import mbEs from "../assets/outreach/MariasBistro-Localreach-Es.png";
-import mbZh from "../assets/outreach/MariasBistro-Localreach-Zh.png";
+import offshoreEn from "../assets/outreach/OffshoreWind-Localreach-En.jpg";
+import offshoreEs from "../assets/outreach/OffshoreWind-Localreach-Es.png";
+import offshoreZh from "../assets/outreach/OffshoreWind-Localreach-Zh.png";
 
 import subEn from "../assets/outreach/Subscription-Localreach-En.png";
 import subEs from "../assets/outreach/Subscription-Localreach-Es.png";
@@ -30,49 +30,32 @@ const STRIPE_SUBSCRIBE_URL = "https://buy.stripe.com/9B65kDcIjdtvg16cCZbQY04";
 const VENMO_URL =
   "https://www.paypal.com/qrcodes/venmocs/27e4b8c5-829d-4347-b684-46e3983b8c4f?created=1765840714&printed=true";
 
+const OFFSHORE_SIDEBAR_LINKS = {
+  en: "http://wind.ny.gov/?utm_source=SunsetPost&utm_medium=DisplaySidebar&utm_campaign=OffShoreWindEvent&utm_content=OffshoreWind_Sidebar_300x600_en",
+  es: "http://wind.ny.gov/?utm_source=SunsetPost&utm_medium=DisplaySidebar&utm_campaign=OffShoreWindEvent&utm_content=OffshoreWind_Sidebar_300x600_es",
+  zh: "http://wind.ny.gov/?utm_source=SunsetPost&utm_medium=DisplaySidebar&utm_campaign=OffShoreWindEvent&utm_content=OffshoreWind_Sidebar_300x600_man",
+};
+
 const placements = [
   {
-    id: "dojo",
+    id: "offshore-wind",
     byLang: {
       en: {
-        image: dojoEn,
-        alt: "Brooklyn Aikikai",
-        href: "https://brooklynaikikai.com",
+        image: offshoreEn,
+        alt: "Offshore Wind & Union Apprenticeship Awareness Open House",
+        href: OFFSHORE_SIDEBAR_LINKS.en,
         external: true,
       },
       es: {
-        image: dojoEs,
-        alt: "Brooklyn Aikikai",
-        href: "https://brooklynaikikai.com",
+        image: offshoreEs,
+        alt: "Jornada de puertas abiertas para informarse de la energía eólica marina y el aprendizaje sindical",
+        href: OFFSHORE_SIDEBAR_LINKS.es,
         external: true,
       },
       zh: {
-        image: dojoZh,
-        alt: "Brooklyn Aikikai",
-        href: "https://brooklynaikikai.com",
-        external: true,
-      },
-    },
-  },
-  {
-    id: "marias",
-    byLang: {
-      en: {
-        image: mbEn,
-        alt: "Maria’s Bistro Mexicano",
-        href: "http://www.mariasbistromexicano.net/",
-        external: true,
-      },
-      es: {
-        image: mbEs,
-        alt: "Maria’s Bistro Mexicano",
-        href: "http://www.mariasbistromexicano.net/",
-        external: true,
-      },
-      zh: {
-        image: mbZh,
-        alt: "Maria’s Bistro Mexicano",
-        href: "http://www.mariasbistromexicano.net/",
+        image: offshoreZh,
+        alt: "离岸风电产业与工会学徒项目介绍开放日",
+        href: OFFSHORE_SIDEBAR_LINKS.zh,
         external: true,
       },
     },
@@ -119,6 +102,29 @@ const placements = [
         image: venmoZh,
         alt: "支持本地新闻！",
         href: VENMO_URL,
+        external: true,
+      },
+    },
+  },
+  {
+    id: "dojo",
+    byLang: {
+      en: {
+        image: dojoEn,
+        alt: "Brooklyn Aikikai",
+        href: "https://brooklynaikikai.com",
+        external: true,
+      },
+      es: {
+        image: dojoEs,
+        alt: "Brooklyn Aikikai",
+        href: "https://brooklynaikikai.com",
+        external: true,
+      },
+      zh: {
+        image: dojoZh,
+        alt: "Brooklyn Aikikai",
+        href: "https://brooklynaikikai.com",
         external: true,
       },
     },
@@ -217,22 +223,26 @@ const InfoStackSidebar = ({ lang }) => {
   const [order, setOrder] = useState(() => shuffle(placementIds));
 
   useEffect(() => {
-    if (placementIds.length <= 1) {
+    if (placementIds.length === 0) {
+      setOrder([]);
+      return;
+    }
+
+    if (placementIds.length === 1) {
       setOrder(placementIds);
       return;
     }
 
-    setOrder((prev) => {
-      const prevFirst = prev?.[0] || null;
-      let next = shuffle(placementIds);
+    const PINNED_ID = "offshore-wind";
+    const hasPinned = placementIds.includes(PINNED_ID);
 
-      if (prevFirst && next[0] === prevFirst) {
-        const alt = next.findIndex((x) => x !== prevFirst);
-        if (alt > 0) [next[0], next[alt]] = [next[alt], next[0]];
-      }
+    if (!hasPinned) {
+      setOrder(shuffle(placementIds));
+      return;
+    }
 
-      return next;
-    });
+    const rest = placementIds.filter((id) => id !== PINNED_ID);
+    setOrder([PINNED_ID, ...shuffle(rest)]);
   }, [stablePath, placementIds]);
 
   const outreach = outreachImageByLang[lang] || localReachEN;

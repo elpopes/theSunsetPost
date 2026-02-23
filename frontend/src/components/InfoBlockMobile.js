@@ -6,9 +6,9 @@ import dojoSmartEn from "../assets/outreach/Dojo-Smartreach-En.png";
 import dojoSmartEs from "../assets/outreach/Dojo-Smartreach-Es.png";
 import dojoSmartZh from "../assets/outreach/Dojo-Smartreach-Zh.png";
 
-import mbSmartEn from "../assets/outreach/MariasBistro-Smartreach-En.png";
-import mbSmartEs from "../assets/outreach/MariasBistro-Smartreach-Es.png";
-import mbSmartZh from "../assets/outreach/MariasBistro-Smartreach-Zh.png";
+import offshoreSmartEn from "../assets/outreach/OffshoreWind-Smartreach-En.jpg";
+import offshoreSmartEs from "../assets/outreach/OffshoreWind-Smartreach-Es.png";
+import offshoreSmartZh from "../assets/outreach/OffshoreWind-Smartreach-Zh.png";
 
 import subscriptionSmartEn from "../assets/outreach/Subscription-Smartreach-En.png";
 import subscriptionSmartEs from "../assets/outreach/Subscription-Smartreach-Es.png";
@@ -26,7 +26,33 @@ const SUBSCRIPTION_LINK = "https://buy.stripe.com/9B65kDcIjdtvg16cCZbQY04";
 const VENMO_LINK =
   "https://www.paypal.com/qrcodes/venmocs/27e4b8c5-829d-4347-b684-46e3983b8c4f?created=1765840714&printed=true";
 
+const OFFSHORE_SMART_LINKS = {
+  en: "http://wind.ny.gov/?utm_source=SunsetPost&utm_medium=DisplayBanner&utm_campaign=OffShoreWindEvent&utm_content=OffshoreWind_Banner_640x200_en",
+  es: "http://wind.ny.gov/?utm_source=SunsetPost&utm_medium=DisplayBanner&utm_campaign=OffShoreWindEvent&utm_content=OffshoreWind_Banner_640x200_es",
+  zh: "http://wind.ny.gov/?utm_source=SunsetPost&utm_medium=DisplayBanner&utm_campaign=OffShoreWindEvent&utm_content=OffshoreWind_Banner_640x200_man",
+};
+
 const sponsorsSmartreach = [
+  {
+    id: "offshore-wind",
+    byLang: {
+      en: {
+        image: offshoreSmartEn,
+        alt: "Offshore Wind & Union Apprenticeship Awareness Open House",
+        link: OFFSHORE_SMART_LINKS.en,
+      },
+      es: {
+        image: offshoreSmartEs,
+        alt: "Jornada de puertas abiertas para informarse de la energía eólica marina y el aprendizaje sindical",
+        link: OFFSHORE_SMART_LINKS.es,
+      },
+      zh: {
+        image: offshoreSmartZh,
+        alt: "离岸风电产业与工会学徒项目介绍开放日",
+        link: OFFSHORE_SMART_LINKS.zh,
+      },
+    },
+  },
   {
     id: "subscription",
     byLang: {
@@ -87,26 +113,6 @@ const sponsorsSmartreach = [
       },
     },
   },
-  {
-    id: "marias-bistro",
-    byLang: {
-      en: {
-        image: mbSmartEn,
-        alt: "Maria’s Bistro Mexicano",
-        link: "http://www.mariasbistromexicano.net/",
-      },
-      es: {
-        image: mbSmartEs,
-        alt: "Maria’s Bistro Mexicano",
-        link: "http://www.mariasbistromexicano.net/",
-      },
-      zh: {
-        image: mbSmartZh,
-        alt: "Maria’s Bistro Mexicano",
-        link: "http://www.mariasbistromexicano.net/",
-      },
-    },
-  },
 ];
 
 const InfoBlockMobile = ({ lang }) => {
@@ -128,6 +134,15 @@ const InfoBlockMobile = ({ lang }) => {
     if (arr.length === 0) {
       setPick(null);
       lastShownIdRef.current = null;
+      return;
+    }
+
+    const PINNED_ID = "offshore-wind";
+    const pinned = arr.find((s) => s.id === PINNED_ID);
+
+    if (pinned) {
+      setPick(pinned);
+      lastShownIdRef.current = pinned.id;
       return;
     }
 
