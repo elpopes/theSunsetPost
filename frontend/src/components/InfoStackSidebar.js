@@ -6,10 +6,6 @@ import dojoEn from "../assets/outreach/Dojo-Localreach-En.png";
 import dojoEs from "../assets/outreach/Dojo-Localreach-Es.png";
 import dojoZh from "../assets/outreach/Dojo-Localreach-Zh.png";
 
-import offshoreEn from "../assets/outreach/OffshoreWind-Localreach-En.jpg";
-import offshoreEs from "../assets/outreach/OffshoreWind-Localreach-Es.png";
-import offshoreZh from "../assets/outreach/OffshoreWind-Localreach-Zh.png";
-
 import subEn from "../assets/outreach/Subscription-Localreach-En.png";
 import subEs from "../assets/outreach/Subscription-Localreach-Es.png";
 import subZh from "../assets/outreach/Subscription-Localreach-Zh.png";
@@ -30,36 +26,7 @@ const STRIPE_SUBSCRIBE_URL = "https://buy.stripe.com/9B65kDcIjdtvg16cCZbQY04";
 const VENMO_URL =
   "https://www.paypal.com/qrcodes/venmocs/27e4b8c5-829d-4347-b684-46e3983b8c4f?created=1765840714&printed=true";
 
-const OFFSHORE_SIDEBAR_LINKS = {
-  en: "https://www.nyserda.ny.gov/All-Programs/Offshore-Wind/Announcements-and-Events?utm_source=SunsetPost&utm_medium=DisplaySidebar&utm_campaign=OffShoreWindEvent&utm_content=OffshoreWind_Sidebar_300x600_en",
-  es: "https://www.nyserda.ny.gov/All-Programs/Offshore-Wind/Announcements-and-Events?utm_source=SunsetPost&utm_medium=DisplaySidebar&utm_campaign=OffShoreWindEvent&utm_content=OffshoreWind_Sidebar_300x600_es",
-  zh: "https://www.nyserda.ny.gov/All-Programs/Offshore-Wind/Announcements-and-Events?utm_source=SunsetPost&utm_medium=DisplaySidebar&utm_campaign=OffShoreWindEvent&utm_content=OffshoreWind_Sidebar_300x600_man",
-};
-
 const placements = [
-  {
-    id: "offshore-wind",
-    byLang: {
-      en: {
-        image: offshoreEn,
-        alt: "Offshore Wind & Union Apprenticeship Awareness Open House",
-        href: OFFSHORE_SIDEBAR_LINKS.en,
-        external: true,
-      },
-      es: {
-        image: offshoreEs,
-        alt: "Jornada de puertas abiertas para informarse de la energía eólica marina y el aprendizaje sindical",
-        href: OFFSHORE_SIDEBAR_LINKS.es,
-        external: true,
-      },
-      zh: {
-        image: offshoreZh,
-        alt: "离岸风电产业与工会学徒项目介绍开放日",
-        href: OFFSHORE_SIDEBAR_LINKS.zh,
-        external: true,
-      },
-    },
-  },
   {
     id: "subscription",
     byLang: {
@@ -233,16 +200,7 @@ const InfoStackSidebar = ({ lang }) => {
       return;
     }
 
-    const PINNED_ID = "offshore-wind";
-    const hasPinned = placementIds.includes(PINNED_ID);
-
-    if (!hasPinned) {
-      setOrder(shuffle(placementIds));
-      return;
-    }
-
-    const rest = placementIds.filter((id) => id !== PINNED_ID);
-    setOrder([PINNED_ID, ...shuffle(rest)]);
+    setOrder(shuffle(placementIds));
   }, [stablePath, placementIds]);
 
   const outreach = outreachImageByLang[lang] || localReachEN;
