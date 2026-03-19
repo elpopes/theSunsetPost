@@ -27,6 +27,7 @@ import ClassifiedsPage from "./components/ClassifiedsPage";
 import ClassifiedDetail from "./components/ClassifiedDetail";
 import { login } from "./features/auth/authSlice";
 import { initGA, logPageView } from "./analytics";
+import ScrollToTop from "./components/ScrollToTop";
 
 const normalizeLang = (lng) => {
   const s = (lng || "en").toLowerCase();
@@ -88,6 +89,7 @@ const AppRoutes = () => {
 
   return (
     <div className="app-container">
+      <ScrollToTop />
       <Routes>
         {/* -------------------- */}
         {/* Language-prefixed routes */}
