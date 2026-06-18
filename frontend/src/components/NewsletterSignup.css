@@ -1,0 +1,14 @@
+.newsletter-signup {
+  min-height: 120px;
+  padding: 12px;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.newsletter-signup > div,
+.newsletter-signup form,
+.newsletter-signup input,
+.newsletter-signup button {
+  max-width: 100%;
+  box-sizing: border-box;
+}
