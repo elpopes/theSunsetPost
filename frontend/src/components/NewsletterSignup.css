@@ -19,7 +19,7 @@
 
 .newsletter-signup.newsletter-signup--sidebar {
   width: 100%;
-  max-width: 300px;
+  max-width: 280px;
   min-height: 180px;
   margin: 0 auto 8px;
   padding: 0;
@@ -27,13 +27,18 @@
 }
 
 .newsletter-signup--sidebar .formkit-container {
-  padding: 20px 16px;
+  padding: 20px 10px !important;
+}
+
+.newsletter-signup--sidebar .formkit-header {
+  width: 100% !important;
 }
 
 .newsletter-signup--sidebar .formkit-header h2 {
-  margin-bottom: 10px;
-  font-size: 1.35rem;
-  line-height: 1.15;
+  margin-bottom: 10px !important;
+  font-size: 1.2rem !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.02em;
 }
 
 .newsletter-signup--sidebar .formkit-content {
