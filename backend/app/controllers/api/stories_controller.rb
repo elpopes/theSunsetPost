@@ -141,6 +141,7 @@ class Api::StoriesController < ApplicationController
     {
       id: story.id,
       slug: story.slug,
+      created_at: story.created_at,
       image_url: story.image.attached? ? url_for(story.image) : nil,
       translations: story.story_translations.map do |tr|
         {
