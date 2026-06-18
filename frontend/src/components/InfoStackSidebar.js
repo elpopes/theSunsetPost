@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
+import NewsletterSignup from "./NewsletterSignup";
 
 import dojoEn from "../assets/outreach/Dojo-Localreach-En.png";
 import dojoEs from "../assets/outreach/Dojo-Localreach-Es.png";
@@ -27,6 +28,10 @@ const VENMO_URL =
   "https://www.paypal.com/qrcodes/venmocs/27e4b8c5-829d-4347-b684-46e3983b8c4f?created=1765840714&printed=true";
 
 const placements = [
+  {
+    id: "newsletter",
+    type: "component",
+  },
   {
     id: "subscription",
     byLang: {
@@ -215,8 +220,22 @@ const InfoStackSidebar = ({ lang }) => {
   return (
     <aside className="main-layout__sidebar">
       {order.map((id, idx) => {
-        const p = placementById[id];
-        const variant = p?.byLang?.[lang] || p?.byLang?.en;
+        const placement = placementById[id];
+
+        if (placement?.type === "component") {
+          return (
+            <NewsletterSignup
+              key={id}
+              lang={lang}
+              variant="sidebar"
+              slot="sidebar_info_stack"
+              path={path}
+            />
+          );
+        }
+
+        const variant =
+          placement?.byLang?.[lang] || placement?.byLang?.en;
         if (!variant) return null;
 
         return (
