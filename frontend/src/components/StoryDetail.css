@@ -30,16 +30,18 @@
 
 .story-detail__title {
   font-size: clamp(1.5rem, 5vw, 2rem);
-  margin: 0 0 8px;
+  margin: 0;
   color: #771000;
   text-align: center;
 }
 
 .story-detail__date {
   display: block;
+  margin: 0 0 16px;
   color: #666;
   font-size: 0.95rem;
   line-height: 1.4;
+  text-align: left;
 }
 
 .story-detail__image {
@@ -51,7 +53,7 @@
 
 .story-detail__image-container {
   display: block;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .story-detail__caption {
