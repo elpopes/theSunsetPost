@@ -1,12 +1,29 @@
 .newsletter-signup {
-  min-height: 120px;
-  padding: 12px;
+  width: 100%;
+  box-sizing: border-box;
   overflow: hidden;
   background-color: #fff;
+  border-radius: 4px;
+  text-align: left;
 }
 
-.newsletter-signup > div,
+.newsletter-signup--sidebar {
+  min-height: 180px;
+  padding: 12px;
+}
+
+.newsletter-signup--mobile {
+  width: calc(100% - 20px);
+  max-width: 680px;
+  min-height: 110px;
+  margin: 0 auto 8px;
+  padding: 10px 16px;
+}
+
+.newsletter-signup__embed,
+.newsletter-signup__embed > div,
 .newsletter-signup form,
+.newsletter-signup iframe,
 .newsletter-signup input,
 .newsletter-signup button {
   max-width: 100%;
