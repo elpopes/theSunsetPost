@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import useInfoView from "../utils/useInfoView";
 import "./NewsletterSignup.css";
 
 const FORM_BY_LANG = {
@@ -19,10 +20,22 @@ const FORM_BY_LANG = {
   },
 };
 
-const NewsletterSignup = ({ lang }) => {
+const NewsletterSignup = ({
+  lang,
+  variant = "sidebar",
+  slot = "newsletter_signup",
+  path = "",
+}) => {
   const containerRef = useRef(null);
   const language = (lang || "en").split("-")[0];
   const form = FORM_BY_LANG[language] || FORM_BY_LANG.en;
+
+  const infoRef = useInfoView({
+    slot,
+    info_id: "newsletter",
+    lng: language,
+    path,
+  });
 
   useEffect(() => {
     const container = containerRef.current;
@@ -43,10 +56,12 @@ const NewsletterSignup = ({ lang }) => {
 
   return (
     <section
-      className="newsletter-signup info-space"
+      className={`newsletter-signup newsletter-signup--${variant} info-space`}
       aria-label={form.label}
-      ref={containerRef}
-    />
+      ref={infoRef}
+    >
+      <div className="newsletter-signup__embed" ref={containerRef} />
+    </section>
   );
 };
 
