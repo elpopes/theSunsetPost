@@ -7,25 +7,55 @@
   text-align: left;
 }
 
+.newsletter-signup .formkit-form,
+.newsletter-signup .formkit-container,
+.newsletter-signup .formkit-fields,
+.newsletter-signup input,
+.newsletter-signup button {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
 .newsletter-signup--sidebar {
   min-height: 180px;
-  padding: 12px;
+  padding: 0;
+}
+
+.newsletter-signup--sidebar .formkit-container {
+  padding: 20px 16px;
+}
+
+.newsletter-signup--sidebar .formkit-header h2 {
+  margin-bottom: 10px;
+  font-size: 1.35rem;
+  line-height: 1.15;
+}
+
+.newsletter-signup--sidebar .formkit-content {
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.newsletter-signup--sidebar .formkit-disclaimer {
+  font-size: 0.7rem;
+  line-height: 1.3;
 }
 
 .newsletter-signup--mobile {
-  width: calc(100% - 20px);
-  max-width: 680px;
+  width: calc(100% - 24px);
+  max-width: 400px;
   min-height: 110px;
   margin: 0 auto 8px;
-  padding: 10px 16px;
+  padding: 0;
+}
+
+.newsletter-signup--mobile .formkit-container {
+  padding: 24px 20px;
 }
 
 .newsletter-signup__embed,
-.newsletter-signup__embed > div,
-.newsletter-signup form,
-.newsletter-signup iframe,
-.newsletter-signup input,
-.newsletter-signup button {
+.newsletter-signup__embed > div {
   max-width: 100%;
   box-sizing: border-box;
 }
