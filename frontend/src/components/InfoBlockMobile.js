@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
+import NewsletterSignup from "./NewsletterSignup";
 
 import dojoSmartEn from "../assets/outreach/Dojo-Smartreach-En.png";
 import dojoSmartEs from "../assets/outreach/Dojo-Smartreach-Es.png";
@@ -83,7 +84,47 @@ const sponsorsSmartreach = [
       },
     },
   },
+  {
+    id: "newsletter",
+    type: "component",
+  },
 ];
+
+const TrackedMobileBanner = ({ banner, pickId, lang, path }) => {
+  const infoRef = useInfoView({
+    slot: "mobile_info_banner",
+    info_id: pickId,
+    lng: lang,
+    path,
+  });
+
+  return (
+    <div className="info-space" ref={infoRef}>
+      <a
+        href={banner.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() =>
+          logInfoClick({
+            slot: "mobile_info_banner",
+            info_id: pickId,
+            lng: lang,
+            path,
+            dest: banner.link,
+          })
+        }
+      >
+        <img
+          src={banner.image}
+          alt={banner.alt}
+          className="reach-image"
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
+    </div>
+  );
+};
 
 const InfoBlockMobile = ({ lang }) => {
   const { t } = useTranslation();
@@ -121,44 +162,33 @@ const InfoBlockMobile = ({ lang }) => {
     lastShownIdRef.current = chosen.id;
   }, [stablePath]);
 
-  const pickId = pick?.id || "unknown";
-  const banner = pick?.byLang?.[lang] || pick?.byLang?.en || null;
+  if (!pick) return null;
 
-  const infoRef = useInfoView({
-    slot: "mobile_info_banner",
-    info_id: pickId,
-    lng: lang,
-    path,
-  });
+  const pickId = pick.id;
+  const isNewsletter = pick.type === "component";
+  const banner = isNewsletter
+    ? null
+    : pick?.byLang?.[lang] || pick?.byLang?.en || null;
 
-  if (!banner) return null;
+  if (!isNewsletter && !banner) return null;
 
   return (
     <>
-      <div className="info-space" ref={infoRef}>
-        <a
-          href={banner.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() =>
-            logInfoClick({
-              slot: "mobile_info_banner",
-              info_id: pickId,
-              lng: lang,
-              path,
-              dest: banner.link,
-            })
-          }
-        >
-          <img
-            src={banner.image}
-            alt={banner.alt}
-            className="reach-image"
-            loading="lazy"
-            decoding="async"
-          />
-        </a>
-      </div>
+      {isNewsletter ? (
+        <NewsletterSignup
+          lang={lang}
+          variant="mobile"
+          slot="mobile_info_banner"
+          path={path}
+        />
+      ) : (
+        <TrackedMobileBanner
+          banner={banner}
+          pickId={pickId}
+          lang={lang}
+          path={path}
+        />
+      )}
 
       <p className="info-link">
         <Link to={`/${lang}/contact`}>
