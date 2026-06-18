@@ -23,11 +23,23 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.story-detail__header {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
 .story-detail__title {
   font-size: clamp(1.5rem, 5vw, 2rem);
-  margin-bottom: 20px;
+  margin: 0 0 8px;
   color: #771000;
   text-align: center;
+}
+
+.story-detail__date {
+  display: block;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.4;
 }
 
 .story-detail__image {
@@ -188,6 +200,9 @@
   }
   .story-detail__title {
     font-size: 1.5rem;
+  }
+  .story-detail__date {
+    font-size: 0.9rem;
   }
   .story-detail__caption {
     font-size: 0.8rem;
