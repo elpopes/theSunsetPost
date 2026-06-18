@@ -17,9 +17,13 @@
   box-sizing: border-box;
 }
 
-.newsletter-signup--sidebar {
+.newsletter-signup.newsletter-signup--sidebar {
+  width: 100%;
+  max-width: 300px;
   min-height: 180px;
+  margin: 0 auto 8px;
   padding: 0;
+  background-color: #fff;
 }
 
 .newsletter-signup--sidebar .formkit-container {
