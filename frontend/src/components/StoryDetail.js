@@ -181,11 +181,6 @@ const StoryDetail = () => {
         <>
           <header className="story-detail__header">
             <h2 className="story-detail__title">{title}</h2>
-            {publishedDate && (
-              <time className="story-detail__date" dateTime={story.created_at}>
-                {publishedDate}
-              </time>
-            )}
           </header>
 
           {story.image_url && (
@@ -201,6 +196,12 @@ const StoryDetail = () => {
                 </figcaption>
               )}
             </figure>
+          )}
+
+          {publishedDate && (
+            <time className="story-detail__date" dateTime={story.created_at}>
+              {publishedDate}
+            </time>
           )}
 
           <div className="story-detail__content">
