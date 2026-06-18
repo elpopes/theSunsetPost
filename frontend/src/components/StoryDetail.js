@@ -11,6 +11,12 @@ import StoryEditor from "./StoryEditor";
 import { Helmet } from "react-helmet";
 import "./StoryDetail.css";
 
+const DATE_LOCALES = {
+  en: "en-US",
+  es: "es-US",
+  zh: "zh-CN",
+};
+
 const StoryDetail = () => {
   const { id } = useParams();
   const { t, i18n } = useTranslation();
@@ -93,11 +99,26 @@ const StoryDetail = () => {
   const metaDescription =
     currentTranslation?.meta_description || "The Sunset Post";
 
+  const language = (i18n.resolvedLanguage || i18n.language || "en").split("-")[0];
+  const createdAt = story.created_at ? new Date(story.created_at) : null;
+  const publishedDate =
+    createdAt && !Number.isNaN(createdAt.getTime())
+      ? new Intl.DateTimeFormat(DATE_LOCALES[language] || DATE_LOCALES.en, {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          timeZone: "America/New_York",
+        }).format(createdAt)
+      : null;
+
   return (
     <div className="story-detail">
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={metaDescription} />
+        {story.created_at && (
+          <meta property="article:published_time" content={story.created_at} />
+        )}
         <link
           rel="canonical"
           href={`https://www.sunsetpost.org/stories/${story.slug}`}
@@ -158,7 +179,14 @@ const StoryDetail = () => {
         </form>
       ) : (
         <>
-          <h2 className="story-detail__title">{title}</h2>
+          <header className="story-detail__header">
+            <h2 className="story-detail__title">{title}</h2>
+            {publishedDate && (
+              <time className="story-detail__date" dateTime={story.created_at}>
+                {publishedDate}
+              </time>
+            )}
+          </header>
 
           {story.image_url && (
             <figure className="story-detail__image-container">
