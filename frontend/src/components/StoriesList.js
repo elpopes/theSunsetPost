@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchStories } from "../features/stories/storiesSlice";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import PopularStories from "./PopularStories";
 import "./StoriesList.css";
 
 const PAGE_SIZE = 30;
@@ -87,6 +88,7 @@ const StoriesList = () => {
 
   return (
     <section className="stories-section">
+      <PopularStories />
       {error && (
         <p className="error-message">
           {t("Error fetching stories")}: {error}
