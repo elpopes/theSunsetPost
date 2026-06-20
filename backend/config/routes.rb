@@ -20,7 +20,9 @@ Rails.application.routes.draw do
     get 'sections/name/:name', to: 'sections#show_by_name'
     resources :sections, only: [:index]
 
-    resources :stories, only: [:index, :show, :create, :update, :destroy]
+    resources :stories, only: [:index, :show, :create, :update, :destroy] do
+      resources :views, only: [:create], controller: "story_views"
+    end
     resources :authors, only: [:index, :show, :create]
 
     resources :classifieds, only: [:index, :show, :create, :update, :destroy]
