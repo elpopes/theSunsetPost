@@ -21,7 +21,9 @@ Rails.application.routes.draw do
     resources :sections, only: [:index]
 
     resources :stories, only: [:index, :show, :create, :update, :destroy] do
-      resources :views, only: [:create], controller: "story_views"
+      resources :views, only: [:create], controller: "story_views" do
+        post :engagement, on: :member
+      end
     end
     resources :authors, only: [:index, :show, :create]
 
