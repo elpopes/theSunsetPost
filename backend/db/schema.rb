@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_01_30_101532) do
+ActiveRecord::Schema[7.1].define(version: 2026_06_20_210000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -178,6 +178,34 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_30_101532) do
     t.index ["story_id"], name: "index_story_translations_on_story_id"
   end
 
+  create_table "story_views", force: :cascade do |t|
+    t.bigint "story_id", null: false
+    t.string "visitor_token", null: false
+    t.string "language", null: false
+    t.string "path", null: false
+    t.text "query_string"
+    t.text "referrer"
+    t.text "user_agent"
+    t.string "utm_source"
+    t.string "utm_medium"
+    t.string "utm_campaign"
+    t.string "utm_content"
+    t.string "source_type", default: "unknown", null: false
+    t.string "ip_hash"
+    t.integer "engaged_seconds", default: 0, null: false
+    t.integer "max_scroll_percent", default: 0, null: false
+    t.datetime "viewed_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ip_hash", "viewed_at"], name: "index_story_views_on_ip_hash_and_viewed_at"
+    t.index ["language", "viewed_at"], name: "index_story_views_on_language_and_viewed_at"
+    t.index ["source_type", "viewed_at"], name: "index_story_views_on_source_type_and_viewed_at"
+    t.index ["story_id", "viewed_at"], name: "index_story_views_on_story_id_and_viewed_at"
+    t.index ["story_id"], name: "index_story_views_on_story_id"
+    t.index ["utm_campaign", "viewed_at"], name: "index_story_views_on_utm_campaign_and_viewed_at"
+    t.index ["visitor_token", "story_id", "viewed_at"], name: "index_story_views_on_visitor_story_and_viewed_at"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email"
     t.string "password_digest"
@@ -201,4 +229,5 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_30_101532) do
   add_foreign_key "section_stories", "stories"
   add_foreign_key "section_translations", "sections"
   add_foreign_key "story_translations", "stories"
+  add_foreign_key "story_views", "stories"
 end
