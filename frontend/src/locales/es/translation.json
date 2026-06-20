@@ -1,5 +1,16 @@
 {
     "welcome": "Bienvenido a The Sunset Post",
+    "Popular Now": "Popular ahora",
+    "print_qr": {
+        "open": "Enlace QR para impresión",
+        "print_language": "Idioma de impresión",
+        "target_language": "Idioma de destino",
+        "issue": "Edición",
+        "url": "URL del código QR",
+        "copy": "Copiar URL del código QR",
+        "copied": "Copiado",
+        "copy_failed": "No se pudo copiar. Copia la URL manualmente."
+    },
     "stories": "Historias",
     "loading": "Cargando historias...",
     "home": "Inicio",

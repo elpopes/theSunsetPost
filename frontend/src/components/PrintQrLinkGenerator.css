@@ -1,0 +1,129 @@
+.story-detail__admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #ddd;
+}
+
+.story-detail__admin-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  background: #fff;
+  color: #2b2b2b;
+  cursor: pointer;
+  font: inherit;
+}
+
+.story-detail__admin-actions button:hover {
+  border-color: #771000;
+  color: #771000;
+}
+
+.story-detail__admin-actions button:focus-visible,
+.print-qr-generator__field select:focus-visible,
+.print-qr-generator__field input:focus-visible {
+  outline: 3px solid #771000;
+  outline-offset: 2px;
+}
+
+.print-qr-generator__panel {
+  flex: 1 0 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #ddd;
+}
+
+.print-qr-generator__field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 5px;
+  color: #444;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.print-qr-generator__field select,
+.print-qr-generator__field input,
+.print-qr-generator__field output {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  background: #fff;
+  color: #222;
+  font: inherit;
+  font-weight: 400;
+}
+
+.print-qr-generator__field output {
+  display: flex;
+  align-items: center;
+}
+
+.print-qr-generator__url {
+  grid-column: 1 / -1;
+}
+
+.print-qr-generator__url input {
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+.print-qr-generator__copy-row {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 40px;
+}
+
+.print-qr-generator__copy-row button {
+  background: #771000;
+  border-color: #771000;
+  color: #fff;
+}
+
+.print-qr-generator__copy-row button:hover {
+  background: #5f0d00;
+  border-color: #5f0d00;
+  color: #fff;
+}
+
+.print-qr-generator__copy-row button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.print-qr-generator__status {
+  color: #444;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+  .print-qr-generator__panel {
+    grid-template-columns: 1fr;
+  }
+
+  .print-qr-generator__url,
+  .print-qr-generator__copy-row {
+    grid-column: 1;
+  }
+
+  .print-qr-generator__copy-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

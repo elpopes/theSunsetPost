@@ -8,6 +8,8 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import StoryEditor from "./StoryEditor";
+import PrintQrLinkGenerator from "./PrintQrLinkGenerator";
+import useStoryEngagement from "../utils/useStoryEngagement";
 import { Helmet } from "react-helmet";
 import "./StoryDetail.css";
 
@@ -30,6 +32,17 @@ const StoryDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(false);
+
+  const language = (
+    i18n.resolvedLanguage ||
+    i18n.language ||
+    "en"
+  ).split("-")[0];
+  const storyDetailRef = useStoryEngagement({
+    storyId: story?.id,
+    language,
+    enabled: Boolean(story?.id && !user?.admin),
+  });
 
   useEffect(() => {
     const fetchStory = async () => {
@@ -99,7 +112,6 @@ const StoryDetail = () => {
   const metaDescription =
     currentTranslation?.meta_description || "The Sunset Post";
 
-  const language = (i18n.resolvedLanguage || i18n.language || "en").split("-")[0];
   const createdAt = story.created_at ? new Date(story.created_at) : null;
   const publishedDate =
     createdAt && !Number.isNaN(createdAt.getTime())
@@ -112,7 +124,7 @@ const StoryDetail = () => {
       : null;
 
   return (
-    <div className="story-detail">
+    <div className="story-detail" ref={storyDetailRef}>
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={metaDescription} />
@@ -272,6 +284,7 @@ const StoryDetail = () => {
             {editMode ? t("Cancel Edit") : t("Edit")}
           </button>
           <button onClick={handleDelete}>{t("Delete")}</button>
+          <PrintQrLinkGenerator story={story} targetLanguage={language} />
         </div>
       )}
     </div>
