@@ -8,6 +8,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import StoryEditor from "./StoryEditor";
+import PrintQrLinkGenerator from "./PrintQrLinkGenerator";
 import useStoryEngagement from "../utils/useStoryEngagement";
 import { Helmet } from "react-helmet";
 import "./StoryDetail.css";
@@ -283,6 +284,7 @@ const StoryDetail = () => {
             {editMode ? t("Cancel Edit") : t("Edit")}
           </button>
           <button onClick={handleDelete}>{t("Delete")}</button>
+          <PrintQrLinkGenerator story={story} targetLanguage={language} />
         </div>
       )}
     </div>

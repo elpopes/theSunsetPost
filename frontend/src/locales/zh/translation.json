@@ -1,6 +1,16 @@
 {
     "welcome": "欢迎来到 The Sunset Post",
     "Popular Now": "热门文章",
+    "print_qr": {
+        "open": "印刷版二维码链接",
+        "print_language": "印刷语言",
+        "target_language": "目标语言",
+        "issue": "期号",
+        "url": "二维码网址",
+        "copy": "复制二维码链接",
+        "copied": "已复制",
+        "copy_failed": "无法复制，请手动复制链接。"
+    },
     "stories": "故事",
     "loading": "加载故事...",
     "home": "首页",
