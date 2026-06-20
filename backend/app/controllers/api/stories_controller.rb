@@ -8,6 +8,31 @@ class Api::StoriesController < ApplicationController
     render json: @stories.map { |story| story_json(story) }
   end
 
+  # GET /api/stories/popular?language=en
+  def popular
+    language = normalized_language(params[:language])
+
+    unless StoryView::LANGUAGES.include?(language)
+      return render json: { error: "Unsupported language" }, status: :unprocessable_entity
+    end
+
+    rankings = PopularStoriesQuery.new(language: language).call
+    stories_by_id = Story
+                    .includes(:story_translations, :authors, :sections)
+                    .where(id: rankings.pluck(:story_id))
+                    .index_by(&:id)
+
+    render json: rankings.filter_map { |ranking|
+      story = stories_by_id[ranking[:story_id]]
+      next unless story
+
+      story_json(story).merge(
+        recent_views: ranking[:recent_views],
+        ranking_scope: ranking[:ranking_scope]
+      )
+    }
+  end
+
   # GET /api/stories/:id_or_slug
   def show
     @story = Story.includes(:story_translations, :authors, :sections).find_by_identifier(params[:id])
@@ -135,6 +160,10 @@ class Api::StoriesController < ApplicationController
     rescue JWT::DecodeError, ActiveRecord::RecordNotFound
       render json: { error: "Unauthorized access" }, status: :unauthorized
     end
+  end
+
+  def normalized_language(language)
+    language.to_s.downcase.split("-").first.presence || "en"
   end
 
   def story_json(story)

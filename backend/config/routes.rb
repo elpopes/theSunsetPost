@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     resources :sections, only: [:index]
 
     resources :stories, only: [:index, :show, :create, :update, :destroy] do
+      get :popular, on: :collection
       resources :views, only: [:create], controller: "story_views" do
         post :engagement, on: :member
       end
