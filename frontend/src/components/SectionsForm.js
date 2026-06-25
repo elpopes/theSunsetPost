@@ -34,14 +34,13 @@ const SectionsForm = ({ selectedSections, setSelectedSections }) => {
     <div>
       <h3>Select Sections</h3>
       {sections.length === 0 && <p>Loading sections...</p>}
-      <select multiple onChange={handleSelectionChange}>
+      <select multiple value={selectedSections.map(String)} onChange={handleSelectionChange}>
         {sections.map((section) => (
           <option key={section.id} value={section.id}>
             {section.name}
           </option>
         ))}
       </select>
-      <p>Currently selected sections: {JSON.stringify(selectedSections)}</p>
     </div>
   );
 };
