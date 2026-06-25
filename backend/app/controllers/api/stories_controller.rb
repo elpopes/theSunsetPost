@@ -52,20 +52,25 @@ class Api::StoriesController < ApplicationController
     begin
       translations = JSON.parse(params[:translations])
       translations.each do |translation|
-        @story.story_translations.build(
-          title: translation["title"],
-          content: translation["content"],
-          meta_description: translation["meta_description"],
-          caption: translation["caption"],
-          language: translation["language"]
-        )
+        @story.story_translations.build(translation_attributes(translation))
       end
     rescue JSON::ParserError
       return render json: { error: "Invalid translations format" }, status: :unprocessable_entity
     end
 
-    @story.authors = Author.where(id: JSON.parse(params[:author_ids])) if params[:author_ids].present?
-    @story.sections = Section.where(id: JSON.parse(params[:section_ids])) if params[:section_ids].present?
+    if params[:author_ids].present?
+      author_ids = parse_json_array_param(:author_ids)
+      return render json: { error: "Invalid author_ids format" }, status: :unprocessable_entity unless author_ids
+
+      @story.authors = Author.where(id: author_ids)
+    end
+
+    if params[:section_ids].present?
+      section_ids = parse_json_array_param(:section_ids)
+      return render json: { error: "Invalid section_ids format" }, status: :unprocessable_entity unless section_ids
+
+      @story.sections = Section.where(id: section_ids)
+    end
 
     if @story.save
       render json: story_json(@story), status: :created
@@ -76,45 +81,52 @@ class Api::StoriesController < ApplicationController
 
   # PATCH/PUT /api/stories/:id_or_slug
   def update
-    @story = Story.find_by(id: params[:id])
+    @story = Story.includes(:story_translations, :authors, :sections).find_by_identifier(params[:id])
     unless @story
       return render json: { error: "Story not found" }, status: :not_found
     end
 
-    # 1. Destroy old translations and rebuild if translations are provided
+    if params.key?(:slug)
+      @story.slug = params[:slug].to_s.strip.presence
+    end
+
+    # Destroy old translations and rebuild if translations are provided
     if params[:translations].present?
       @story.story_translations.destroy_all
       begin
         translations = JSON.parse(params[:translations])
         translations.each do |translation|
-          @story.story_translations.build(
-            title: translation["title"],
-            content: translation["content"],
-            meta_description: translation["meta_description"],
-            caption: translation["caption"],
-            language: translation["language"]
-          )
+          @story.story_translations.build(translation_attributes(translation))
         end
       rescue JSON::ParserError
         return render json: { error: "Invalid translations format" }, status: :unprocessable_entity
       end
     end
 
-    # 2. Only update the image if a new one is provided
+    if params.key?(:author_ids)
+      author_ids = parse_json_array_param(:author_ids)
+      return render json: { error: "Invalid author_ids format" }, status: :unprocessable_entity unless author_ids
+
+      @story.authors = Author.where(id: author_ids)
+    end
+
+    if params.key?(:section_ids)
+      section_ids = parse_json_array_param(:section_ids)
+      return render json: { error: "Invalid section_ids format" }, status: :unprocessable_entity unless section_ids
+
+      @story.sections = Section.where(id: section_ids)
+    end
+
+    remove_image_requested = params[:remove_image].to_s == "true"
+
     if params[:image].present?
       @story.image.attach(params[:image])
+    elsif remove_image_requested && @story.image.attached?
+      @story.image.purge
     end
 
-    # 3. Generate a slug if it's missing
-    if @story.slug.blank?
-      default_title = @story.story_translations.find_by(language: "en")&.title ||
-                      @story.story_translations.first&.title
-      @story.slug = default_title.to_s.parameterize if default_title.present?
-    end
-
-    # 4. Save and return updated story
     if @story.save
-      render json: story_json(@story), status: :ok
+      render json: story_json(@story.reload), status: :ok
     else
       render json: { errors: @story.errors.full_messages }, status: :unprocessable_entity
     end
@@ -164,6 +176,26 @@ class Api::StoriesController < ApplicationController
 
   def normalized_language(language)
     language.to_s.downcase.split("-").first.presence || "en"
+  end
+
+  def parse_json_array_param(param_name)
+    raw_value = params[param_name]
+    return [] if raw_value.blank?
+
+    parsed_value = JSON.parse(raw_value)
+    parsed_value if parsed_value.is_a?(Array)
+  rescue JSON::ParserError
+    nil
+  end
+
+  def translation_attributes(translation)
+    {
+      title: translation["title"],
+      content: translation["content"],
+      meta_description: translation["meta_description"] || translation["metaDescription"],
+      caption: translation["caption"],
+      language: translation["language"]
+    }
   end
 
   def story_json(story)
