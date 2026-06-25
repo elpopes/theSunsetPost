@@ -62,8 +62,8 @@
   }
 }
 
-/* Mobile */
-@media (max-width: 768px) {
+/* Compact layout: mobile-style info banner replaces desktop sidebar */
+@media (max-width: 900px) {
   .main-layout__container {
     flex-direction: column;
   }
