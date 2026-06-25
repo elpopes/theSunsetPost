@@ -10,7 +10,8 @@ const Footer = () => {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
 
-  const sections = useSelector((state) => state.sections.items);
+  const sectionsState = useSelector((state) => state.sections.items);
+  const sections = Array.isArray(sectionsState) ? sectionsState : [];
   const user = useSelector((state) => state.auth.user);
 
   const filteredSections = sections.map((section) => {
