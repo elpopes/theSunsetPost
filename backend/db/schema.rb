@@ -205,7 +205,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_25_110000) do
     t.index ["story_id", "viewed_at"], name: "index_story_views_on_story_id_and_viewed_at"
     t.index ["story_id"], name: "index_story_views_on_story_id"
     t.index ["utm_campaign", "viewed_at"], name: "index_story_views_on_utm_campaign_and_viewed_at"
-    t.index ["visitor_token", "story_id", "viewed_at"], name: "index_Story_views_on_visitor_story_and_viewed_at"
+    t.index ["visitor_token", "story_id", "viewed_at"], name: "index_story_views_on_visitor_story_and_viewed_at"
   end
 
   create_table "users", force: :cascade do |t|
