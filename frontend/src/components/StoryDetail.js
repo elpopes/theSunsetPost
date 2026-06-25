@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { deleteStory, editStory } from "../features/stories/storiesSlice";
+import { deleteStory } from "../features/stories/storiesSlice";
 import { baseURL } from "../config";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import StoryEditor from "./StoryEditor";
+import AuthorsForm from "./AuthorsForm";
+import SectionsForm from "./SectionsForm";
+import ImageUpload from "./ImageUpload";
 import PrintQrLinkGenerator from "./PrintQrLinkGenerator";
 import useStoryEngagement from "../utils/useStoryEngagement";
 import { Helmet } from "react-helmet";
@@ -19,8 +22,10 @@ const DATE_LOCALES = {
   zh: "zh-CN",
 };
 
+const isNumericIdentifier = (identifier) => /^\d+$/.test(identifier || "");
+
 const StoryDetail = () => {
-  const { id } = useParams();
+  const { id, lang } = useParams();
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,6 +37,12 @@ const StoryDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(false);
+  const [editError, setEditError] = useState("");
+  const [slug, setSlug] = useState("");
+  const [selectedAuthors, setSelectedAuthors] = useState([]);
+  const [selectedSections, setSelectedSections] = useState([]);
+  const [image, setImage] = useState(null);
+  const [removeImage, setRemoveImage] = useState(false);
 
   const language = (
     i18n.resolvedLanguage ||
@@ -44,11 +55,25 @@ const StoryDetail = () => {
     enabled: Boolean(story?.id && !user?.admin),
   });
 
+  const initializeEditForm = (sourceStory) => {
+    setTranslations(sourceStory.translations || []);
+    setSlug(sourceStory.slug || "");
+    setSelectedAuthors((sourceStory.authors || []).map((author) => String(author.id)));
+    setSelectedSections((sourceStory.sections || []).map((section) => String(section.id)));
+    setImage(null);
+    setRemoveImage(false);
+    setEditError("");
+  };
+
   useEffect(() => {
     const fetchStory = async () => {
       setLoading(true);
       try {
-        const existingStory = stories.find((s) => s.id === parseInt(id));
+        const existingStory = stories.find((s) => {
+          if (isNumericIdentifier(id)) return s.id === Number(id);
+          return s.slug === id;
+        });
+
         if (existingStory) {
           setStory(existingStory);
           setTranslations(existingStory.translations);
@@ -78,19 +103,61 @@ const StoryDetail = () => {
     }
   };
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
     if (!user?.token) return;
-    const sanitizedTranslations = translations.map(({ id, ...rest }) => rest);
+    setEditError("");
 
-    dispatch(
-      editStory({
-        storyId: story.id,
-        translations: sanitizedTranslations,
-        token: user.token,
-      })
-    ).then(() => {
+    if (selectedAuthors.length === 0) {
+      setEditError("Please select at least one author.");
+      return;
+    }
+
+    if (selectedSections.length === 0) {
+      setEditError("Please select at least one section.");
+      return;
+    }
+
+    const sanitizedTranslations = translations.map(({ id, ...rest }) => rest);
+    const formData = new FormData();
+    formData.append("translations", JSON.stringify(sanitizedTranslations));
+    formData.append("slug", slug);
+    formData.append("author_ids", JSON.stringify(selectedAuthors));
+    formData.append("section_ids", JSON.stringify(selectedSections));
+
+    if (image) formData.append("image", image);
+    if (removeImage) formData.append("remove_image", "true");
+
+    try {
+      const response = await fetch(`${baseURL}/api/stories/${story.id}`, {
+        method: "PUT",
+        body: formData,
+        headers: {
+          Authorization: ["Bearer", user.token].join(" "),
+        },
+      });
+
+      const responseBody = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(
+          responseBody?.errors?.join(", ") ||
+            responseBody?.error ||
+            "Failed to edit story"
+        );
+      }
+
+      setStory(responseBody);
+      initializeEditForm(responseBody);
       setEditMode(false);
-    });
+
+      if (responseBody.slug && responseBody.slug !== id) {
+        const storyPathPrefix = lang ? `/${lang}/stories` : "/stories";
+        navigate(`${storyPathPrefix}/${responseBody.slug}`, { replace: true });
+      }
+    } catch (err) {
+      console.error("[StoryDetail] Error editing story:", err.message);
+      setEditError(err.message);
+    }
   };
 
   const handleTranslationChange = (idx, field, value) => {
@@ -99,12 +166,27 @@ const StoryDetail = () => {
     );
   };
 
+  const startEdit = () => {
+    initializeEditForm(story);
+    setEditMode(true);
+  };
+
+  const cancelEdit = () => {
+    initializeEditForm(story);
+    setEditMode(false);
+  };
+
+  const handleImageChange = (nextImage) => {
+    setImage(nextImage);
+    if (nextImage) setRemoveImage(false);
+  };
+
   if (loading) return <p>{t("Loading story...")}</p>;
   if (error) return <p>{error}</p>;
   if (!story) return <p>{t("Story not found.")}</p>;
 
   const currentTranslation = story.translations.find(
-    (translation) => translation.language === i18n.language
+    (translation) => translation.language === language
   );
   const title = currentTranslation?.title || story.title;
   const content = currentTranslation?.content || story.content;
@@ -139,6 +221,58 @@ const StoryDetail = () => {
 
       {editMode ? (
         <form onSubmit={(e) => e.preventDefault()}>
+          <section>
+            <h3>{t("Story Settings")}</h3>
+
+            <label>{t("Slug / Permalink")}</label>
+            <input
+              type="text"
+              value={slug}
+              onChange={(e) => setSlug(e.target.value)}
+              placeholder="story-url-slug"
+            />
+            <p>
+              {t(
+                "Use lowercase words separated by hyphens. Saving will clean up spaces automatically."
+              )}
+            </p>
+
+            <AuthorsForm
+              selectedAuthors={selectedAuthors}
+              setSelectedAuthors={setSelectedAuthors}
+            />
+
+            <SectionsForm
+              selectedSections={selectedSections}
+              setSelectedSections={setSelectedSections}
+            />
+
+            <h3>{t("Featured Image")}</h3>
+            {story.image_url && !image && !removeImage && (
+              <div style={{ marginBottom: 12 }}>
+                <p>{t("Current featured image")}</p>
+                <img
+                  src={story.image_url}
+                  alt={title}
+                  style={{ maxWidth: "100%", maxHeight: "240px" }}
+                />
+              </div>
+            )}
+            {story.image_url && !image && (
+              <label>
+                <input
+                  type="checkbox"
+                  checked={removeImage}
+                  onChange={(e) => setRemoveImage(e.target.checked)}
+                />
+                {" "}
+                {t("Remove current featured image")}
+              </label>
+            )}
+            {image && <p>{t("New featured image selected.")}</p>}
+            <ImageUpload image={image} setImage={handleImageChange} />
+          </section>
+
           {translations.map((translation, idx) => (
             <div key={translation.language}>
               <h3>{t(`Edit Translation (${translation.language})`)}</h3>
@@ -185,8 +319,12 @@ const StoryDetail = () => {
               />
             </div>
           ))}
+          {editError && <p className="story-detail__edit-error">{editError}</p>}
           <button type="button" onClick={handleEdit}>
             {t("Save Changes")}
+          </button>
+          <button type="button" onClick={cancelEdit}>
+            {t("Cancel Edit")}
           </button>
         </form>
       ) : (
@@ -253,7 +391,7 @@ const StoryDetail = () => {
         {story.authors.length > 0 ? (
           story.authors.map((author) => {
             const authorTranslation = author.translations?.find(
-              (trans) => trans.language === i18n.language
+              (trans) => trans.language === language
             );
             const bio = authorTranslation?.bio || author.bio;
 
@@ -280,7 +418,7 @@ const StoryDetail = () => {
 
       {user?.admin && (
         <div className="story-detail__admin-actions">
-          <button onClick={() => setEditMode(!editMode)}>
+          <button onClick={editMode ? cancelEdit : startEdit}>
             {editMode ? t("Cancel Edit") : t("Edit")}
           </button>
           <button onClick={handleDelete}>{t("Delete")}</button>

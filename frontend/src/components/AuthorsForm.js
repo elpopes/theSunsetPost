@@ -68,6 +68,7 @@ const AuthorsForm = ({ selectedAuthors, setSelectedAuthors }) => {
     if (response.ok) {
       const newAuthorData = await response.json();
       setAuthors((prev) => [...prev, newAuthorData]);
+      setSelectedAuthors((prev) => [...prev, String(newAuthorData.id)]);
       setNewAuthor({
         name: "",
         bios: { en: "", es: "", zh: "" },
@@ -91,7 +92,7 @@ const AuthorsForm = ({ selectedAuthors, setSelectedAuthors }) => {
   return (
     <div>
       <h3>Select Authors</h3>
-      <select multiple onChange={handleSelect}>
+      <select multiple value={selectedAuthors.map(String)} onChange={handleSelect}>
         {authors.map((author) => (
           <option key={author.id} value={author.id}>
             {author.name}
