@@ -6,19 +6,29 @@ import InfoStackSidebar from "./InfoStackSidebar";
 
 import "./MainLayout.css";
 
+const INFO_MOBILE_MEDIA_QUERY = "(max-width: 900px)";
+
 const MainLayout = ({ children }) => {
   const { i18n } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
   const lang = i18n.language;
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+    const mediaQuery = window.matchMedia(INFO_MOBILE_MEDIA_QUERY);
+
+    const handleChange = (event) => {
+      setIsMobile(event.matches);
     };
 
-    handleResize(); // Initial check
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    setIsMobile(mediaQuery.matches);
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", handleChange);
+      return () => mediaQuery.removeEventListener("change", handleChange);
+    }
+
+    mediaQuery.addListener(handleChange);
+    return () => mediaQuery.removeListener(handleChange);
   }, []);
 
   return (
