@@ -6,7 +6,7 @@ import InfoStackSidebar from "./InfoStackSidebar";
 
 import "./MainLayout.css";
 
-const INFO_MOBILE_MEDIA_QUERY = "(max-width: 900px)";
+const INFO_MOBILE_MEDIA_QUERY = "(max-width: 1100px)";
 
 const MainLayout = ({ children }) => {
   const { i18n } = useTranslation();
