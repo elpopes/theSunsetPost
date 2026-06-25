@@ -8,9 +8,9 @@
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
-# It's strongly recommended that you check this file into your version control system.
+# It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_06_20_210000) do
+ActiveRecord::Schema[7.1].define(version: 2026_06_25_110000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -65,6 +65,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_20_210000) do
     t.text "bio"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "slug"
+    t.index ["slug"], name: "index_authors_on_slug", unique: true
   end
 
   create_table "classified_categories", force: :cascade do |t|
@@ -203,7 +205,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_20_210000) do
     t.index ["story_id", "viewed_at"], name: "index_story_views_on_story_id_and_viewed_at"
     t.index ["story_id"], name: "index_story_views_on_story_id"
     t.index ["utm_campaign", "viewed_at"], name: "index_story_views_on_utm_campaign_and_viewed_at"
-    t.index ["visitor_token", "story_id", "viewed_at"], name: "index_story_views_on_visitor_story_and_viewed_at"
+    t.index ["visitor_token", "story_id", "viewed_at"], name: "index_Story_views_on_visitor_story_and_viewed_at"
   end
 
   create_table "users", force: :cascade do |t|
