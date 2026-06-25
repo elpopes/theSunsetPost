@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import MainLayout from "./components/MainLayout";
 import StoriesList from "./components/StoriesList";
 import StoryDetail from "./components/StoryDetail";
+import AuthorDetail from "./components/AuthorDetail";
 import SectionDetail from "./components/SectionDetail";
 import SignUpForm from "./components/SignUpForm";
 import LoginForm from "./components/LoginForm";
@@ -73,6 +74,22 @@ const LegacyClassifiedDetailRedirect = () => {
 
   const l = normalizeLang(stored || i18n.language || browser || "en");
   return <Navigate to={`/${l}/classifieds/${idOrSlug}`} replace />;
+};
+
+const LegacyAuthorDetailRedirect = () => {
+  const { idOrSlug } = useParams();
+  const { i18n } = useTranslation();
+
+  const stored =
+    (typeof window !== "undefined" && window.localStorage
+      ? localStorage.getItem("i18nextLng")
+      : null) || "";
+
+  const browser =
+    typeof navigator !== "undefined" ? navigator.language || "" : "";
+
+  const l = normalizeLang(stored || i18n.language || browser || "en");
+  return <Navigate to={`/${l}/authors/${idOrSlug}`} replace />;
 };
 
 // Nested component to handle GA tracking on route change
@@ -154,6 +171,15 @@ const AppRoutes = () => {
             <MainLayout>
               <LanguageHandler />
               <StoryDetail />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/:lang/authors/:idOrSlug"
+          element={
+            <MainLayout>
+              <LanguageHandler />
+              <AuthorDetail />
             </MainLayout>
           }
         />
@@ -261,6 +287,7 @@ const AppRoutes = () => {
             </MainLayout>
           }
         />
+        <Route path="/authors/:idOrSlug" element={<LegacyAuthorDetailRedirect />} />
         <Route
           path="/sections/:name"
           element={
