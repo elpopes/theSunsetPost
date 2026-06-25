@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get "/stories/:id", to: redirect(status: 301) { |params|
     story = Story.find_by(id: params[:id])
     story ? "/stories/#{story.slug}" : "/"
-  }
+  }, constraints: { id: /\d+/ }
 
   get "/preview/stories/:slug", to: "previews#story"
 
