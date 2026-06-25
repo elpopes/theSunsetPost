@@ -26,7 +26,7 @@ Rails.application.routes.draw do
         post :engagement, on: :member
       end
     end
-    resources :authors, only: [:index, :show, :create]
+    resources :authors, only: [:index, :show, :create, :update, :destroy]
 
     resources :classifieds, only: [:index, :show, :create, :update, :destroy]
     resources :classified_categories, only: [:index, :create, :update, :destroy]
