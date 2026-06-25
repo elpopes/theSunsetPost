@@ -12,7 +12,16 @@ export const fetchSections = createAsyncThunk(
       const response = await fetch(
         `${baseURL}/api/sections?locale=${currentLanguage}`
       );
-      const data = await response.json();
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        return rejectWithValue(data?.error || "Failed to fetch sections");
+      }
+
+      if (!Array.isArray(data)) {
+        return rejectWithValue("Invalid sections response");
+      }
+
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -53,11 +62,12 @@ const sectionsSlice = createSlice({
       })
       .addCase(fetchSections.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.items = action.payload;
+        state.items = Array.isArray(action.payload) ? action.payload : [];
       })
       .addCase(fetchSections.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+        state.items = [];
       })
       .addCase(fetchSectionByName.pending, (state) => {
         state.status = "loading";

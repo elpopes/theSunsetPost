@@ -31,6 +31,14 @@
     "Community Spotlight": "Community Spotlight",
     "Contact us to feature your message": "Contact us to feature your message",
     "Written by" : "Written by",
+    "Stories by this author": "Stories by this author",
+    "Other authors": "Other authors",
+    "No stories available for this author.": "No stories available for this author.",
+    "Loading author...": "Loading author...",
+    "Author not found.": "Author not found.",
+    "Failed to fetch author": "Failed to fetch author",
+    "Failed to fetch authors": "Failed to fetch authors",
+    "Untitled Story": "Untitled Story",
     "no_stories": {
         "development": "Our site is still in development, and we’re actively looking for stories and contributors. If you have a story or are interested in submitting content, please reach out to us using our contact form.",
         "contact_link": "Contact us here."
@@ -101,4 +109,3 @@
     }
     
 }
-  

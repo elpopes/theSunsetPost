@@ -218,6 +218,7 @@ class Api::StoriesController < ApplicationController
         {
           id: author.id,
           name: author.name,
+          slug: author.slug,
           bio: author.translated_bio(I18n.locale.to_s),
           image_url: author.image.attached? ? url_for(author.image) : nil,
           translations: author.author_translations.map do |tr|

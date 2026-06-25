@@ -155,6 +155,16 @@
   margin-bottom: 15px;
 }
 
+.story-detail__author-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.story-detail__author-link:hover h4,
+.story-detail__author-link:focus h4 {
+  text-decoration: underline;
+}
+
 .story-detail__author-image {
   width: 50px;
   height: 50px;

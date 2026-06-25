@@ -19,7 +19,8 @@ const Header = () => {
   const dispatch = useDispatch();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const sections = useSelector((state) => state.sections.items);
+  const sectionsState = useSelector((state) => state.sections.items);
+  const sections = Array.isArray(sectionsState) ? sectionsState : [];
 
   useEffect(() => {
     dispatch(fetchSections());
@@ -95,7 +96,7 @@ const Header = () => {
             className="hamburger-menu"
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            {menuOpen ? "\u2715" : "\u2630"}
+            {menuOpen ? "✕" : "☰"}
           </button>
 
           <nav className={`header__sections-nav ${menuOpen ? "open" : ""}`}>
