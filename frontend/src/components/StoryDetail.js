@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { deleteStory } from "../features/stories/storiesSlice";
@@ -396,7 +396,11 @@ const StoryDetail = () => {
             const bio = authorTranslation?.bio || author.bio;
 
             return (
-              <div key={author.id} className="story-detail__author">
+              <Link
+                key={author.id}
+                to={`/${language}/authors/${author.slug || author.id}`}
+                className="story-detail__author story-detail__author-link"
+              >
                 {author.image_url && (
                   <img
                     src={author.image_url}
@@ -408,7 +412,7 @@ const StoryDetail = () => {
                   <h4>{author.name}</h4>
                   <p className="story-detail__author-bio">{bio}</p>
                 </div>
-              </div>
+              </Link>
             );
           })
         ) : (
