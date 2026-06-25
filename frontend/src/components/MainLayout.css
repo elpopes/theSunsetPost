@@ -19,8 +19,8 @@
 }
 
 .main-layout__sidebar {
-  flex: 0 0 clamp(240px, 24vw, 320px);
-  max-width: 320px;
+  flex: 0 0 300px;
+  max-width: 300px;
   min-width: 0;
   background-color: transparent;
   padding: 0;
@@ -58,6 +58,7 @@
 
   .main-layout__sidebar {
     flex-basis: 260px;
+    max-width: 260px;
   }
 }
 
