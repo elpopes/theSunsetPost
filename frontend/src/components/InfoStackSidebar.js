@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import NewsletterSignup from "./NewsletterSignup";
 
-import dojoEn from "../assets/outreach/Dojo-Localreach-En.png";
-import dojoEs from "../assets/outreach/Dojo-Localreach-Es.png";
-import dojoZh from "../assets/outreach/Dojo-Localreach-Zh.png";
+import beyondCareEn from "../assets/outreach/BeyondCare-Localreach-En.png";
+import beyondCareEs from "../assets/outreach/BeyondCare-Localreach-Es.png";
+import beyondCareZh from "../assets/outreach/BeyondCare-Localreach-Zh.png";
 
 import subEn from "../assets/outreach/Subscription-Localreach-En.png";
 import subEs from "../assets/outreach/Subscription-Localreach-Es.png";
@@ -26,6 +26,8 @@ const STRIPE_SUBSCRIBE_URL = "https://buy.stripe.com/9B65kDcIjdtvg16cCZbQY04";
 
 const VENMO_URL =
   "https://www.paypal.com/qrcodes/venmocs/27e4b8c5-829d-4347-b684-46e3983b8c4f?created=1765840714&printed=true";
+
+const BEYOND_CARE_URL = "https://beyondcare.coop/";
 
 const placements = [
   {
@@ -79,24 +81,24 @@ const placements = [
     },
   },
   {
-    id: "dojo",
+    id: "beyondcare",
     byLang: {
       en: {
-        image: dojoEn,
-        alt: "Brooklyn Aikikai",
-        href: "https://brooklynaikikai.com",
+        image: beyondCareEn,
+        alt: "Beyond Care Childcare Cooperative",
+        href: BEYOND_CARE_URL,
         external: true,
       },
       es: {
-        image: dojoEs,
-        alt: "Brooklyn Aikikai",
-        href: "https://brooklynaikikai.com",
+        image: beyondCareEs,
+        alt: "Beyond Care Childcare Cooperative",
+        href: BEYOND_CARE_URL,
         external: true,
       },
       zh: {
-        image: dojoZh,
-        alt: "Brooklyn Aikikai",
-        href: "https://brooklynaikikai.com",
+        image: beyondCareZh,
+        alt: "Beyond Care Childcare Cooperative",
+        href: BEYOND_CARE_URL,
         external: true,
       },
     },
@@ -111,10 +113,12 @@ const outreachImageByLang = {
 
 const shuffle = (arr) => {
   const out = [...arr];
+
   for (let i = out.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [out[i], out[j]] = [out[j], out[i]];
   }
+
   return out;
 };
 
@@ -188,6 +192,7 @@ const InfoStackSidebar = ({ lang }) => {
   }, [location.pathname]);
 
   const placementIds = useMemo(() => placements.map((p) => p.id), []);
+
   const placementById = useMemo(() => {
     return Object.fromEntries(placements.map((p) => [p.id, p]));
   }, []);
@@ -234,8 +239,7 @@ const InfoStackSidebar = ({ lang }) => {
           );
         }
 
-        const variant =
-          placement?.byLang?.[lang] || placement?.byLang?.en;
+        const variant = placement?.byLang?.[lang] || placement?.byLang?.en;
         if (!variant) return null;
 
         return (

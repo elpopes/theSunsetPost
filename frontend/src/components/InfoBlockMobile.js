@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import NewsletterSignup from "./NewsletterSignup";
 
-import dojoSmartEn from "../assets/outreach/Dojo-Smartreach-En.png";
-import dojoSmartEs from "../assets/outreach/Dojo-Smartreach-Es.png";
-import dojoSmartZh from "../assets/outreach/Dojo-Smartreach-Zh.png";
+import beyondCareSmartEn from "../assets/outreach/BeyondCare-Smartreach-En.png";
+import beyondCareSmartEs from "../assets/outreach/BeyondCare-Smartreach-Es.png";
+import beyondCareSmartZh from "../assets/outreach/BeyondCare-Smartreach-Zh.png";
 
 import subscriptionSmartEn from "../assets/outreach/Subscription-Smartreach-En.png";
 import subscriptionSmartEs from "../assets/outreach/Subscription-Smartreach-Es.png";
@@ -22,6 +22,8 @@ const SUBSCRIPTION_LINK = "https://buy.stripe.com/9B65kDcIjdtvg16cCZbQY04";
 
 const VENMO_LINK =
   "https://www.paypal.com/qrcodes/venmocs/27e4b8c5-829d-4347-b684-46e3983b8c4f?created=1765840714&printed=true";
+
+const BEYOND_CARE_LINK = "https://beyondcare.coop/";
 
 const sponsorsSmartreach = [
   {
@@ -65,22 +67,22 @@ const sponsorsSmartreach = [
     },
   },
   {
-    id: "dojo",
+    id: "beyondcare",
     byLang: {
       en: {
-        image: dojoSmartEn,
-        alt: "Brooklyn Aikikai",
-        link: "https://brooklynaikikai.com",
+        image: beyondCareSmartEn,
+        alt: "Beyond Care Childcare Cooperative",
+        link: BEYOND_CARE_LINK,
       },
       es: {
-        image: dojoSmartEs,
-        alt: "Brooklyn Aikikai",
-        link: "https://brooklynaikikai.com",
+        image: beyondCareSmartEs,
+        alt: "Beyond Care Childcare Cooperative",
+        link: BEYOND_CARE_LINK,
       },
       zh: {
-        image: dojoSmartZh,
-        alt: "Brooklyn Aikikai",
-        link: "https://brooklynaikikai.com",
+        image: beyondCareSmartZh,
+        alt: "Beyond Care Childcare Cooperative",
+        link: BEYOND_CARE_LINK,
       },
     },
   },
