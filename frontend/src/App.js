@@ -26,6 +26,7 @@ import LanguageHandler from "./components/LanguageHandler";
 import SearchPage from "./components/SearchPage";
 import ClassifiedsPage from "./components/ClassifiedsPage";
 import ClassifiedDetail from "./components/ClassifiedDetail";
+import AdminAnalytics from "./components/AdminAnalytics";
 import { login } from "./features/auth/authSlice";
 import { initGA, logPageView } from "./analytics";
 import ScrollToTop from "./components/ScrollToTop";
@@ -95,6 +96,7 @@ const LegacyAuthorDetailRedirect = () => {
 // Nested component to handle GA tracking on route change
 const AppRoutes = () => {
   const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin/");
 
   useEffect(() => {
     initGA();
@@ -108,6 +110,12 @@ const AppRoutes = () => {
     <div className="app-container">
       <ScrollToTop />
       <Routes>
+        <Route path="/admin/analytics" element={<AdminAnalytics />} />
+        <Route
+          path="/admin/analytics/stories/:storyId"
+          element={<AdminAnalytics />}
+        />
+
         {/* -------------------- */}
         {/* Language-prefixed routes */}
         {/* -------------------- */}
@@ -287,7 +295,10 @@ const AppRoutes = () => {
             </MainLayout>
           }
         />
-        <Route path="/authors/:idOrSlug" element={<LegacyAuthorDetailRedirect />} />
+        <Route
+          path="/authors/:idOrSlug"
+          element={<LegacyAuthorDetailRedirect />}
+        />
         <Route
           path="/sections/:name"
           element={
@@ -317,7 +328,7 @@ const AppRoutes = () => {
         />
       </Routes>
 
-      <Footer />
+      {!isAdminRoute && <Footer />}
     </div>
   );
 };

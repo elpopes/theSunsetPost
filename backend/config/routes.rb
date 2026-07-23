@@ -8,16 +8,15 @@ Rails.application.routes.draw do
 
   get "/preview/stories/:slug", to: "previews#story"
 
-    # RSS feeds
-    get "/rss.xml", to: "feeds#rss", defaults: { format: "xml" }
-    get "/:lang/rss.xml", to: "feeds#rss",
-    constraints: { lang: /(en|es|zh)/ },
-    defaults: { format: "xml" }
-
-    get "/rss", to: redirect("/rss.xml"), format: false
+  # RSS feeds
+  get "/rss.xml", to: "feeds#rss", defaults: { format: "xml" }
+  get "/:lang/rss.xml", to: "feeds#rss",
+      constraints: { lang: /(en|es|zh)/ },
+      defaults: { format: "xml" }
+  get "/rss", to: redirect("/rss.xml"), format: false
 
   namespace :api do
-    get 'sections/name/:name', to: 'sections#show_by_name'
+    get "sections/name/:name", to: "sections#show_by_name"
     resources :sections, only: [:index]
 
     resources :stories, only: [:index, :show, :create, :update, :destroy] do
@@ -32,19 +31,35 @@ Rails.application.routes.draw do
     resources :classified_categories, only: [:index, :create, :update, :destroy]
     resources :classified_subcategories, only: [:create, :update, :destroy]
 
+    post "ad_events", to: "ad_events#create"
+
+    namespace :admin do
+      get "analytics/overview", to: "analytics#overview"
+      get "analytics/stories", to: "analytics#stories"
+      get "analytics/story_options", to: "analytics#story_options"
+      get "analytics/stories/:id", to: "analytics#story"
+      get "analytics/ads", to: "analytics#ads"
+
+      resources :print_issues, only: [:index, :show, :create, :update] do
+        resources :placements,
+                  only: [:create],
+                  controller: "print_story_placements"
+      end
+      resources :print_story_placements, only: [:destroy]
+    end
 
     # API endpoints
-    get 'transit', to: 'transit#get_transit_info'
-    get 'weather', to: 'weather#fetch_weather'
-    post 'signup', to: 'auth#signup'
-    post 'login', to: 'auth#login'
-    post 'contact', to: 'contact#create'
-    delete 'logout', to: 'auth#logout'
+    get "transit", to: "transit#get_transit_info"
+    get "weather", to: "weather#fetch_weather"
+    post "signup", to: "auth#signup"
+    post "login", to: "auth#login"
+    post "contact", to: "contact#create"
+    delete "logout", to: "auth#logout"
 
     # Image upload endpoint for inline editor images
-    post 'upload_image', to: 'stories#upload_image'
+    post "upload_image", to: "stories#upload_image"
 
     # Search endpoint
-    get 'search', to: 'search#index'
+    get "search", to: "search#index"
   end
 end

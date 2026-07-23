@@ -8,6 +8,8 @@ class Story < ApplicationRecord
 
   has_many :story_translations, dependent: :destroy
   has_many :story_views, dependent: :destroy
+  has_many :print_story_placements, dependent: :destroy
+  has_many :print_issues, through: :print_story_placements
   accepts_nested_attributes_for :story_translations, allow_destroy: true
 
   has_one_attached :image # Featured image (used for social sharing)
@@ -27,7 +29,8 @@ class Story < ApplicationRecord
   def generate_slug
     return if slug.present?
 
-    default_title = story_translations.find_by(language: "en")&.title || story_translations.first&.title
+    default_title = story_translations.find_by(language: "en")&.title ||
+                    story_translations.first&.title
     self.slug = default_title.to_s.parameterize if default_title.present?
   end
 

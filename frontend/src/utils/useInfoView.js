@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { logEvent } from "../analytics";
+import { recordAdEvent } from "./firstPartyAnalytics";
 
 export default function useInfoView({
   slot,
@@ -49,6 +50,13 @@ export default function useInfoView({
           firedRef.current = true;
 
           logEvent("info_view", { slot, info_id, lng, path });
+          recordAdEvent({
+            event_type: "view",
+            campaign_key: info_id,
+            slot,
+            language: lng,
+            path,
+          });
         }, minMs);
       },
       { threshold: [threshold] },
