@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_06_25_110000) do
+ActiveRecord::Schema[7.1].define(version: 2026_07_23_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,41 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_25_110000) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "ad_campaigns", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "name", null: false
+    t.string "advertiser"
+    t.string "campaign_type", default: "paid", null: false
+    t.text "destination_url"
+    t.date "starts_on"
+    t.date "ends_on"
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_type", "active"], name: "index_ad_campaigns_on_campaign_type_and_active"
+    t.index ["key"], name: "index_ad_campaigns_on_key", unique: true
+  end
+
+  create_table "ad_events", force: :cascade do |t|
+    t.bigint "ad_campaign_id", null: false
+    t.string "event_type", null: false
+    t.string "slot", null: false
+    t.string "language", null: false
+    t.string "device_type", default: "unknown", null: false
+    t.text "path", null: false
+    t.text "destination_url"
+    t.string "visitor_token"
+    t.text "user_agent"
+    t.datetime "event_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ad_campaign_id", "event_at"], name: "index_ad_events_on_ad_campaign_id_and_event_at"
+    t.index ["ad_campaign_id"], name: "index_ad_events_on_ad_campaign_id"
+    t.index ["device_type", "event_at"], name: "index_ad_events_on_device_type_and_event_at"
+    t.index ["event_type", "event_at"], name: "index_ad_events_on_event_type_and_event_at"
+    t.index ["language", "event_at"], name: "index_ad_events_on_language_and_event_at"
   end
 
   create_table "author_stories", force: :cascade do |t|
@@ -135,6 +170,34 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_25_110000) do
     t.index ["slug"], name: "index_classifieds_on_slug", unique: true
   end
 
+  create_table "print_issues", force: :cascade do |t|
+    t.string "code", null: false
+    t.string "name", null: false
+    t.date "publication_date"
+    t.integer "copies_printed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_print_issues_on_code", unique: true
+    t.index ["publication_date"], name: "index_print_issues_on_publication_date"
+  end
+
+  create_table "print_story_placements", force: :cascade do |t|
+    t.bigint "print_issue_id", null: false
+    t.bigint "story_id", null: false
+    t.integer "page_number"
+    t.string "position_label"
+    t.string "print_language", null: false
+    t.string "target_language", null: false
+    t.string "utm_content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["print_issue_id", "page_number"], name: "index_print_story_placements_on_print_issue_id_and_page_number"
+    t.index ["print_issue_id", "story_id", "print_language", "target_language"], name: "index_print_placements_on_issue_story_and_languages", unique: true
+    t.index ["print_issue_id"], name: "index_print_story_placements_on_print_issue_id"
+    t.index ["story_id"], name: "index_print_story_placements_on_story_id"
+    t.index ["utm_content"], name: "index_print_story_placements_on_utm_content"
+  end
+
   create_table "section_stories", force: :cascade do |t|
     t.bigint "story_id", null: false
     t.bigint "section_id", null: false
@@ -218,6 +281,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_25_110000) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "ad_events", "ad_campaigns"
   add_foreign_key "author_stories", "authors"
   add_foreign_key "author_stories", "stories"
   add_foreign_key "author_translations", "authors"
@@ -227,6 +291,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_25_110000) do
   add_foreign_key "classified_translations", "classifieds"
   add_foreign_key "classifieds", "classified_categories"
   add_foreign_key "classifieds", "classified_subcategories"
+  add_foreign_key "print_story_placements", "print_issues"
+  add_foreign_key "print_story_placements", "stories"
   add_foreign_key "section_stories", "sections"
   add_foreign_key "section_stories", "stories"
   add_foreign_key "section_translations", "sections"

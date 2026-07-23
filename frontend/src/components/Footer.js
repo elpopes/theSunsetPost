@@ -113,9 +113,14 @@ const Footer = () => {
             {user ? (
               <>
                 {user.admin && (
-                  <li>
-                    <Link to={`/${i18n.language}/post`}>{t("post")}</Link>
-                  </li>
+                  <>
+                    <li>
+                      <Link to={`/${i18n.language}/post`}>{t("post")}</Link>
+                    </li>
+                    <li>
+                      <Link to="/admin/analytics">Analytics</Link>
+                    </li>
+                  </>
                 )}
                 <li>
                   <button className="footer__logout" onClick={handleLogout}>
