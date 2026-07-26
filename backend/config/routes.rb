@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     resources :classified_subcategories, only: [:create, :update, :destroy]
 
     post "ad_events", to: "ad_events#create"
+    get "ad_events/pixel.gif", to: "ad_events#pixel"
 
     namespace :admin do
       get "analytics/overview", to: "analytics#overview"
