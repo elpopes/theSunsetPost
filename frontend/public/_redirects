@@ -1,5 +1,6 @@
-/rss.xml https://thesunsetpost.onrender.com/rss.xml 302
-/rss https://thesunsetpost.onrender.com/rss.xml 302
-/en/rss.xml https://thesunsetpost.onrender.com/rss.xml 302
-/es/rss.xml https://thesunsetpost.onrender.com/es/rss.xml 302
-/zh/rss.xml https://thesunsetpost.onrender.com/zh/rss.xml 302
+/events/info https://thesunsetpost.onrender.com/api/ad_events 200
+/rss.xml https://thesunsetpost.onrender.com/rss.xml 200
+/rss https://thesunsetpost.onrender.com/rss.xml 200
+/en/rss.xml https://thesunsetpost.onrender.com/rss.xml 200
+/es/rss.xml https://thesunsetpost.onrender.com/es/rss.xml 200
+/zh/rss.xml https://thesunsetpost.onrender.com/zh/rss.xml 200
