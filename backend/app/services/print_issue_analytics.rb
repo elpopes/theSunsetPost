@@ -14,6 +14,7 @@ class PrintIssueAnalytics
     total_scans = scans.size
     engaged_scans = scans.count { |view| engaged?(view) }
     placement_rows = placements.map { |placement| placement_row(placement, scans) }
+    scan_rows = discovered_scan_rows(scans, placements)
 
     {
       issue: {
@@ -33,8 +34,9 @@ class PrintIssueAnalytics
         scans_per_thousand_copies: scans_per_thousand(total_scans)
       },
       by_target_language: count_by(scans, &:language),
-      by_language_path: language_path_rows(placement_rows),
+      by_language_path: language_path_rows(scan_rows),
       links: link_rows(scans),
+      scan_rows: scan_rows,
       placements: placement_rows,
       unmatched_scan_count: unmatched_scan_count(placements, scans)
     }
@@ -45,7 +47,7 @@ class PrintIssueAnalytics
   attr_reader :issue
 
   def campaign_scans
-    StoryView.where(
+    StoryView.includes(story: :story_translations).where(
       source_type: "print_qr",
       utm_source: "print",
       utm_medium: "qr",
@@ -74,6 +76,35 @@ class PrintIssueAnalytics
       average_engaged_seconds: average(matching, &:engaged_seconds),
       average_scroll_percent: average(matching, &:max_scroll_percent)
     }
+  end
+
+  def discovered_scan_rows(scans, placements)
+    scans.group_by { |view| [view.story_id, view.utm_content, view.language] }
+         .map do |(_story_id, content, language), views|
+      story = views.first.story
+      print_language, utm_target_language = languages_from_utm(content)
+      target_language = language.presence || utm_target_language || "unknown"
+      engaged = views.count { |view| engaged?(view) }
+
+      {
+        story_id: story&.id,
+        title: story ? story_title(story) : "Unknown story",
+        slug: story&.slug,
+        print_language: print_language || "unknown",
+        target_language: target_language,
+        utm_content: content,
+        path: most_common_value(views, &:path),
+        scans: views.size,
+        approximate_scanners: views.map(&:visitor_token).compact.uniq.size,
+        engaged_scan_rate: percentage(engaged, views.size),
+        average_engaged_seconds: average(views, &:engaged_seconds),
+        average_scroll_percent: average(views, &:max_scroll_percent),
+        registered: views.any? do |view|
+          placements.any? { |placement| matches_placement?(view, placement) }
+        end
+      }
+    end
+         .sort_by { |row| [-row[:scans], row[:title].to_s] }
   end
 
   def matches_placement?(view, placement)
@@ -114,17 +145,33 @@ class PrintIssueAnalytics
          .sort_by { |row| -row[:scans] }
   end
 
-  def language_path_rows(placement_rows)
-    placement_rows
-      .group_by { |row| [row[:print_language], row[:target_language]] }
-      .map do |(print_language, target_language), rows|
-        {
-          print_language: print_language,
-          target_language: target_language,
-          scans: rows.sum { |row| row[:scans] }
-        }
-      end
-      .sort_by { |row| -row[:scans] }
+  def language_path_rows(rows)
+    rows.group_by { |row| [row[:print_language], row[:target_language]] }
+        .map do |(print_language, target_language), matches|
+      {
+        print_language: print_language,
+        target_language: target_language,
+        scans: matches.sum { |row| row[:scans] }
+      }
+    end
+        .sort_by { |row| -row[:scans] }
+  end
+
+  def languages_from_utm(content)
+    match = content.to_s.match(
+      /_print-(en|es|zh)_target-(en|es|zh)(?:\z|[^a-z])/i
+    )
+    return [nil, nil] unless match
+
+    [match[1].downcase, match[2].downcase]
+  end
+
+  def most_common_value(records)
+    records.map { |record| yield(record) }
+           .compact
+           .group_by(&:itself)
+           .max_by { |_value, matches| matches.size }
+           &.first
   end
 
   def count_by(records)
@@ -134,8 +181,8 @@ class PrintIssueAnalytics
   end
 
   def engaged?(view)
-    view.engaged_seconds >= ENGAGED_SECONDS &&
-      view.max_scroll_percent >= ENGAGED_SCROLL_PERCENT
+    view.engaged_seconds.to_i >= ENGAGED_SECONDS &&
+      view.max_scroll_percent.to_i >= ENGAGED_SCROLL_PERCENT
   end
 
   def average(records)
