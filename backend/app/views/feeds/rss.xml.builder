@@ -3,8 +3,25 @@ xml.instruct! :xml, version: "1.0", encoding: "UTF-8"
 site_name = "Sunset Post"
 site_url  = FeedsController::SITE_URL
 feed_path = (@lang == "en") ? "/rss.xml" : "/#{@lang}/rss.xml"
-feed_url  = "#{site_url}#{feed_path}"
+feed_url  = "#{request.base_url}#{feed_path}"
 site_uri  = URI.parse(site_url)
+
+markdown_to_feed_html = lambda do |content|
+  escaped = ERB::Util.html_escape(content.to_s)
+
+  escaped = escaped.gsub(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/) do
+    label = Regexp.last_match(1)
+    href = Regexp.last_match(2)
+    %(<a href="#{href}">#{label}</a>)
+  end
+
+  escaped = escaped.gsub(/\*\*([^*]+)\*\*/, '<strong>\1</strong>')
+
+  escaped
+    .split(/\n{2,}/)
+    .map { |paragraph| "<p>#{paragraph.gsub("\n", "<br />\n")}</p>" }
+    .join("\n")
+end
 
 xml.rss(
   "version" => "2.0",
@@ -87,7 +104,7 @@ xml.rss(
             escaped_title = ERB::Util.html_escape(tr.title.to_s)
             html << "<p><a href=\"#{item_url}\"><img src=\"#{escaped_image_url}\" alt=\"#{escaped_title}\" loading=\"lazy\" /></a></p>\n"
           end
-          html << tr.content.to_s
+          html << markdown_to_feed_html.call(tr.content)
           xml.cdata!(html)
         end
 
