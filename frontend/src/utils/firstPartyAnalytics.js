@@ -9,13 +9,44 @@ const isAdminSession = () => {
   }
 };
 
-const analyticsEndpoint = () => {
-  if (typeof window !== "undefined" && window.location?.origin) {
-    return `${window.location.origin}/events/info`;
-  }
-
+const directAnalyticsEndpoint = () => {
   if (!baseURL) return null;
   return `${baseURL.replace(/\/$/, "")}/api/ad_events`;
+};
+
+const sameOriginAnalyticsEndpoint = () => {
+  if (typeof window === "undefined" || !window.location?.origin) return null;
+  return `${window.location.origin}/events/info`;
+};
+
+const postEvent = async (endpoint, payload) => {
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+    keepalive: true,
+  });
+
+  const contentType = response.headers.get("content-type") || "";
+  const bodyText = await response.text();
+
+  let body = null;
+  if (contentType.includes("application/json") && bodyText) {
+    try {
+      body = JSON.parse(bodyText);
+    } catch {
+      body = null;
+    }
+  }
+
+  const recorded = response.status === 201 && body?.recorded === true;
+
+  return {
+    recorded,
+    status: response.status,
+    contentType,
+    bodyText,
+  };
 };
 
 export const recordAdEvent = ({
@@ -26,8 +57,7 @@ export const recordAdEvent = ({
   path,
   destination_url,
 }) => {
-  const endpoint = analyticsEndpoint();
-  if (!endpoint || !campaign_key || !event_type || isAdminSession()) return;
+  if (!campaign_key || !event_type || isAdminSession()) return;
 
   const payload = {
     event_type,
@@ -39,28 +69,38 @@ export const recordAdEvent = ({
     visitor_token: getVisitorToken(),
   };
 
-  fetch(endpoint, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-    keepalive: true,
-  })
-    .then(async (response) => {
-      if (response.ok) return;
+  const sameOriginEndpoint = sameOriginAnalyticsEndpoint();
+  const directEndpoint = directAnalyticsEndpoint();
 
-      let detail = "";
+  const record = async () => {
+    if (sameOriginEndpoint) {
       try {
-        detail = await response.text();
-      } catch {
-        // The status code is still useful when the response body is unavailable.
+        const result = await postEvent(sameOriginEndpoint, payload);
+        if (result.recorded) return;
+
+        console.warn(
+          `[AdAnalytics] Same-origin ${event_type} was not recorded (${result.status}, ${result.contentType || "unknown content type"}).`,
+          result.bodyText,
+        );
+      } catch (error) {
+        console.warn("[AdAnalytics] Same-origin request failed:", error);
       }
+    }
+
+    if (!directEndpoint || directEndpoint === sameOriginEndpoint) return;
+
+    try {
+      const result = await postEvent(directEndpoint, payload);
+      if (result.recorded) return;
 
       console.warn(
-        `[AdAnalytics] ${event_type} was not recorded (${response.status}).`,
-        detail,
+        `[AdAnalytics] Direct ${event_type} was not recorded (${result.status}, ${result.contentType || "unknown content type"}).`,
+        result.bodyText,
       );
-    })
-    .catch((error) => {
-      console.warn("[AdAnalytics] Failed to record event:", error);
-    });
+    } catch (error) {
+      console.warn("[AdAnalytics] Direct request failed:", error);
+    }
+  };
+
+  record();
 };
