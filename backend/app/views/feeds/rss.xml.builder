@@ -4,7 +4,7 @@ site_name = "Sunset Post"
 site_url  = FeedsController::SITE_URL
 feed_path = (@lang == "en") ? "/rss.xml" : "/#{@lang}/rss.xml"
 feed_url  = "#{request.base_url}#{feed_path}"
-site_uri  = URI.parse(site_url)
+asset_uri = URI.parse(request.base_url)
 
 markdown_to_feed_html = lambda do |content|
   escaped = ERB::Util.html_escape(content.to_s)
@@ -64,11 +64,13 @@ xml.rss(
       image_type = nil
       image_size = nil
       if story.image.attached?
+        # Active Storage routes live on the Rails service, not the React frontend.
+        # Keep this URL stable and let Rails redirect to the signed S3 object URL.
         image_url = rails_blob_url(
           story.image,
-          host: site_uri.host,
-          protocol: site_uri.scheme,
-          port: site_uri.port
+          host: asset_uri.host,
+          protocol: asset_uri.scheme,
+          port: asset_uri.port
         )
         image_type = story.image.blob.content_type.presence || "image/jpeg"
         image_size = story.image.blob.byte_size
@@ -102,7 +104,7 @@ xml.rss(
           if image_url.present?
             escaped_image_url = ERB::Util.html_escape(image_url)
             escaped_title = ERB::Util.html_escape(tr.title.to_s)
-            html << "<p><a href=\"#{item_url}\"><img src=\"#{escaped_image_url}\" alt=\"#{escaped_title}\" loading=\"lazy\" /></a></p>\n"
+            html << "<p><a href=\"#{item_url}\"><img src=\"#{escaped_image_url}\" alt=\"#{escaped_title}\" /></a></p>\n"
           end
           html << markdown_to_feed_html.call(tr.content)
           xml.cdata!(html)
