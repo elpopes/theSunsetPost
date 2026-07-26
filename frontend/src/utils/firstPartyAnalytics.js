@@ -9,6 +9,11 @@ const isAdminSession = () => {
   }
 };
 
+const analyticsEndpoint = () => {
+  if (!baseURL) return null;
+  return `${baseURL.replace(/\/$/, "")}/api/ad_events`;
+};
+
 export const recordAdEvent = ({
   event_type,
   campaign_key,
@@ -17,22 +22,41 @@ export const recordAdEvent = ({
   path,
   destination_url,
 }) => {
-  if (!baseURL || !campaign_key || !event_type || isAdminSession()) return;
+  const endpoint = analyticsEndpoint();
+  if (!endpoint || !campaign_key || !event_type || isAdminSession()) return;
 
-  fetch(`${baseURL}/api/ad_events`, {
+  const payload = {
+    event_type,
+    campaign_key,
+    slot,
+    language: (language || "en").split("-")[0],
+    path,
+    destination_url,
+    visitor_token: getVisitorToken(),
+  };
+
+  fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      event_type,
-      campaign_key,
-      slot,
-      language: (language || "en").split("-")[0],
-      path,
-      destination_url,
-      visitor_token: getVisitorToken(),
-    }),
+    body: JSON.stringify(payload),
     keepalive: true,
-  }).catch((error) => {
-    console.warn("[AdAnalytics] Failed to record event:", error);
-  });
+  })
+    .then(async (response) => {
+      if (response.ok) return;
+
+      let detail = "";
+      try {
+        detail = await response.text();
+      } catch {
+        // The status code is still useful when the response body is unavailable.
+      }
+
+      console.warn(
+        `[AdAnalytics] ${event_type} was not recorded (${response.status}).`,
+        detail,
+      );
+    })
+    .catch((error) => {
+      console.warn("[AdAnalytics] Failed to record event:", error);
+    });
 };

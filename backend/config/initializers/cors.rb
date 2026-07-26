@@ -1,23 +1,22 @@
 # Be sure to restart your server when you modify this file.
+#
+# The frontend is served from both the apex and www hostnames. Analytics POSTs
+# must accept either origin or browsers will block them before Rails sees them.
 
-# Avoid CORS issues when API is called from the frontend app.
-# Handle Cross-Origin Resource Sharing (CORS) in order to accept cross-origin Ajax requests.
-
-# Read more: https://github.com/cyu/rack-cors
+allowed_origins = if Rails.env.production?
+  ["https://www.sunsetpost.org", "https://sunsetpost.org"]
+else
+  ["http://localhost:5000"]
+end
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
-    allow do
-        if Rails.env.production?
-            origins 'https://www.sunsetpost.org' # Production frontend URL
-          else
-            origins 'http://localhost:5000' # Local development frontend URL
-        end
-  
-      resource "*",
-        headers: :any,
-        methods: [:get, :post, :put, :patch, :delete, :options, :head],
-        credentials: true, 
-        expose: ['Authorization'] 
-    end
+  allow do
+    origins(*allowed_origins)
+
+    resource "*",
+      headers: :any,
+      methods: [:get, :post, :put, :patch, :delete, :options, :head],
+      credentials: true,
+      expose: ["Authorization"]
   end
-  
+end

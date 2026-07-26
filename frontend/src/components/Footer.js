@@ -54,6 +54,9 @@ const Footer = () => {
             <li>
               <Link to={`/${i18n.language}/contact`}>{t("contact")}</Link>
             </li>
+            <li>
+              <a href="/rss-feeds.html">RSS</a>
+            </li>
           </ul>
         </div>
 
@@ -143,7 +146,7 @@ const Footer = () => {
       </div>
 
       <div className="footer__bottom">
-        <p>sunsetpost.org © 2024-2025 {t("The Sunset Post")}</p>
+        <p>sunsetpost.org © 2024-2026 {t("The Sunset Post")}</p>
       </div>
     </footer>
   );
