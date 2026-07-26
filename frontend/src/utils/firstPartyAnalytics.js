@@ -10,6 +10,10 @@ const isAdminSession = () => {
 };
 
 const analyticsEndpoint = () => {
+  if (typeof window !== "undefined" && window.location?.origin) {
+    return `${window.location.origin}/events/info`;
+  }
+
   if (!baseURL) return null;
   return `${baseURL.replace(/\/$/, "")}/api/ad_events`;
 };
