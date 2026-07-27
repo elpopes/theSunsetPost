@@ -31,8 +31,10 @@ Rails.application.routes.draw do
     resources :classified_categories, only: [:index, :create, :update, :destroy]
     resources :classified_subcategories, only: [:create, :update, :destroy]
 
+    # Neutral public collection route. The legacy endpoint remains temporarily
+    # available for older frontend builds during deployment.
+    post "info", to: "ad_events#info"
     post "ad_events", to: "ad_events#create"
-    get "ad_events/pixel.gif", to: "ad_events#pixel"
 
     namespace :admin do
       get "analytics/overview", to: "analytics#overview"
