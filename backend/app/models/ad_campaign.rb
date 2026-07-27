@@ -42,9 +42,9 @@ class AdCampaign < ApplicationRecord
     attributes = DEFAULTS[normalized_key]
     return unless attributes
 
-    create_or_find_by!(key: normalized_key) do |campaign|
-      campaign.assign_attributes(attributes)
-    end
+    find_by(key: normalized_key) || create!(attributes.merge(key: normalized_key))
+  rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid
+    find_by(key: normalized_key)
   end
 
   def running_on?(date = Date.current)
