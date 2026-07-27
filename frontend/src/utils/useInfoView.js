@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { logEvent } from "../analytics";
-import { recordAdEvent } from "./firstPartyAnalytics";
+import { recordInfoEvent } from "./infoMetrics";
 
 export default function useInfoView({
   slot,
@@ -50,11 +50,11 @@ export default function useInfoView({
           firedRef.current = true;
 
           logEvent("info_view", { slot, info_id, lng, path });
-          recordAdEvent({
-            event_type: "view",
-            campaign_key: info_id,
+          recordInfoEvent({
+            kind: "view",
+            content_id: info_id,
             slot,
-            language: lng,
+            lang: lng,
             path,
           });
         }, minMs);
