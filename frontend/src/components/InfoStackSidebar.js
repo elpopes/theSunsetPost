@@ -15,6 +15,10 @@ import venmoEn from "../assets/outreach/Venmo-Localreach-En.png";
 import venmoEs from "../assets/outreach/Venmo-Localreach-Es.png";
 import venmoZh from "../assets/outreach/Venmo-Localreach-Zh.png";
 
+import ymcaEn from "../assets/outreach/YMCA-Localreach-En.jpg";
+import ymcaEs from "../assets/outreach/YMCA-Localreach-Es.jpg";
+import ymcaZh from "../assets/outreach/YMCA-Localreach-Zh.jpg";
+
 import localReachEN from "../assets/outreach/localreach-en.svg";
 import localReachES from "../assets/outreach/localreach-es.svg";
 import localReachZH from "../assets/outreach/localreach-zh.svg";
@@ -28,6 +32,8 @@ const VENMO_URL =
   "https://www.paypal.com/qrcodes/venmocs/27e4b8c5-829d-4347-b684-46e3983b8c4f?created=1765840714&printed=true";
 
 const BEYOND_CARE_URL = "https://beyondcare.coop/";
+
+const YMCA_URL = "https://ymcanyc.org/events/open-house-schedules";
 
 const placements = [
   {
@@ -99,6 +105,29 @@ const placements = [
         image: beyondCareZh,
         alt: "Beyond Care Childcare Cooperative",
         href: BEYOND_CARE_URL,
+        external: true,
+      },
+    },
+  },
+  {
+    id: "ymca",
+    byLang: {
+      en: {
+        image: ymcaEn,
+        alt: "YMCA free open house",
+        href: YMCA_URL,
+        external: true,
+      },
+      es: {
+        image: ymcaEs,
+        alt: "Jornada gratuita de puertas abiertas de la YMCA",
+        href: YMCA_URL,
+        external: true,
+      },
+      zh: {
+        image: ymcaZh,
+        alt: "YMCA免费开放日",
+        href: YMCA_URL,
         external: true,
       },
     },
