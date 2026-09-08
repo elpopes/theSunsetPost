@@ -11,6 +11,12 @@
   overflow: hidden;
   position: relative;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.subway-info:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 
 .subway-info__header {
@@ -20,6 +26,15 @@
   line-height: 1.1;
   text-align: center;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.subway-info__next {
+  font-size: 1rem;
+  line-height: 0.8;
 }
 
 .subway-info__updating {
