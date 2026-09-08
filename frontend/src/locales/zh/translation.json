@@ -24,6 +24,20 @@
     "No arrivals available.": "没有可用的到达信息。",
     "Error fetching transit data.": "获取交通数据时出错。",
     "Northbound Trains at 36th St.": "36街北行列车",
+    "Error fetching subway data.": "获取地铁数据时出错。",
+    "No arrivals": "暂无列车到站",
+    "Updating…": "正在更新…",
+    "subway": {
+        "manhattanBoundAt": "{{station}}开往曼哈顿方向列车",
+        "nextStation": "显示下一站",
+        "cycleLabel": "{{station}}开往曼哈顿方向的地铁到站信息。点击或按回车键查看日落公园下一站。",
+        "stations": {
+            "36-st": "36街",
+            "9-av": "第9大道",
+            "8-av": "第8大道",
+            "59-st": "59街"
+        }
+    },
     "Bus": "巴士",
     "Train": "列车",
     "Now arriving": "即将到达",
@@ -100,4 +114,3 @@
         "confirmDelete": "要删除这条分类信息吗？此操作无法撤销。"
     }
 }
-  
