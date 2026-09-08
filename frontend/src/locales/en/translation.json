@@ -24,6 +24,20 @@
     "No arrivals available.": "No arrivals available.",
     "Error fetching transit data.": "Error fetching transit data.",
     "Northbound Trains at 36th St.": "Northbound Trains at 36th St.",
+    "Error fetching subway data.": "Error fetching subway data.",
+    "No arrivals": "No arrivals",
+    "Updating…": "Updating…",
+    "subway": {
+        "manhattanBoundAt": "Manhattan-bound trains at {{station}}",
+        "nextStation": "Show next station",
+        "cycleLabel": "Manhattan-bound subway arrivals at {{station}}. Activate to show the next Sunset Park station.",
+        "stations": {
+            "36-st": "36 St",
+            "9-av": "9 Av",
+            "8-av": "8 Av",
+            "59-st": "59 St"
+        }
+    },
     "Bus": "Bus",
     "Train": "Train",
     "Now arriving": "Now arriving",
