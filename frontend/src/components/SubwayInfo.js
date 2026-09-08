@@ -3,28 +3,50 @@ import { useTranslation } from "react-i18next";
 import protobuf from "protobufjs";
 import "./SubwayInfo.css";
 
-const feeds = [
+const FEEDS = {
+  nqrw:
+    "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-nqrw",
+  bdfm:
+    "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-bdfm",
+};
+
+const STATIONS = [
   {
-    feedUrl:
-      "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-nqrw",
+    key: "36-st",
     stationId: "R36N",
+    feedKeys: ["nqrw", "bdfm"],
   },
   {
-    feedUrl:
-      "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-bdfm",
-    stationId: "R36N",
+    key: "9-av",
+    stationId: "B12N",
+    feedKeys: ["bdfm"],
+  },
+  {
+    key: "8-av",
+    stationId: "N02N",
+    feedKeys: ["nqrw"],
+  },
+  {
+    key: "59-st",
+    stationId: "R41N",
+    feedKeys: ["nqrw"],
   },
 ];
 
 const SubwayInfo = () => {
   const { t } = useTranslation();
 
-  const [arrivals, setArrivals] = useState([]);
+  const [arrivalsByStation, setArrivalsByStation] = useState({});
+  const [stationIndex, setStationIndex] = useState(() =>
+    Math.floor(Math.random() * STATIONS.length)
+  );
   const [initialLoading, setInitialLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
 
   const feedMessageRef = useRef(null);
+  const selectedStation = STATIONS[stationIndex];
+  const arrivals = arrivalsByStation[selectedStation.key] || [];
 
   useEffect(() => {
     let cancelled = false;
@@ -43,41 +65,57 @@ const SubwayInfo = () => {
 
       try {
         const FeedMessage = await ensureProto();
+        const decodedFeeds = {};
 
-        let allArrivals = [];
-
-        for (const { feedUrl, stationId } of feeds) {
+        for (const [feedKey, feedUrl] of Object.entries(FEEDS)) {
           const response = await fetch(feedUrl, { cache: "no-store" });
-          if (!response.ok)
+          if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
+          }
 
           const arrayBuffer = await response.arrayBuffer();
-          const feed = FeedMessage.decode(new Uint8Array(arrayBuffer));
-
-          const stationArrivals = feed.entity
-            .flatMap((entity) =>
-              entity.tripUpdate
-                ? entity.tripUpdate.stopTimeUpdate
-                    .filter((stopTime) => stopTime.stopId === stationId)
-                    .map((stopTime) => ({
-                      route: entity.tripUpdate.trip.routeId,
-                      arrival_time: stopTime.arrival?.time
-                        ? new Date(stopTime.arrival.time * 1000)
-                        : null,
-                    }))
-                : []
-            )
-            .flat();
-
-          allArrivals = allArrivals.concat(stationArrivals);
+          decodedFeeds[feedKey] = FeedMessage.decode(
+            new Uint8Array(arrayBuffer)
+          );
         }
 
-        const limitedArrivals = allArrivals
-          .filter((a) => a.arrival_time)
-          .sort((a, b) => a.arrival_time - b.arrival_time)
-          .slice(0, 3);
+        const nextArrivalsByStation = {};
 
-        if (!cancelled) setArrivals(limitedArrivals);
+        STATIONS.forEach(({ key, stationId, feedKeys }) => {
+          let stationArrivals = [];
+
+          feedKeys.forEach((feedKey) => {
+            const feed = decodedFeeds[feedKey];
+            if (!feed) return;
+
+            const feedArrivals = feed.entity.flatMap((entity) => {
+              if (!entity.tripUpdate) return [];
+
+              return entity.tripUpdate.stopTimeUpdate
+                .filter((stopTime) => stopTime.stopId === stationId)
+                .map((stopTime) => {
+                  const timestamp =
+                    stopTime.arrival?.time || stopTime.departure?.time;
+
+                  return {
+                    route: entity.tripUpdate.trip.routeId,
+                    arrival_time: timestamp
+                      ? new Date(timestamp * 1000)
+                      : null,
+                  };
+                });
+            });
+
+            stationArrivals = stationArrivals.concat(feedArrivals);
+          });
+
+          nextArrivalsByStation[key] = stationArrivals
+            .filter((arrival) => arrival.arrival_time)
+            .sort((a, b) => a.arrival_time - b.arrival_time)
+            .slice(0, 3);
+        });
+
+        if (!cancelled) setArrivalsByStation(nextArrivalsByStation);
       } catch (err) {
         if (!cancelled) setError(t("Error fetching subway data."));
       } finally {
@@ -107,10 +145,36 @@ const SubwayInfo = () => {
     return diffMinutes <= 0 ? t("Now arriving") : `${diffMinutes} ${t("min")}`;
   };
 
+  const cycleStation = () => {
+    setStationIndex((currentIndex) => (currentIndex + 1) % STATIONS.length);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      cycleStation();
+    }
+  };
+
+  const stationName = t(`subway.stations.${selectedStation.key}`);
+  const heading = t("subway.manhattanBoundAt", { station: stationName });
+
   return (
-    <div className="subway-info" aria-busy={initialLoading || refreshing}>
+    <div
+      className="subway-info"
+      aria-busy={initialLoading || refreshing}
+      aria-label={t("subway.cycleLabel", { station: stationName })}
+      role="button"
+      tabIndex={0}
+      title={t("subway.nextStation")}
+      onClick={cycleStation}
+      onKeyDown={handleKeyDown}
+    >
       <h3 className="subway-info__header">
-        {t("Northbound Trains at 36th St.")}
+        <span>{heading}</span>
+        <span className="subway-info__next" aria-hidden="true">
+          ›
+        </span>
       </h3>
 
       {refreshing && (
