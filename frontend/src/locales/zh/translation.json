@@ -28,7 +28,7 @@
     "No arrivals": "暂无列车到站",
     "Updating…": "正在更新…",
     "subway": {
-        "manhattanBoundAt": "{{station}}开往曼哈顿方向列车",
+        "manhattanBoundAt": "{{station}} · 曼哈顿方向",
         "nextStation": "显示下一站",
         "cycleLabel": "{{station}}开往曼哈顿方向的地铁到站信息。点击或按回车键查看日落公园下一站。",
         "stations": {

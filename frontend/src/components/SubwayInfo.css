@@ -65,7 +65,8 @@
   border-radius: 5px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   display: grid;
-  grid-template-columns: 1fr 78px;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  column-gap: 4px;
   align-items: center;
   min-height: 24px;
 }
@@ -83,7 +84,6 @@
   text-align: right;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
-  width: 78px;
 }
 
 .subway-info__eta.now-arriving {

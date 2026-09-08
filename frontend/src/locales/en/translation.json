@@ -28,7 +28,7 @@
     "No arrivals": "No arrivals",
     "Updating…": "Updating…",
     "subway": {
-        "manhattanBoundAt": "Manhattan-bound trains at {{station}}",
+        "manhattanBoundAt": "{{station}} · Manhattan-bound",
         "nextStation": "Show next station",
         "cycleLabel": "Manhattan-bound subway arrivals at {{station}}. Activate to show the next Sunset Park station.",
         "stations": {

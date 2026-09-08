@@ -28,7 +28,7 @@
     "No arrivals": "No hay llegadas",
     "Updating…": "Actualizando…",
     "subway": {
-        "manhattanBoundAt": "Trenes hacia Manhattan en {{station}}",
+        "manhattanBoundAt": "{{station}} · hacia Manhattan",
         "nextStation": "Mostrar la próxima estación",
         "cycleLabel": "Llegadas del metro hacia Manhattan en {{station}}. Activa para mostrar la próxima estación de Sunset Park.",
         "stations": {
@@ -40,7 +40,7 @@
     },
     "Bus": "Autobús",
     "Train": "Tren",
-    "Now arriving": "Llegando ahora",
+    "Now arriving": "Llega ahora",
     "min": "min",
     "Community Spotlight": "Destacado Comunitario",
     "Contact us to feature your message": "Contáctanos para destacar tu mensaje",
