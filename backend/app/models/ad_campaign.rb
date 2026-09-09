@@ -14,6 +14,12 @@ class AdCampaign < ApplicationRecord
       campaign_type: "paid",
       destination_url: "https://ymcanyc.org/events/open-house-schedules"
     },
+    "birthday" => {
+      name: "Sunset Post 1st Birthday",
+      advertiser: "The Sunset Post",
+      campaign_type: "house",
+      destination_url: "https://givebutter.com/sunsetpost"
+    },
     "subscription" => {
       name: "Sunset Post subscription",
       advertiser: "The Sunset Post",

@@ -19,6 +19,10 @@ import ymcaSmartEn from "../assets/outreach/YMCA-Smartreach-En.jpg";
 import ymcaSmartEs from "../assets/outreach/YMCA-Smartreach-Es.jpg";
 import ymcaSmartZh from "../assets/outreach/YMCA-Smartreach-Zh.jpg";
 
+import birthdaySmartEn from "../assets/outreach/Birthday-Smartreach-En.webp";
+import birthdaySmartEs from "../assets/outreach/Birthday-Smartreach-Es.webp";
+import birthdaySmartZh from "../assets/outreach/Birthday-Smartreach-Zh.webp";
+
 import useInfoView from "../utils/useInfoView";
 import { logInfoClick } from "../utils/infoEvents";
 
@@ -31,7 +35,17 @@ const BEYOND_CARE_LINK = "https://beyondcare.coop/";
 
 const YMCA_LINK = "https://ymcanyc.org/events/open-house-schedules";
 
+const BIRTHDAY_LINK = "https://givebutter.com/sunsetpost";
+
 const sponsorsSmartreach = [
+  {
+    id: "birthday",
+    byLang: {
+      en: { image: birthdaySmartEn, alt: "The Sunset Post first birthday party", link: BIRTHDAY_LINK },
+      es: { image: birthdaySmartEs, alt: "Fiesta del primer aniversario de the Sunset Post", link: BIRTHDAY_LINK },
+      zh: { image: birthdaySmartZh, alt: "the Sunset Post 一周年庆祝活动", link: BIRTHDAY_LINK },
+    },
+  },
   {
     id: "subscription",
     byLang: {

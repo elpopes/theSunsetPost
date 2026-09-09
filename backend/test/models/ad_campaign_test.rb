@@ -18,6 +18,16 @@ class AdCampaignTest < ActiveSupport::TestCase
     assert_equal "ymca", campaign.key
   end
 
+  test "resolves birthday tracking key" do
+    campaign = AdCampaign.resolve_default("birthday")
+
+    assert_equal "Sunset Post 1st Birthday", campaign.name
+    assert_equal "The Sunset Post", campaign.advertiser
+    assert_equal "house", campaign.campaign_type
+    assert_equal "birthday", campaign.key
+    assert_equal "https://givebutter.com/sunsetpost", campaign.destination_url
+  end
+
   test "returns an existing campaign instead of creating a duplicate" do
     existing = AdCampaign.create!(
       key: "beyondcare",
