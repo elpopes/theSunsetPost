@@ -1,12 +1,6 @@
 /events/info https://thesunsetpost.onrender.com/api/ad_events 200
-/sitemap.xml https://thesunsetpost.onrender.com/sitemap.xml 200
 /rss.xml https://thesunsetpost.onrender.com/rss.xml 200
 /rss https://thesunsetpost.onrender.com/rss.xml 200
 /en/rss.xml https://thesunsetpost.onrender.com/rss.xml 200
 /es/rss.xml https://thesunsetpost.onrender.com/es/rss.xml 200
 /zh/rss.xml https://thesunsetpost.onrender.com/zh/rss.xml 200
-/stories/:id /en/stories/:id 301
-/authors/:idOrSlug /en/authors/:idOrSlug 301
-/sections/:name /en/sections/:name 301
-/about /en/about 301
-/contact /en/contact 301
