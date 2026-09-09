@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   }, constraints: { id: /\d+/ }
 
   get "/preview/stories/:slug", to: "previews#story"
+  get "/sitemap.xml", to: "sitemaps#index", defaults: { format: "xml" }
 
   # RSS feeds
   get "/rss.xml", to: "feeds#rss", defaults: { format: "xml" }
