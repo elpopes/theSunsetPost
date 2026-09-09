@@ -50,13 +50,18 @@
         "contact_link": "Contáctanos aquí."
     },
     "about_page": {
-        "title": "Sobre el Sunset Post",
-        "welcome": "Bienvenido a Sunset Post, tu plataforma de noticias hiperlocal y trilingüe.",
-        "mission": "Estamos comprometidos a traer las historias, actualizaciones e ideas que más importan a los residentes y miembros de la comunidad de Sunset Park.",
-        "team": "Nuestro creciente equipo de narradores apasionados está dedicado a fomentar una comunidad vibrante e informada.",
-        "stay_tuned": "Mantente al tanto de las últimas noticias, eventos y más. Creemos en el poder de las historias para conectar a las personas e inspirar el cambio.",
-        "join_us": "Si estás interesado en unirte a nuestro equipo de escritores, fotógrafos y desarrolladores, ¡contáctanos hoy!",
-        "connect": "Conéctate con Sunset Post aquí."
+        "title": "Sobre the Sunset Post",
+        "intro": "The Sunset Post es el periódico comunitario trilingüe e hiperlocal de Sunset Park.",
+        "bio": "Fundado por el editor y residente de Sunset Park Lorenzo Tijerina, the Sunset Post ofrece noticias locales, cobertura cultural y una mirada cercana a la comunidad de Sunset Park, en Brooklyn. Como reflejo de la diversidad del vecindario, todos los artículos se publican en inglés, español y chino, y las ediciones impresas se distribuyen localmente.",
+        "recognition": "The Sunset Post fue incluido en la lista “Reasons to Love New York” de New York Magazine de 2025: “Porque Sunset Park ahora tiene su propio periódico trilingüe.”",
+        "david_prize_before": "Tijerina fue seleccionado como ",
+        "david_prize_link": "finalista del David Prize 2026",
+        "david_prize_after": ".",
+        "origin": "El periódico comenzó como una manera de conocer mejor lo que ocurre en Sunset Park y de conectar con nuestros vecinos. Desde entonces, se ha convertido en un espacio compartido y en una conversación continua sobre los temas que importan a quienes viven y trabajan aquí.",
+        "team": "La publicación se apoya en un equipo cada vez mayor de escritores, narradores, artistas y fotógrafos locales que aportan distintas experiencias, intereses y perspectivas a nuestra cobertura. Creemos que las historias cotidianas del vecindario merecen ser contadas, preservadas, discutidas y compartidas en varios idiomas.",
+        "get_involved_title": "Participa",
+        "get_involved": "¿Tienes una idea para una historia? ¿Te interesa escribir, hacer fotografía, ilustrar, anunciarte, colaborar con nosotros o contribuir de alguna otra manera?",
+        "connect": "Ponte en contacto con nosotros."
     },
     "contact_page": {
       "title": "Contáctanos",
