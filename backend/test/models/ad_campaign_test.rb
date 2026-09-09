@@ -9,6 +9,15 @@ class AdCampaignTest < ActiveSupport::TestCase
     assert_equal "beyondcare", campaign.key
   end
 
+  test "resolves YMCA tracking key" do
+    campaign = AdCampaign.resolve_default("ymca")
+
+    assert_equal "YMCA", campaign.name
+    assert_equal "YMCA of Greater New York", campaign.advertiser
+    assert_equal "paid", campaign.campaign_type
+    assert_equal "ymca", campaign.key
+  end
+
   test "returns an existing campaign instead of creating a duplicate" do
     existing = AdCampaign.create!(
       key: "beyondcare",
