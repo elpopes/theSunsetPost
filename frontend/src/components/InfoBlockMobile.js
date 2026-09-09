@@ -19,9 +19,9 @@ import ymcaSmartEn from "../assets/outreach/YMCA-Smartreach-En.jpg";
 import ymcaSmartEs from "../assets/outreach/YMCA-Smartreach-Es.jpg";
 import ymcaSmartZh from "../assets/outreach/YMCA-Smartreach-Zh.jpg";
 
-import birthdaySmartEn from "../assets/outreach/Birthday-Smartreach-En.webp";
-import birthdaySmartEs from "../assets/outreach/Birthday-Smartreach-Es.webp";
-import birthdaySmartZh from "../assets/outreach/Birthday-Smartreach-Zh.webp";
+import birthdaySmartEn from "../assets/outreach/Birthday-Smartreach-En.png";
+import birthdaySmartEs from "../assets/outreach/Birthday-Smartreach-Es.png";
+import birthdaySmartZh from "../assets/outreach/Birthday-Smartreach-Zh.png";
 
 import useInfoView from "../utils/useInfoView";
 import { logInfoClick } from "../utils/infoEvents";
