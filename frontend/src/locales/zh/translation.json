@@ -50,13 +50,18 @@
         "contact_link": "点击此处联系我们。"
     },
     "about_page": {
-        "title": "关于 Sunset Post",
-        "welcome": "我们很想听到您的声音！使用下面的表单分享故事创意、与我们合作投放广告、提交分类信息，或宣传即将到来的活动。",
-        "mission": "我们致力于为 Sunset Park 的居民和社区成员提供最重要的故事、更新和见解。",
-        "team": "我们不断壮大的热情讲述者团队致力于打造一个充满活力和信息丰富的社区。",
-        "stay_tuned": "敬请关注最新新闻、活动等。我们相信故事的力量能够连接人们并激发变革。",
-        "join_us": "如果您有兴趣加入我们的作家、摄影师和开发人员团队，请立即联系我们！",
-        "connect": "在这里与 Sunset Post 联系。"
+        "title": "关于 the Sunset Post",
+        "intro": "The Sunset Post 是一份服务 Sunset Park 的三语超本地社区报纸。",
+        "bio": "The Sunset Post 由编辑、Sunset Park 居民 Lorenzo Tijerina 创办，致力于报道 Sunset Park 的本地新闻、文化生活和社区动态。为体现社区多元的人口构成，我们的每篇文章都以英语、西班牙语和中文发布，纸质版也在本地印刷和发行。",
+        "recognition": "The Sunset Post 入选 New York Magazine 2025 年“Reasons to Love New York”榜单，获评：“因为 Sunset Park 现在有了自己的三语报纸。”",
+        "david_prize_before": "Tijerina 被选为 ",
+        "david_prize_link": "2026 年 David Prize 决赛入围者",
+        "david_prize_after": "。",
+        "origin": "这份报纸最初源于一个简单的想法：更多了解 Sunset Park 正在发生的事情，并与邻居建立联系。如今，它已发展成为一个共享空间，也是一场持续的对话，关注在这里生活和工作的人们真正关心的事情。",
+        "team": "The Sunset Post 汇集了一支不断壮大的本地作者、故事讲述者、艺术家和摄影师团队。他们以不同的经历、兴趣和视角共同参与我们的报道。我们相信，社区里的日常故事值得被报道、保存、讨论，并跨越语言与更多人分享。",
+        "get_involved_title": "参与其中",
+        "get_involved": "有新闻线索或故事想法吗？想参与写作、摄影、插画、投放广告、与我们合作，或以其他方式参与吗？",
+        "connect": "联系我们。"
   },
     "contact_page": {
         "title": "联系我们",

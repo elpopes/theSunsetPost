@@ -59,12 +59,17 @@
     },
     "about_page": {
       "title": "About the Sunset Post",
-      "welcome": "Welcome to the Sunset Post, your hyper-local, trilingual news platform.",
-      "mission": "We are committed to bringing the stories, updates, and insights that matter most to Sunset Park residents and community members.",
-      "team": "Our expanding team of passionate storytellers is dedicated to fostering a vibrant and informed community.",
-      "stay_tuned": "Stay tuned for the latest news, events, and more. We believe in the power of stories to connect people and spark change.",
-      "join_us": "If you're interested in joining our team of writers, photographers and developers reach out to us today!",
-      "connect": "Connect with the Sunset Post here."
+      "intro": "The Sunset Post is Sunset Park’s trilingual, hyper-local community newspaper.",
+      "bio": "Founded by editor and Sunset Park resident Lorenzo Tijerina, the Sunset Post provides local news, cultural coverage, and community insight to Sunset Park in Brooklyn, NY. Reflecting the neighborhood’s diverse population, every article is published in English, Spanish, and Chinese, with physical copies printed and distributed locally.",
+      "recognition": "The Sunset Post was named to New York Magazine’s 2025 “Reasons to Love New York” list: “Because Sunset Park Now Has Its Own Trilingual Newspaper.”",
+      "david_prize_before": "Tijerina was selected as a ",
+      "david_prize_link": "2026 David Prize finalist",
+      "david_prize_after": ".",
+      "origin": "The paper began as a way to learn more about what is happening in Sunset Park and to connect with our neighbors. It has grown into a shared space and an ongoing conversation about the things that matter to the people who live and work here.",
+      "team": "The publication relies on a growing team of local writers, storytellers, artists, and photographers who bring different experiences, interests, and perspectives to our coverage. We believe the neighborhood’s everyday stories are worth reporting, preserving, discussing, and sharing across languages.",
+      "get_involved_title": "Get involved",
+      "get_involved": "Have a story idea? Interested in writing, photography, illustration, advertising, collaborating with us, or otherwise contributing to the Sunset Post?",
+      "connect": "Get in touch with us."
     },
     "contact_page": {
       "title": "Contact Us",
