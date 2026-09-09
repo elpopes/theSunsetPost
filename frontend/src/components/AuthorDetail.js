@@ -2,8 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { Helmet } from "react-helmet";
 import { baseURL } from "../config";
+import SeoHead from "./SeoHead";
 import "./AuthorDetail.css";
 
 const LANGUAGES = ["en", "es", "zh"];
@@ -264,14 +264,13 @@ const AuthorDetail = () => {
 
   return (
     <section className="author-detail">
-      <Helmet>
-        <title>{author.name}</title>
-        <meta name="description" content={bio || "The Sunset Post"} />
-        <link
-          rel="canonical"
-          href={`https://www.sunsetpost.org/authors/${author.slug}`}
-        />
-      </Helmet>
+      <SeoHead
+        language={language}
+        path={`/authors/${author.slug}`}
+        title={`${author.name} | The Sunset Post`}
+        description={bio || "The Sunset Post"}
+        image={author.image_url}
+      />
 
       <header className="author-detail__header">
         {author.image_url && (
