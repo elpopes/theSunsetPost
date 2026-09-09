@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import NewsletterSignup from "./NewsletterSignup";
@@ -166,6 +166,8 @@ const TrackedInfoTile = ({ variant, id, idx, lang, path }) => {
       src={variant.image}
       alt={variant.alt}
       className="sidebar-image"
+      width="300"
+      height="600"
       loading={isAboveFold ? "eager" : "lazy"}
       decoding="async"
     />
@@ -226,21 +228,9 @@ const InfoStackSidebar = ({ lang }) => {
     return Object.fromEntries(placements.map((p) => [p.id, p]));
   }, []);
 
-  const [order, setOrder] = useState(() => shuffle(placementIds));
-
-  useEffect(() => {
-    if (placementIds.length === 0) {
-      setOrder([]);
-      return;
-    }
-
-    if (placementIds.length === 1) {
-      setOrder(placementIds);
-      return;
-    }
-
-    setOrder(shuffle(placementIds));
-  }, [stablePath, placementIds]);
+  // Pick the randomized order during render so the browser never paints one
+  // order and then gets a second post-paint shuffle from an effect.
+  const order = useMemo(() => shuffle(placementIds), [stablePath, placementIds]);
 
   const outreach = outreachImageByLang[lang] || localReachEN;
 
@@ -300,6 +290,8 @@ const InfoStackSidebar = ({ lang }) => {
             src={outreach}
             alt={t("Advertise with us")}
             className="sidebar-image"
+            width="300"
+            height="600"
             loading="eager"
             decoding="async"
           />

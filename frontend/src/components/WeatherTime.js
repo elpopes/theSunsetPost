@@ -7,7 +7,7 @@ const WeatherTime = () => {
   const { i18n } = useTranslation();
   const [weather, setWeather] = useState(null);
   const [time, setTime] = useState(new Date());
-  const weatherIntervalRef = useRef(null); // Use a ref for weatherInterval
+  const weatherIntervalRef = useRef(null);
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -37,16 +37,13 @@ const WeatherTime = () => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
         fetchWeather();
-        weatherIntervalRef.current = setInterval(fetchWeather, 600000); // Update every 10 minutes
-      } else {
-        if (weatherIntervalRef.current) {
-          clearInterval(weatherIntervalRef.current);
-          weatherIntervalRef.current = null;
-        }
+        weatherIntervalRef.current = setInterval(fetchWeather, 600000);
+      } else if (weatherIntervalRef.current) {
+        clearInterval(weatherIntervalRef.current);
+        weatherIntervalRef.current = null;
       }
     };
 
-    // Initial fetch and attach visibility listener
     if (document.visibilityState === "visible") {
       fetchWeather();
       weatherIntervalRef.current = setInterval(fetchWeather, 600000);
@@ -54,7 +51,6 @@ const WeatherTime = () => {
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    // Cleanup
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       if (weatherIntervalRef.current) {
@@ -66,26 +62,32 @@ const WeatherTime = () => {
 
   useEffect(() => {
     const timeInterval = setInterval(() => setTime(new Date()), 10000);
-
-    // Cleanup
     return () => clearInterval(timeInterval);
   }, []);
 
   return (
-    <div className="weather-time">
-      {weather ? (
-        <>
-          <img
-            src={weather.icon}
-            alt={weather.description}
-            className="weather-time__icon"
-          />
-          <p className="weather-time__temp">{weather.temp}°F</p>
-          <p className="weather-time__description">{weather.description}</p>
-        </>
-      ) : (
-        <p>Loading weather...</p>
-      )}
+    <div className="weather-time" aria-live="polite">
+      <div className="weather-time__conditions">
+        {weather ? (
+          <>
+            <img
+              src={weather.icon}
+              alt={weather.description}
+              className="weather-time__icon"
+              width="64"
+              height="64"
+            />
+            <p className="weather-time__temp">{weather.temp}°F</p>
+            <p className="weather-time__description">{weather.description}</p>
+          </>
+        ) : (
+          <div className="weather-time__placeholder" aria-hidden="true">
+            <span className="weather-time__placeholder-icon" />
+            <span className="weather-time__placeholder-line weather-time__placeholder-line--temp" />
+            <span className="weather-time__placeholder-line" />
+          </div>
+        )}
+      </div>
       <p className="weather-time__time">
         {time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
       </p>

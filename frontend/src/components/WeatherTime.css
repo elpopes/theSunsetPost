@@ -2,8 +2,26 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 120px;
+  min-height: 126px;
   font-size: 14px;
   color: #555;
+}
+
+.weather-time__conditions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 96px;
+}
+
+.weather-time__icon {
+  display: block;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
 }
 
 .weather-time__temp {
@@ -14,6 +32,7 @@
 }
 
 .weather-time__description {
+  min-height: 17px;
   text-transform: capitalize;
   margin: 0;
   color: #333;
@@ -22,5 +41,28 @@
 .weather-time__time {
   font-size: 14px;
   color: #555;
-  margin-top: 5px;
+  margin: 5px 0 0;
+}
+
+.weather-time__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.weather-time__placeholder-icon {
+  width: 64px;
+  height: 64px;
+}
+
+.weather-time__placeholder-line {
+  display: block;
+  width: 76px;
+  height: 14px;
+}
+
+.weather-time__placeholder-line--temp {
+  width: 54px;
+  height: 18px;
 }
