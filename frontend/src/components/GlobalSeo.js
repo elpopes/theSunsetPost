@@ -43,6 +43,19 @@ const COPY = {
   },
 };
 
+const ORGANIZATION_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "NewsMediaOrganization",
+  "@id": `${SITE_URL}/#organization`,
+  name: "The Sunset Post",
+  url: SITE_URL,
+  areaServed: {
+    "@type": "Place",
+    name: "Sunset Park, Brooklyn, New York",
+  },
+  knowsLanguage: ["en", "es", "zh"],
+};
+
 const withoutLanguagePrefix = (pathname) =>
   pathname.replace(/^\/(en|es|zh)(?=\/|$)/, "") || "/";
 
@@ -92,6 +105,9 @@ const GlobalSeo = () => {
       {description && <meta property="og:description" content={description} />}
       <meta property="og:url" content={canonical} />
       <meta property="og:locale" content={language === "zh" ? "zh_CN" : language === "es" ? "es_US" : "en_US"} />
+      <script type="application/ld+json">
+        {JSON.stringify(ORGANIZATION_SCHEMA)}
+      </script>
     </Helmet>
   );
 };

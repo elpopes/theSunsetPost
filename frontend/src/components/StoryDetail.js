@@ -13,6 +13,7 @@ import SectionsForm from "./SectionsForm";
 import ImageUpload from "./ImageUpload";
 import PrintQrLinkGenerator from "./PrintQrLinkGenerator";
 import useStoryEngagement from "../utils/useStoryEngagement";
+import SeoHead from "./SeoHead";
 import { Helmet } from "react-helmet";
 import "./StoryDetail.css";
 
@@ -205,18 +206,51 @@ const StoryDetail = () => {
         }).format(createdAt)
       : null;
 
+  const canonicalUrl = `https://www.sunsetpost.org/${language}/stories/${story.slug}`;
+  const articleStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: title,
+    description: metaDescription,
+    inLanguage: language,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": canonicalUrl,
+    },
+    datePublished: story.created_at || undefined,
+    dateModified: story.updated_at || story.created_at || undefined,
+    image: story.image_url ? [story.image_url] : undefined,
+    author: (story.authors || []).map((author) => ({
+      "@type": "Person",
+      name: author.name,
+      url: author.slug
+        ? `https://www.sunsetpost.org/${language}/authors/${author.slug}`
+        : undefined,
+    })),
+    articleSection: (story.sections || []).map((section) => section.name),
+    publisher: {
+      "@type": "NewsMediaOrganization",
+      "@id": "https://www.sunsetpost.org/#organization",
+      name: "The Sunset Post",
+      url: "https://www.sunsetpost.org",
+    },
+  };
+
   return (
     <div className="story-detail" ref={storyDetailRef}>
+      <SeoHead
+        language={language}
+        path={`/stories/${story.slug}`}
+        title={title}
+        description={metaDescription}
+        image={story.image_url}
+        type="article"
+        publishedTime={story.created_at}
+      />
       <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={metaDescription} />
-        {story.created_at && (
-          <meta property="article:published_time" content={story.created_at} />
-        )}
-        <link
-          rel="canonical"
-          href={`https://www.sunsetpost.org/stories/${story.slug}`}
-        />
+        <script type="application/ld+json">
+          {JSON.stringify(articleStructuredData)}
+        </script>
       </Helmet>
 
       {editMode ? (
@@ -388,7 +422,7 @@ const StoryDetail = () => {
 
       <div className="story-detail__authors">
         <h3>{t("Written by")}</h3>
-        {story.authors.length > 0 ? (
+        {(story.authors || []).length > 0 ? (
           story.authors.map((author) => {
             const authorTranslation = author.translations?.find(
               (trans) => trans.language === language
