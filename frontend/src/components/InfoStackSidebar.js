@@ -19,6 +19,10 @@ import ymcaEn from "../assets/outreach/YMCA-Localreach-En.jpg";
 import ymcaEs from "../assets/outreach/YMCA-Localreach-Es.jpg";
 import ymcaZh from "../assets/outreach/YMCA-Localreach-Zh.jpg";
 
+import birthdayEn from "../assets/outreach/Birthday-Localreach-En.webp";
+import birthdayEs from "../assets/outreach/Birthday-Localreach-Es.webp";
+import birthdayZh from "../assets/outreach/Birthday-Localreach-Zh.webp";
+
 import localReachEN from "../assets/outreach/localreach-en.svg";
 import localReachES from "../assets/outreach/localreach-es.svg";
 import localReachZH from "../assets/outreach/localreach-zh.svg";
@@ -35,10 +39,35 @@ const BEYOND_CARE_URL = "https://beyondcare.coop/";
 
 const YMCA_URL = "https://ymcanyc.org/events/open-house-schedules";
 
+const BIRTHDAY_URL = "https://givebutter.com/sunsetpost";
+
 const placements = [
   {
     id: "newsletter",
     type: "component",
+  },
+  {
+    id: "birthday",
+    byLang: {
+      en: {
+        image: birthdayEn,
+        alt: "The Sunset Post first birthday party",
+        href: BIRTHDAY_URL,
+        external: true,
+      },
+      es: {
+        image: birthdayEs,
+        alt: "Fiesta del primer aniversario de the Sunset Post",
+        href: BIRTHDAY_URL,
+        external: true,
+      },
+      zh: {
+        image: birthdayZh,
+        alt: "the Sunset Post 一周年庆祝活动",
+        href: BIRTHDAY_URL,
+        external: true,
+      },
+    },
   },
   {
     id: "subscription",
