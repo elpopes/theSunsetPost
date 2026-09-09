@@ -19,9 +19,9 @@ import ymcaEn from "../assets/outreach/YMCA-Localreach-En.jpg";
 import ymcaEs from "../assets/outreach/YMCA-Localreach-Es.jpg";
 import ymcaZh from "../assets/outreach/YMCA-Localreach-Zh.jpg";
 
-import birthdayEn from "../assets/outreach/Birthday-Localreach-En.webp";
-import birthdayEs from "../assets/outreach/Birthday-Localreach-Es.webp";
-import birthdayZh from "../assets/outreach/Birthday-Localreach-Zh.webp";
+import birthdayEn from "../assets/outreach/Birthday-Localreach-En.png";
+import birthdayEs from "../assets/outreach/Birthday-Localreach-Es.png";
+import birthdayZh from "../assets/outreach/Birthday-Localreach-Zh.png";
 
 import localReachEN from "../assets/outreach/localreach-en.svg";
 import localReachES from "../assets/outreach/localreach-es.svg";
