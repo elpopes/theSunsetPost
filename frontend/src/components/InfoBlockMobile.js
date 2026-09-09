@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import NewsletterSignup from "./NewsletterSignup";
@@ -35,81 +35,33 @@ const sponsorsSmartreach = [
   {
     id: "subscription",
     byLang: {
-      en: {
-        image: subscriptionSmartEn,
-        alt: "Subscribe to the Sunset Post",
-        link: SUBSCRIPTION_LINK,
-      },
-      es: {
-        image: subscriptionSmartEs,
-        alt: "Suscríbete al Sunset Post",
-        link: SUBSCRIPTION_LINK,
-      },
-      zh: {
-        image: subscriptionSmartZh,
-        alt: "订阅the Sunset Post",
-        link: SUBSCRIPTION_LINK,
-      },
+      en: { image: subscriptionSmartEn, alt: "Subscribe to the Sunset Post", link: SUBSCRIPTION_LINK },
+      es: { image: subscriptionSmartEs, alt: "Suscríbete al Sunset Post", link: SUBSCRIPTION_LINK },
+      zh: { image: subscriptionSmartZh, alt: "订阅the Sunset Post", link: SUBSCRIPTION_LINK },
     },
   },
   {
     id: "venmo",
     byLang: {
-      en: {
-        image: venmoSmartEn,
-        alt: "Support local journalism",
-        link: VENMO_LINK,
-      },
-      es: {
-        image: venmoSmartEs,
-        alt: "¡Apoya el periodismo local!",
-        link: VENMO_LINK,
-      },
-      zh: {
-        image: venmoSmartZh,
-        alt: "支持本地新闻！",
-        link: VENMO_LINK,
-      },
+      en: { image: venmoSmartEn, alt: "Support local journalism", link: VENMO_LINK },
+      es: { image: venmoSmartEs, alt: "¡Apoya el periodismo local!", link: VENMO_LINK },
+      zh: { image: venmoSmartZh, alt: "支持本地新闻！", link: VENMO_LINK },
     },
   },
   {
     id: "beyondcare",
     byLang: {
-      en: {
-        image: beyondCareSmartEn,
-        alt: "Beyond Care Childcare Cooperative",
-        link: BEYOND_CARE_LINK,
-      },
-      es: {
-        image: beyondCareSmartEs,
-        alt: "Beyond Care Childcare Cooperative",
-        link: BEYOND_CARE_LINK,
-      },
-      zh: {
-        image: beyondCareSmartZh,
-        alt: "Beyond Care Childcare Cooperative",
-        link: BEYOND_CARE_LINK,
-      },
+      en: { image: beyondCareSmartEn, alt: "Beyond Care Childcare Cooperative", link: BEYOND_CARE_LINK },
+      es: { image: beyondCareSmartEs, alt: "Beyond Care Childcare Cooperative", link: BEYOND_CARE_LINK },
+      zh: { image: beyondCareSmartZh, alt: "Beyond Care Childcare Cooperative", link: BEYOND_CARE_LINK },
     },
   },
   {
     id: "ymca",
     byLang: {
-      en: {
-        image: ymcaSmartEn,
-        alt: "YMCA free open house",
-        link: YMCA_LINK,
-      },
-      es: {
-        image: ymcaSmartEs,
-        alt: "Jornada gratuita de puertas abiertas de la YMCA",
-        link: YMCA_LINK,
-      },
-      zh: {
-        image: ymcaSmartZh,
-        alt: "YMCA免费开放日",
-        link: YMCA_LINK,
-      },
+      en: { image: ymcaSmartEn, alt: "YMCA free open house", link: YMCA_LINK },
+      es: { image: ymcaSmartEs, alt: "Jornada gratuita de puertas abiertas de la YMCA", link: YMCA_LINK },
+      zh: { image: ymcaSmartZh, alt: "YMCA免费开放日", link: YMCA_LINK },
     },
   },
   {
@@ -146,7 +98,9 @@ const TrackedMobileBanner = ({ banner, pickId, lang, path }) => {
           src={banner.image}
           alt={banner.alt}
           className="reach-image"
-          loading="lazy"
+          width="640"
+          height="200"
+          loading="eager"
           decoding="async"
         />
       </a>
@@ -157,7 +111,6 @@ const TrackedMobileBanner = ({ banner, pickId, lang, path }) => {
 const InfoBlockMobile = ({ lang }) => {
   const { t } = useTranslation();
   const location = useLocation();
-  const lastShownIdRef = useRef(null);
 
   const path = location.pathname + location.search;
 
@@ -165,29 +118,13 @@ const InfoBlockMobile = ({ lang }) => {
     return location.pathname.replace(/^\/(en|es|zh)(?=\/|$)/, "") || "/";
   }, [location.pathname]);
 
-  const [pick, setPick] = useState(() => sponsorsSmartreach[0] || null);
-
-  useEffect(() => {
-    const arr = sponsorsSmartreach;
-
-    if (arr.length === 0) {
-      setPick(null);
-      lastShownIdRef.current = null;
-      return;
-    }
-
-    if (arr.length === 1) {
-      setPick(arr[0]);
-      lastShownIdRef.current = arr[0].id;
-      return;
-    }
-
-    const lastId = lastShownIdRef.current;
-    const candidates = lastId ? arr.filter((s) => s.id !== lastId) : arr;
-    const chosen = candidates[Math.floor(Math.random() * candidates.length)];
-
-    setPick(chosen);
-    lastShownIdRef.current = chosen.id;
+  // Choose once for each route during render. This avoids painting a default
+  // placement and replacing it immediately after mount.
+  const pick = useMemo(() => {
+    if (sponsorsSmartreach.length === 0) return null;
+    return sponsorsSmartreach[
+      Math.floor(Math.random() * sponsorsSmartreach.length)
+    ];
   }, [stablePath]);
 
   if (!pick) return null;

@@ -8,9 +8,14 @@ import "./MainLayout.css";
 
 const INFO_MOBILE_MEDIA_QUERY = "(max-width: 1100px)";
 
+const getInitialMobileState = () => {
+  if (typeof window === "undefined" || !window.matchMedia) return false;
+  return window.matchMedia(INFO_MOBILE_MEDIA_QUERY).matches;
+};
+
 const MainLayout = ({ children }) => {
   const { i18n } = useTranslation();
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(getInitialMobileState);
   const lang = i18n.language;
 
   useEffect(() => {
@@ -19,8 +24,6 @@ const MainLayout = ({ children }) => {
     const handleChange = (event) => {
       setIsMobile(event.matches);
     };
-
-    setIsMobile(mediaQuery.matches);
 
     if (mediaQuery.addEventListener) {
       mediaQuery.addEventListener("change", handleChange);
@@ -37,7 +40,6 @@ const MainLayout = ({ children }) => {
 
       {isMobile && <InfoBlockMobile lang={lang} />}
 
-      {/* Main content layout */}
       <div className="main-layout__container">
         <div className="main-layout__content">{children}</div>
 
