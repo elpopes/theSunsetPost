@@ -8,6 +8,12 @@ class AdCampaign < ApplicationRecord
       campaign_type: "paid",
       destination_url: "https://beyondcare.coop/"
     },
+    "ymca" => {
+      name: "YMCA",
+      advertiser: "YMCA of Greater New York",
+      campaign_type: "paid",
+      destination_url: "https://ymcanyc.org/events/open-house-schedules"
+    },
     "subscription" => {
       name: "Sunset Post subscription",
       advertiser: "The Sunset Post",
