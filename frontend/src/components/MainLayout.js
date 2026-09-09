@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import Header from "./Header";
 import InfoBlockMobile from "./InfoBlockMobile";
 import InfoStackSidebar from "./InfoStackSidebar";
+import GlobalSeo from "./GlobalSeo";
 
 import "./MainLayout.css";
 
@@ -45,6 +46,8 @@ const MainLayout = ({ children }) => {
 
         {!isMobile && <InfoStackSidebar lang={lang} />}
       </div>
+
+      <GlobalSeo />
     </div>
   );
 };

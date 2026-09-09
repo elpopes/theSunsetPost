@@ -5,12 +5,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { fetchSectionByName } from "../features/sections/sectionsSlice";
 import ReactMarkdown from "react-markdown";
+import SeoHead, { normalizeSeoLanguage } from "./SeoHead";
 import "./SectionDetail.css";
 
 const SectionDetail = () => {
   const { name } = useParams();
   const { t, i18n } = useTranslation();
-  const language = i18n.language;
+  const language = normalizeSeoLanguage(i18n.resolvedLanguage || i18n.language);
   const dispatch = useDispatch();
 
   const section = useSelector((state) => state.sections.currentSection);
@@ -26,7 +27,7 @@ const SectionDetail = () => {
   }, [name, isClassifiedsRoute, dispatch]);
 
   if (isClassifiedsRoute) {
-    return <Navigate to={`/${i18n.language}/classifieds`} replace />;
+    return <Navigate to={`/${language}/classifieds`} replace />;
   }
 
   if (status === "loading") {
@@ -62,13 +63,20 @@ const SectionDetail = () => {
 
   return (
     <div className="section-detail">
+      <SeoHead
+        language={language}
+        path={`/sections/${name}`}
+        title={`${currentTranslation.name} | The Sunset Post`}
+        description={currentTranslation.description || "The Sunset Post"}
+      />
+
       <h2>{currentTranslation.name}</h2>
       <p>{currentTranslation.description}</p>
 
       <ul className="section-stories">
         {translatedStories.length > 0 ? (
           translatedStories.map((story) => {
-            const isCJK = ["zh", "zh-CN", "zh-TW"].includes(language);
+            const isCJK = language === "zh";
             const snippet = isCJK
               ? (story.content || "").slice(0, 60) + "..."
               : (story.content || "").split(" ").slice(0, 25).join(" ") + "...";
@@ -76,7 +84,7 @@ const SectionDetail = () => {
             return (
               <li key={story.id} className="section-story-item">
                 <Link
-                  to={`/${i18n.language}/stories/${story.slug || story.id}`}
+                  to={`/${language}/stories/${story.slug || story.id}`}
                   className="section-story-link"
                 >
                   {story.image_url && (
@@ -108,7 +116,7 @@ const SectionDetail = () => {
         ) : (
           <p>
             {t("no_stories.development")}{" "}
-            <Link to={`/${i18n.language}/contact`}>
+            <Link to={`/${language}/contact`}>
               {t("no_stories.contact_link")}
             </Link>
           </p>

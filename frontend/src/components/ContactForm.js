@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import "./ContactForm.css";
 import { baseURL } from "../config";
-import { Helmet } from "react-helmet";
 
 const ContactForm = () => {
   const { t } = useTranslation();
@@ -45,58 +44,47 @@ const ContactForm = () => {
   };
 
   return (
-    <>
-      <Helmet>
-        <title>Contact – The Sunset Post</title>
-        <meta
-          name="description"
-          content="Reach out to The Sunset Post with story tips, community questions, or feedback. We welcome messages in English, Spanish, and Chinese."
+    <div className="contact-form-container">
+      <h2>{t("contact_page.title")}</h2>
+      <p className="welcome-text">{t("contact_page.welcome_text")}</p>
+      <p className="recruitment-text">{t("contact_page.recruitment_text")}</p>
+      <form onSubmit={handleSubmit} className="contact-form">
+        <label htmlFor="name">{t("contact_page.name_label")}</label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          placeholder={t("contact_page.name_placeholder")}
+          value={formData.name}
+          onChange={handleChange}
+          required
         />
-        <link rel="canonical" href="https://www.sunsetpost.org/contact/" />
-      </Helmet>
 
-      <div className="contact-form-container">
-        <h2>{t("contact_page.title")}</h2>
-        <p className="welcome-text">{t("contact_page.welcome_text")}</p>
-        <p className="recruitment-text">{t("contact_page.recruitment_text")}</p>
-        <form onSubmit={handleSubmit} className="contact-form">
-          <label htmlFor="name">{t("contact_page.name_label")}</label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            placeholder={t("contact_page.name_placeholder")}
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
+        <label htmlFor="email">{t("contact_page.email_label")}</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          placeholder={t("contact_page.email_placeholder")}
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
 
-          <label htmlFor="email">{t("contact_page.email_label")}</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder={t("contact_page.email_placeholder")}
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
+        <label htmlFor="message">{t("contact_page.message_label")}</label>
+        <textarea
+          name="message"
+          id="message"
+          placeholder={t("contact_page.message_placeholder")}
+          value={formData.message}
+          onChange={handleChange}
+          required
+        ></textarea>
 
-          <label htmlFor="message">{t("contact_page.message_label")}</label>
-          <textarea
-            name="message"
-            id="message"
-            placeholder={t("contact_page.message_placeholder")}
-            value={formData.message}
-            onChange={handleChange}
-            required
-          ></textarea>
-
-          <button type="submit">{t("contact_page.send_button")}</button>
-          <p className="status-message">{status}</p>
-        </form>
-      </div>
-    </>
+        <button type="submit">{t("contact_page.send_button")}</button>
+        <p className="status-message">{status}</p>
+      </form>
+    </div>
   );
 };
 
