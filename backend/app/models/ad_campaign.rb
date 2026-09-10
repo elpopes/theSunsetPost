@@ -14,6 +14,12 @@ class AdCampaign < ApplicationRecord
       campaign_type: "paid",
       destination_url: "https://ymcanyc.org/events/open-house-schedules"
     },
+    "youngdancers" => {
+      name: "Young Dancers in Repertory",
+      advertiser: "Young Dancers in Repertory",
+      campaign_type: "paid",
+      destination_url: "https://youngdancersinrep.org/center-for-dance-studies-2/"
+    },
     "birthday" => {
       name: "Sunset Post 1st Birthday",
       advertiser: "The Sunset Post",
