@@ -43,25 +43,13 @@ jobs:
       - name: Verify native dimensions
         shell: bash
         run: |
-          python - <<'PY'
-          from PIL import Image
-          from pathlib import Path
-
-          expected = {
-              "YoungDancers-Localreach-En.png": (300, 600),
-              "YoungDancers-Localreach-Es.png": (300, 600),
-              "YoungDancers-Localreach-Zh.png": (300, 600),
-              "YoungDancers-Smartreach-En.png": (640, 200),
-              "YoungDancers-Smartreach-Es.png": (640, 200),
-              "YoungDancers-Smartreach-Zh.png": (640, 200),
-          }
-          root = Path("frontend/src/assets/outreach")
-          for name, dims in expected.items():
-              actual = Image.open(root / name).size
-              if actual != dims:
-                  raise SystemExit(f"{name}: expected {dims}, got {actual}")
-              print(f"{name}: {actual}")
-          PY
+          set -euo pipefail
+          for f in frontend/src/assets/outreach/YoungDancers-Localreach-*.png; do
+            file "$f" | grep -q "PNG image data, 300 x 600"
+          done
+          for f in frontend/src/assets/outreach/YoungDancers-Smartreach-*.png; do
+            file "$f" | grep -q "PNG image data, 640 x 200"
+          done
 
       - name: Commit original assets
         shell: bash
