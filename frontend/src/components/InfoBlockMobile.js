@@ -23,6 +23,10 @@ import birthdaySmartEn from "../assets/outreach/Birthday-Smartreach-En.png";
 import birthdaySmartEs from "../assets/outreach/Birthday-Smartreach-Es.png";
 import birthdaySmartZh from "../assets/outreach/Birthday-Smartreach-Zh.png";
 
+import youngDancersSmartEn from "../assets/outreach/YoungDancers-Smartreach-En.png";
+import youngDancersSmartEs from "../assets/outreach/YoungDancers-Smartreach-Es.png";
+import youngDancersSmartZh from "../assets/outreach/YoungDancers-Smartreach-Zh.png";
+
 import useInfoView from "../utils/useInfoView";
 import { logInfoClick } from "../utils/infoEvents";
 
@@ -37,6 +41,8 @@ const YMCA_LINK = "https://ymcanyc.org/events/open-house-schedules";
 
 const BIRTHDAY_LINK = "https://givebutter.com/sunsetpost";
 
+const YOUNG_DANCERS_LINK = "https://youngdancersinrep.org/center-for-dance-studies-2/";
+
 const sponsorsSmartreach = [
   {
     id: "birthday",
@@ -44,6 +50,14 @@ const sponsorsSmartreach = [
       en: { image: birthdaySmartEn, alt: "The Sunset Post first birthday party", link: BIRTHDAY_LINK },
       es: { image: birthdaySmartEs, alt: "Fiesta del primer aniversario de the Sunset Post", link: BIRTHDAY_LINK },
       zh: { image: birthdaySmartZh, alt: "the Sunset Post 一周年庆祝活动", link: BIRTHDAY_LINK },
+    },
+  },
+  {
+    id: "youngdancers",
+    byLang: {
+      en: { image: youngDancersSmartEn, alt: "Young Dancers in Repertory kids dance classes", link: YOUNG_DANCERS_LINK },
+      es: { image: youngDancersSmartEs, alt: "Clases de danza para niños de Young Dancers in Repertory", link: YOUNG_DANCERS_LINK },
+      zh: { image: youngDancersSmartZh, alt: "Young Dancers in Repertory 儿童舞蹈课程", link: YOUNG_DANCERS_LINK },
     },
   },
   {

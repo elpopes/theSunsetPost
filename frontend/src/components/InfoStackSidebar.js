@@ -23,6 +23,10 @@ import birthdayEn from "../assets/outreach/Birthday-Localreach-En.png";
 import birthdayEs from "../assets/outreach/Birthday-Localreach-Es.png";
 import birthdayZh from "../assets/outreach/Birthday-Localreach-Zh.png";
 
+import youngDancersEn from "../assets/outreach/YoungDancers-Localreach-En.png";
+import youngDancersEs from "../assets/outreach/YoungDancers-Localreach-Es.png";
+import youngDancersZh from "../assets/outreach/YoungDancers-Localreach-Zh.png";
+
 import localReachEN from "../assets/outreach/localreach-en.svg";
 import localReachES from "../assets/outreach/localreach-es.svg";
 import localReachZH from "../assets/outreach/localreach-zh.svg";
@@ -40,6 +44,8 @@ const BEYOND_CARE_URL = "https://beyondcare.coop/";
 const YMCA_URL = "https://ymcanyc.org/events/open-house-schedules";
 
 const BIRTHDAY_URL = "https://givebutter.com/sunsetpost";
+
+const YOUNG_DANCERS_URL = "https://youngdancersinrep.org/center-for-dance-studies-2/";
 
 const placements = [
   {
@@ -65,6 +71,29 @@ const placements = [
         image: birthdayZh,
         alt: "the Sunset Post 一周年庆祝活动",
         href: BIRTHDAY_URL,
+        external: true,
+      },
+    },
+  },
+  {
+    id: "youngdancers",
+    byLang: {
+      en: {
+        image: youngDancersEn,
+        alt: "Young Dancers in Repertory kids dance classes",
+        href: YOUNG_DANCERS_URL,
+        external: true,
+      },
+      es: {
+        image: youngDancersEs,
+        alt: "Clases de danza para niños de Young Dancers in Repertory",
+        href: YOUNG_DANCERS_URL,
+        external: true,
+      },
+      zh: {
+        image: youngDancersZh,
+        alt: "Young Dancers in Repertory 儿童舞蹈课程",
+        href: YOUNG_DANCERS_URL,
         external: true,
       },
     },

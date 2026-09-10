@@ -18,6 +18,16 @@ class AdCampaignTest < ActiveSupport::TestCase
     assert_equal "ymca", campaign.key
   end
 
+  test "resolves Young Dancers tracking key" do
+    campaign = AdCampaign.resolve_default("youngdancers")
+
+    assert_equal "Young Dancers in Repertory", campaign.name
+    assert_equal "Young Dancers in Repertory", campaign.advertiser
+    assert_equal "paid", campaign.campaign_type
+    assert_equal "youngdancers", campaign.key
+    assert_equal "https://youngdancersinrep.org/center-for-dance-studies-2/", campaign.destination_url
+  end
+
   test "resolves birthday tracking key" do
     campaign = AdCampaign.resolve_default("birthday")
 
