@@ -1,0 +1,77 @@
+name: Stage Young Dancers assets
+
+on:
+  push:
+    branches:
+      - add/young-dancers-outreach
+    paths:
+      - .github/workflows/stage-young-dancers-assets.yml
+
+permissions:
+  contents: write
+
+jobs:
+  stage-assets:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: add/young-dancers-outreach
+
+      - name: Download original PNG artwork
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p frontend/src/assets/outreach
+          download() {
+            local id="$1"
+            local dest="$2"
+            curl -fL --retry 3 --retry-delay 2 \
+              "https://drive.usercontent.google.com/download?id=${id}&export=download&confirm=t" \
+              -o "$dest"
+            file "$dest"
+          }
+
+          download "1GPrkdp8YHd4Sjl6GU5b_7yOK5oIBl2IK" "frontend/src/assets/outreach/YoungDancers-Localreach-En.png"
+          download "1dMC5x2EIdFWiimpcDaMSAZntyIRPmYzd" "frontend/src/assets/outreach/YoungDancers-Localreach-Es.png"
+          download "1JOGjNTtgpMef0IDutgoT1P56Fqf81wAm" "frontend/src/assets/outreach/YoungDancers-Localreach-Zh.png"
+          download "1fEF3dhv8EVHk0TnQCHMUytakycICSvG2" "frontend/src/assets/outreach/YoungDancers-Smartreach-En.png"
+          download "1Ki2gG3J0-qQwVU0y614TIbdC2Q6HLffS" "frontend/src/assets/outreach/YoungDancers-Smartreach-Es.png"
+          download "16dIi5mKxccAMeoSuZ7NpQP4L0DszWG4O" "frontend/src/assets/outreach/YoungDancers-Smartreach-Zh.png"
+
+      - name: Verify native dimensions
+        shell: bash
+        run: |
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+
+          expected = {
+              "YoungDancers-Localreach-En.png": (300, 600),
+              "YoungDancers-Localreach-Es.png": (300, 600),
+              "YoungDancers-Localreach-Zh.png": (300, 600),
+              "YoungDancers-Smartreach-En.png": (640, 200),
+              "YoungDancers-Smartreach-Es.png": (640, 200),
+              "YoungDancers-Smartreach-Zh.png": (640, 200),
+          }
+          root = Path("frontend/src/assets/outreach")
+          for name, dims in expected.items():
+              actual = Image.open(root / name).size
+              if actual != dims:
+                  raise SystemExit(f"{name}: expected {dims}, got {actual}")
+              print(f"{name}: {actual}")
+          PY
+
+      - name: Commit original assets
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add frontend/src/assets/outreach/YoungDancers-*.png
+          if git diff --cached --quiet; then
+            echo "No asset changes to commit."
+            exit 0
+          fi
+          git commit -m "Add original Young Dancers outreach PNGs"
+          git push origin HEAD:add/young-dancers-outreach
