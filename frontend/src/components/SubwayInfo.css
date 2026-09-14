@@ -12,6 +12,7 @@
   position: relative;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 .subway-info:focus-visible {
