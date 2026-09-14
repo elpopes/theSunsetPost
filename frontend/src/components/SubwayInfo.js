@@ -17,6 +17,34 @@ const DIRECTIONS = {
 
 const DOUBLE_TAP_DELAY = 300;
 
+const DIRECTION_COPY = {
+  en: {
+    southboundAt: "{{station}} · Southbound",
+    northboundLabel:
+      "Manhattan-bound subway arrivals at {{station}}. Single tap or press Enter to show the next Sunset Park station. Double tap, or use the left/right arrow keys, to switch direction.",
+    southboundLabel:
+      "Southbound subway arrivals at {{station}}. Single tap or press Enter to show the next Sunset Park station. Double tap, or use the left/right arrow keys, to switch direction.",
+    interactionHint: "Single tap: next station. Double tap: switch direction.",
+  },
+  es: {
+    southboundAt: "{{station}} · hacia el sur",
+    northboundLabel:
+      "Llegadas del metro hacia Manhattan en {{station}}. Toca una vez o presiona Enter para mostrar la próxima estación de Sunset Park. Toca dos veces, o usa las flechas izquierda/derecha, para cambiar de dirección.",
+    southboundLabel:
+      "Llegadas del metro hacia el sur en {{station}}. Toca una vez o presiona Enter para mostrar la próxima estación de Sunset Park. Toca dos veces, o usa las flechas izquierda/derecha, para cambiar de dirección.",
+    interactionHint:
+      "Un toque: próxima estación. Dos toques: cambiar de dirección.",
+  },
+  zh: {
+    southboundAt: "{{station}} · 南行",
+    northboundLabel:
+      "{{station}}开往曼哈顿方向的地铁到站信息。单击或按回车键查看日落公园下一站。双击，或使用左右方向键，切换行驶方向。",
+    southboundLabel:
+      "{{station}}南行地铁到站信息。单击或按回车键查看日落公园下一站。双击，或使用左右方向键，切换行驶方向。",
+    interactionHint: "单击：下一站。双击：切换方向。",
+  },
+};
+
 const STATIONS = [
   {
     key: "36-st",
@@ -41,7 +69,7 @@ const STATIONS = [
 ];
 
 const SubwayInfo = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [arrivalsByStation, setArrivalsByStation] = useState({});
   const [stationIndex, setStationIndex] = useState(() =>
@@ -203,14 +231,25 @@ const SubwayInfo = () => {
     }
   };
 
+  const language = String(i18n.resolvedLanguage || i18n.language || "en")
+    .toLowerCase()
+    .startsWith("es")
+    ? "es"
+    : String(i18n.resolvedLanguage || i18n.language || "en")
+        .toLowerCase()
+        .startsWith("zh")
+      ? "zh"
+      : "en";
+  const copy = DIRECTION_COPY[language];
   const stationName = t(`subway.stations.${selectedStation.key}`);
   const isNorthbound = direction === "northbound";
   const heading = isNorthbound
     ? t("subway.manhattanBoundAt", { station: stationName })
-    : t("subway.southboundAt", { station: stationName });
-  const cycleLabel = isNorthbound
-    ? t("subway.cycleLabel", { station: stationName })
-    : t("subway.southboundCycleLabel", { station: stationName });
+    : copy.southboundAt.replace("{{station}}", stationName);
+  const cycleLabel = (isNorthbound
+    ? copy.northboundLabel
+    : copy.southboundLabel
+  ).replace("{{station}}", stationName);
 
   return (
     <div
@@ -219,7 +258,7 @@ const SubwayInfo = () => {
       aria-label={cycleLabel}
       role="button"
       tabIndex={0}
-      title={t("subway.interactionHint")}
+      title={copy.interactionHint}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
     >
