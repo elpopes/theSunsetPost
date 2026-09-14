@@ -10,25 +10,32 @@ const FEEDS = {
     "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-bdfm",
 };
 
+const DIRECTIONS = {
+  northbound: "N",
+  southbound: "S",
+};
+
+const DOUBLE_TAP_DELAY = 300;
+
 const STATIONS = [
   {
     key: "36-st",
-    stationId: "R36N",
+    stopId: "R36",
     feedKeys: ["nqrw", "bdfm"],
   },
   {
     key: "9-av",
-    stationId: "B12N",
+    stopId: "B12",
     feedKeys: ["bdfm"],
   },
   {
     key: "8-av",
-    stationId: "N02N",
+    stopId: "N02",
     feedKeys: ["nqrw"],
   },
   {
     key: "59-st",
-    stationId: "R41N",
+    stopId: "R41",
     feedKeys: ["nqrw"],
   },
 ];
@@ -40,13 +47,15 @@ const SubwayInfo = () => {
   const [stationIndex, setStationIndex] = useState(() =>
     Math.floor(Math.random() * STATIONS.length)
   );
+  const [direction, setDirection] = useState("northbound");
   const [initialLoading, setInitialLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
 
   const feedMessageRef = useRef(null);
+  const tapTimerRef = useRef(null);
   const selectedStation = STATIONS[stationIndex];
-  const arrivals = arrivalsByStation[selectedStation.key] || [];
+  const arrivals = arrivalsByStation[selectedStation.key]?.[direction] || [];
 
   useEffect(() => {
     let cancelled = false;
@@ -81,38 +90,43 @@ const SubwayInfo = () => {
 
         const nextArrivalsByStation = {};
 
-        STATIONS.forEach(({ key, stationId, feedKeys }) => {
-          let stationArrivals = [];
+        STATIONS.forEach(({ key, stopId, feedKeys }) => {
+          nextArrivalsByStation[key] = {};
 
-          feedKeys.forEach((feedKey) => {
-            const feed = decodedFeeds[feedKey];
-            if (!feed) return;
+          Object.entries(DIRECTIONS).forEach(([directionKey, suffix]) => {
+            const stationId = `${stopId}${suffix}`;
+            let stationArrivals = [];
 
-            const feedArrivals = feed.entity.flatMap((entity) => {
-              if (!entity.tripUpdate) return [];
+            feedKeys.forEach((feedKey) => {
+              const feed = decodedFeeds[feedKey];
+              if (!feed) return;
 
-              return entity.tripUpdate.stopTimeUpdate
-                .filter((stopTime) => stopTime.stopId === stationId)
-                .map((stopTime) => {
-                  const timestamp =
-                    stopTime.arrival?.time || stopTime.departure?.time;
+              const feedArrivals = feed.entity.flatMap((entity) => {
+                if (!entity.tripUpdate) return [];
 
-                  return {
-                    route: entity.tripUpdate.trip.routeId,
-                    arrival_time: timestamp
-                      ? new Date(timestamp * 1000)
-                      : null,
-                  };
-                });
+                return entity.tripUpdate.stopTimeUpdate
+                  .filter((stopTime) => stopTime.stopId === stationId)
+                  .map((stopTime) => {
+                    const timestamp =
+                      stopTime.arrival?.time || stopTime.departure?.time;
+
+                    return {
+                      route: entity.tripUpdate.trip.routeId,
+                      arrival_time: timestamp
+                        ? new Date(timestamp * 1000)
+                        : null,
+                    };
+                  });
+              });
+
+              stationArrivals = stationArrivals.concat(feedArrivals);
             });
 
-            stationArrivals = stationArrivals.concat(feedArrivals);
+            nextArrivalsByStation[key][directionKey] = stationArrivals
+              .filter((arrival) => arrival.arrival_time)
+              .sort((a, b) => a.arrival_time - b.arrival_time)
+              .slice(0, 3);
           });
-
-          nextArrivalsByStation[key] = stationArrivals
-            .filter((arrival) => arrival.arrival_time)
-            .sort((a, b) => a.arrival_time - b.arrival_time)
-            .slice(0, 3);
         });
 
         if (!cancelled) setArrivalsByStation(nextArrivalsByStation);
@@ -138,6 +152,13 @@ const SubwayInfo = () => {
     };
   }, [t]);
 
+  useEffect(
+    () => () => {
+      if (tapTimerRef.current) clearTimeout(tapTimerRef.current);
+    },
+    []
+  );
+
   const calculateMinutes = (arrivalTime) => {
     const now = new Date();
     const diffMs = arrivalTime - now;
@@ -149,25 +170,57 @@ const SubwayInfo = () => {
     setStationIndex((currentIndex) => (currentIndex + 1) % STATIONS.length);
   };
 
+  const switchDirection = () => {
+    setDirection((currentDirection) =>
+      currentDirection === "northbound" ? "southbound" : "northbound"
+    );
+  };
+
+  const handleClick = () => {
+    if (tapTimerRef.current) {
+      clearTimeout(tapTimerRef.current);
+      tapTimerRef.current = null;
+      switchDirection();
+      return;
+    }
+
+    tapTimerRef.current = setTimeout(() => {
+      cycleStation();
+      tapTimerRef.current = null;
+    }, DOUBLE_TAP_DELAY);
+  };
+
   const handleKeyDown = (event) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       cycleStation();
+      return;
+    }
+
+    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+      event.preventDefault();
+      switchDirection();
     }
   };
 
   const stationName = t(`subway.stations.${selectedStation.key}`);
-  const heading = t("subway.manhattanBoundAt", { station: stationName });
+  const isNorthbound = direction === "northbound";
+  const heading = isNorthbound
+    ? t("subway.manhattanBoundAt", { station: stationName })
+    : t("subway.southboundAt", { station: stationName });
+  const cycleLabel = isNorthbound
+    ? t("subway.cycleLabel", { station: stationName })
+    : t("subway.southboundCycleLabel", { station: stationName });
 
   return (
     <div
       className="subway-info"
       aria-busy={initialLoading || refreshing}
-      aria-label={t("subway.cycleLabel", { station: stationName })}
+      aria-label={cycleLabel}
       role="button"
       tabIndex={0}
-      title={t("subway.nextStation")}
-      onClick={cycleStation}
+      title={t("subway.interactionHint")}
+      onClick={handleClick}
       onKeyDown={handleKeyDown}
     >
       <h3 className="subway-info__header">
