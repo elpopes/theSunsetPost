@@ -56,12 +56,14 @@ const ORGANIZATION_SCHEMA = {
   knowsLanguage: ["en", "es", "zh"],
 };
 
-const withoutLanguagePrefix = (pathname) =>
-  pathname.replace(/^\/(en|es|zh)(?=\/|$)/, "") || "/";
+const withoutLanguagePrefix = (pathname) => {
+  const stripped = pathname.replace(/^\/(en|es|zh)(?=\/|$)/, "") || "/";
+  return stripped === "/" ? "/" : stripped.replace(/\/+$/, "");
+};
 
 const localizedUrl = (language, path) => {
-  const suffix = path === "/" ? "" : path.replace(/\/$/, "");
-  return `${SITE_URL}/${language}${suffix}`;
+  const suffix = path === "/" ? "" : path.replace(/\/+$/, "");
+  return `${SITE_URL}/${language}${suffix}/`;
 };
 
 const GlobalSeo = () => {
