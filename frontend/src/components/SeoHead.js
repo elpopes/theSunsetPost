@@ -13,11 +13,11 @@ export const normalizeSeoLanguage = (language = "en") => {
 
 const cleanPath = (path = "") => {
   const value = path.startsWith("/") ? path : `/${path}`;
-  return value === "/" ? "" : value.replace(/\/$/, "");
+  return value === "/" ? "" : value.replace(/\/+$/, "");
 };
 
 const localizedUrl = (language, path) =>
-  `${SITE_URL}/${language}${cleanPath(path)}`;
+  `${SITE_URL}/${language}${cleanPath(path)}/`;
 
 const SeoHead = ({
   language = "en",

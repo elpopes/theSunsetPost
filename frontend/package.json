@@ -33,7 +33,7 @@
   },
   "scripts": {
     "start": "PORT=5000 react-scripts start",
-    "build": "react-scripts build && node scripts/prerender-seo.js",
+    "build": "react-scripts build && node scripts/prerender-seo.js && node scripts/finalize-seo.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
