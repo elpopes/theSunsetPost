@@ -50,7 +50,8 @@ class SitemapsController < ApplicationController
   private
 
   def add_url(urls, path, updated_at = nil)
-    loc = ERB::Util.html_escape("#{SITE_URL}#{path}")
+    normalized_path = path.end_with?("/") ? path : "#{path}/"
+    loc = ERB::Util.html_escape("#{SITE_URL}#{normalized_path}")
     lines = ["  <url>", "    <loc>#{loc}</loc>"]
     lines << "    <lastmod>#{updated_at.utc.iso8601}</lastmod>" if updated_at
     lines << "  </url>"
