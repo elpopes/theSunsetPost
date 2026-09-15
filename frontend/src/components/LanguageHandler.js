@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -7,6 +7,7 @@ const LanguageHandler = () => {
   const { i18n } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
+  const initialPathHandled = useRef(false);
 
   useEffect(() => {
     if (!lang) return;
@@ -19,16 +20,31 @@ const LanguageHandler = () => {
   }, [lang, i18n]);
 
   useEffect(() => {
-    if (!lang || location.pathname.endsWith("/")) return;
+    if (!lang) return;
 
-    navigate(
-      {
-        pathname: `${location.pathname}/`,
-        search: location.search,
-        hash: location.hash,
-      },
-      { replace: true }
-    );
+    const needsTrailingSlash = !location.pathname.endsWith("/");
+
+    if (!initialPathHandled.current) {
+      initialPathHandled.current = true;
+
+      if (needsTrailingSlash) {
+        window.location.replace(
+          `${location.pathname}/${location.search}${location.hash}`
+        );
+        return;
+      }
+    }
+
+    if (needsTrailingSlash) {
+      navigate(
+        {
+          pathname: `${location.pathname}/`,
+          search: location.search,
+          hash: location.hash,
+        },
+        { replace: true }
+      );
+    }
   }, [lang, location.pathname, location.search, location.hash, navigate]);
 
   return null;
