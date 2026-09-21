@@ -15,6 +15,10 @@ import venmoEn from "../assets/outreach/Venmo-Localreach-En.png";
 import venmoEs from "../assets/outreach/Venmo-Localreach-Es.png";
 import venmoZh from "../assets/outreach/Venmo-Localreach-Zh.png";
 
+import ymcaEn from "../assets/outreach/YMCA-Localreach-En.jpg";
+import ymcaEs from "../assets/outreach/YMCA-Localreach-Es.jpg";
+import ymcaZh from "../assets/outreach/YMCA-Localreach-Zh.jpg";
+
 import birthdayEn from "../assets/outreach/Birthday-Localreach-En.png";
 import birthdayEs from "../assets/outreach/Birthday-Localreach-Es.png";
 import birthdayZh from "../assets/outreach/Birthday-Localreach-Zh.png";
@@ -37,6 +41,8 @@ const VENMO_URL =
 
 const BEYOND_CARE_URL = "https://beyondcare.coop/";
 
+const YMCA_URL = "https://ymcanyc.org/join";
+
 const BIRTHDAY_URL = "https://givebutter.com/sunsetpost";
 
 const YOUNG_DANCERS_URL = "https://youngdancersinrep.org/center-for-dance-studies-2/";
@@ -45,6 +51,29 @@ const placements = [
   {
     id: "newsletter",
     type: "component",
+  },
+  {
+    id: "ymca",
+    byLang: {
+      en: {
+        image: ymcaEn,
+        alt: "Join the YMCA of Greater New York",
+        href: YMCA_URL,
+        external: true,
+      },
+      es: {
+        image: ymcaEs,
+        alt: "Únete a la YMCA de Greater New York",
+        href: YMCA_URL,
+        external: true,
+      },
+      zh: {
+        image: ymcaZh,
+        alt: "加入纽约市基督教青年会 YMCA",
+        href: YMCA_URL,
+        external: true,
+      },
+    },
   },
   {
     id: "birthday",
