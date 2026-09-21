@@ -12,7 +12,7 @@ class AdCampaign < ApplicationRecord
       name: "YMCA",
       advertiser: "YMCA of Greater New York",
       campaign_type: "paid",
-      destination_url: "https://ymcanyc.org/events/open-house-schedules"
+      destination_url: "https://ymcanyc.org/join"
     },
     "youngdancers" => {
       name: "Young Dancers in Repertory",
