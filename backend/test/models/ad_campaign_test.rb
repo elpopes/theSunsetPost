@@ -16,6 +16,7 @@ class AdCampaignTest < ActiveSupport::TestCase
     assert_equal "YMCA of Greater New York", campaign.advertiser
     assert_equal "paid", campaign.campaign_type
     assert_equal "ymca", campaign.key
+    assert_equal "https://ymcanyc.org/join", campaign.destination_url
   end
 
   test "resolves Young Dancers tracking key" do
