@@ -24,7 +24,8 @@ class AdCampaign < ApplicationRecord
       name: "Sunset Post 1st Birthday",
       advertiser: "The Sunset Post",
       campaign_type: "house",
-      destination_url: "https://givebutter.com/sunsetpost"
+      destination_url: "https://givebutter.com/sunsetpost",
+      active: false
     },
     "subscription" => {
       name: "Sunset Post subscription",
