@@ -19,10 +19,6 @@ import ymcaSmartEn from "../assets/outreach/YMCA-Smartreach-En.jpg";
 import ymcaSmartEs from "../assets/outreach/YMCA-Smartreach-Es.jpg";
 import ymcaSmartZh from "../assets/outreach/YMCA-Smartreach-Zh.jpg";
 
-import birthdaySmartEn from "../assets/outreach/Birthday-Smartreach-En.png";
-import birthdaySmartEs from "../assets/outreach/Birthday-Smartreach-Es.png";
-import birthdaySmartZh from "../assets/outreach/Birthday-Smartreach-Zh.png";
-
 import youngDancersSmartEn from "../assets/outreach/YoungDancers-Smartreach-En.png";
 import youngDancersSmartEs from "../assets/outreach/YoungDancers-Smartreach-Es.png";
 import youngDancersSmartZh from "../assets/outreach/YoungDancers-Smartreach-Zh.png";
@@ -39,8 +35,6 @@ const BEYOND_CARE_LINK = "https://beyondcare.coop/";
 
 const YMCA_LINK = "https://ymcanyc.org/join";
 
-const BIRTHDAY_LINK = "https://givebutter.com/sunsetpost";
-
 const YOUNG_DANCERS_LINK = "https://youngdancersinrep.org/center-for-dance-studies-2/";
 
 const sponsorsSmartreach = [
@@ -50,14 +44,6 @@ const sponsorsSmartreach = [
       en: { image: ymcaSmartEn, alt: "Join the YMCA of Greater New York", link: YMCA_LINK },
       es: { image: ymcaSmartEs, alt: "Únete a la YMCA de Greater New York", link: YMCA_LINK },
       zh: { image: ymcaSmartZh, alt: "加入纽约市基督教青年会 YMCA", link: YMCA_LINK },
-    },
-  },
-  {
-    id: "birthday",
-    byLang: {
-      en: { image: birthdaySmartEn, alt: "The Sunset Post first birthday party", link: BIRTHDAY_LINK },
-      es: { image: birthdaySmartEs, alt: "Fiesta del primer aniversario de the Sunset Post", link: BIRTHDAY_LINK },
-      zh: { image: birthdaySmartZh, alt: "the Sunset Post 一周年庆祝活动", link: BIRTHDAY_LINK },
     },
   },
   {
