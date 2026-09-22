@@ -21,6 +21,7 @@ class AdminAnalyticsQuery
     end
     @range = day_range(@start_date, @end_date)
     @include_house = ActiveModel::Type::Boolean.new.cast(params[:include_house])
+    @include_inactive = ActiveModel::Type::Boolean.new.cast(params[:include_inactive])
     @language = StoryView::LANGUAGES.include?(params[:language]) ? params[:language] : nil
     @source_type = StoryView::SOURCE_TYPES.include?(params[:source_type]) ? params[:source_type] : nil
   end
@@ -118,6 +119,7 @@ class AdminAnalyticsQuery
     {
       range: range_json,
       include_house: @include_house,
+      include_inactive: @include_inactive,
       campaigns: rows,
       detail: campaign_id ? campaign_detail(campaign_id) : nil
     }
@@ -165,6 +167,7 @@ class AdminAnalyticsQuery
     scope = AdEvent.joins(:ad_campaign).where(event_at: time_range)
     scope = scope.where(language: @language) if @language
     scope = scope.where(ad_campaigns: { campaign_type: "paid" }) unless @include_house
+    scope = scope.where(ad_campaigns: { active: true }) unless @include_inactive
     scope
   end
 
@@ -318,6 +321,7 @@ class AdminAnalyticsQuery
         name: campaign.name,
         advertiser: campaign.advertiser,
         campaign_type: campaign.campaign_type,
+        active: campaign.active,
         destination_url: campaign.destination_url,
         starts_on: campaign.starts_on,
         ends_on: campaign.ends_on,
@@ -340,6 +344,7 @@ class AdminAnalyticsQuery
         name: campaign.name,
         advertiser: campaign.advertiser,
         campaign_type: campaign.campaign_type,
+        active: campaign.active,
         impressions: 0,
         clicks: 0,
         ctr: 0.0,
