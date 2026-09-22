@@ -608,6 +608,8 @@ const AdsPanel = ({
   data,
   includeHouse,
   setIncludeHouse,
+  includeInactive,
+  setIncludeInactive,
   selectedCampaignId,
   setSelectedCampaignId,
   onExport,
@@ -641,6 +643,17 @@ const AdsPanel = ({
           />
           Include Sunset Post promotions
         </label>
+        <label className="admin-analytics__checkbox">
+          <input
+            type="checkbox"
+            checked={includeInactive}
+            onChange={(event) => {
+              setIncludeInactive(event.target.checked);
+              setSelectedCampaignId("");
+            }}
+          />
+          Include inactive campaigns
+        </label>
       </div>
 
       {data.campaigns.length === 0 && (
@@ -657,6 +670,7 @@ const AdsPanel = ({
               <th>Campaign</th>
               <th>Advertiser</th>
               <th>Type</th>
+              <th>Status</th>
               <th>Impressions</th>
               <th>Reach</th>
               <th>Clicks</th>
@@ -679,6 +693,7 @@ const AdsPanel = ({
                 </td>
                 <td>{campaign.advertiser || "—"}</td>
                 <td>{campaign.campaign_type}</td>
+                <td>{campaign.active ? "Active" : "Inactive"}</td>
                 <td>{formatNumber(campaign.impressions)}</td>
                 <td>{formatNumber(campaign.approximate_reach)}</td>
                 <td>{formatNumber(campaign.clicks)}</td>
@@ -783,6 +798,7 @@ const AdminAnalytics = () => {
   const [sourceType, setSourceType] = useState("");
   const [compareEnabled, setCompareEnabled] = useState(true);
   const [includeHouse, setIncludeHouse] = useState(false);
+  const [includeInactive, setIncludeInactive] = useState(false);
   const [storyFilters, setStoryFilters] = useState({
     q: "",
     author_id: "",
@@ -830,8 +846,9 @@ const AdminAnalytics = () => {
       language,
       source_type: sourceType,
       include_house: includeHouse,
+      include_inactive: includeInactive,
     }),
-    [dateFilters, includeHouse, language, sourceType],
+    [dateFilters, includeHouse, includeInactive, language, sourceType],
   );
 
   useEffect(() => {
@@ -1087,6 +1104,8 @@ const AdminAnalytics = () => {
             data={data}
             includeHouse={includeHouse}
             setIncludeHouse={setIncludeHouse}
+            includeInactive={includeInactive}
+            setIncludeInactive={setIncludeInactive}
             selectedCampaignId={selectedCampaignId}
             setSelectedCampaignId={setSelectedCampaignId}
             onExport={exportAds}
