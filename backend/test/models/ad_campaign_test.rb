@@ -36,6 +36,7 @@ class AdCampaignTest < ActiveSupport::TestCase
     assert_equal "The Sunset Post", campaign.advertiser
     assert_equal "house", campaign.campaign_type
     assert_equal "birthday", campaign.key
+    assert_not campaign.active?
     assert_equal "https://givebutter.com/sunsetpost", campaign.destination_url
   end
 
