@@ -88,6 +88,7 @@ class AdminAnalyticsQuery
       by_language: grouped_count(scoped_views, :language),
       by_source: grouped_count(scoped_views, :source_type),
       scroll_distribution: scroll_distribution(scroll_values),
+      utm_links: utm_link_rows(scoped_views),
       print_links: print_link_rows(scoped_views)
     }
   end
@@ -398,6 +399,34 @@ class AdminAnalyticsQuery
         ctr: percentage(clicks, impressions)
       }
     end.sort_by { |row| [-row[:impressions], -row[:clicks]] }
+  end
+
+  def utm_link_rows(scope)
+    scope.where(
+      "utm_source IS NOT NULL OR utm_medium IS NOT NULL OR " \
+      "utm_campaign IS NOT NULL OR utm_content IS NOT NULL"
+    )
+         .group(:utm_source, :utm_medium, :utm_campaign, :utm_content, :language)
+         .pluck(
+           :utm_source,
+           :utm_medium,
+           :utm_campaign,
+           :utm_content,
+           :language,
+           Arel.sql("COUNT(*)"),
+           Arel.sql("COUNT(DISTINCT visitor_token)")
+         )
+         .map do |source, medium, campaign, content, language, views, readers|
+      {
+        source: source.presence || "—",
+        medium: medium.presence || "—",
+        campaign: campaign.presence || "—",
+        utm_content: content.presence || "—",
+        target_language: language,
+        views: views.to_i,
+        approximate_readers: readers.to_i
+      }
+    end.sort_by { |row| [-row[:views], row[:source].to_s, row[:campaign].to_s] }
   end
 
   def print_link_rows(scope)
