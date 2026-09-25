@@ -10,7 +10,9 @@ bounded.
 - **Overview:** Story and paid-ad totals, preceding-period comparisons, daily
   trends, top stories and top campaigns.
 - **Stories:** Sortable/filterable story performance, CSV export and per-story
-  language, source, scroll and print-QR detail.
+  language, source, scroll, UTM-link and print-QR detail. UTM detail breaks
+  tagged visits down by source, medium, campaign, content and target language,
+  with recorded views and approximate readers.
 - **Print & QR:** Print-issue records and story placements, including registered
   stories with zero scans.
 - **Advertising:** Paid campaign performance by default, with an option to
