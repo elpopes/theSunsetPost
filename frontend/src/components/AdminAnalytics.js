@@ -251,6 +251,7 @@ const OverviewPanel = ({ data, compareEnabled }) => {
 const StoryDetailPanel = ({ data }) => {
   if (!data) return null;
   const { story } = data;
+  const utmLinks = data.utm_links || [];
 
   return (
     <section>
@@ -356,6 +357,49 @@ const StoryDetailPanel = ({ data }) => {
           </ul>
         </article>
       </div>
+
+      <article className="admin-analytics__panel">
+        <h3>Tracked links (UTM)</h3>
+        <p>
+          Partner, newsletter and campaign-tagged story visits. Source identifies
+          the partner; medium identifies the channel.
+        </p>
+        <div className="admin-analytics__table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Source</th>
+                <th>Medium</th>
+                <th>Campaign</th>
+                <th>UTM content</th>
+                <th>Target</th>
+                <th>Views</th>
+                <th>Readers</th>
+              </tr>
+            </thead>
+            <tbody>
+              {utmLinks.map((row, index) => (
+                <tr
+                  key={`${row.source}-${row.medium}-${row.campaign}-${row.utm_content}-${row.target_language}-${index}`}
+                >
+                  <td>{row.source}</td>
+                  <td>{row.medium}</td>
+                  <td>{row.campaign}</td>
+                  <td>{row.utm_content}</td>
+                  <td>{row.target_language.toUpperCase()}</td>
+                  <td>{formatNumber(row.views)}</td>
+                  <td>{formatNumber(row.approximate_readers)}</td>
+                </tr>
+              ))}
+              {utmLinks.length === 0 && (
+                <tr>
+                  <td colSpan="7">No UTM-attributed views in this period.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </article>
 
       <article className="admin-analytics__panel">
         <h3>Print QR links</h3>
