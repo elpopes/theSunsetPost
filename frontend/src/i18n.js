@@ -8,6 +8,13 @@ import authorEN from "./locales/en/author.json";
 import authorES from "./locales/es/author.json";
 import authorZH from "./locales/zh/author.json";
 
+const routeLanguage = (() => {
+  if (typeof window === "undefined") return "en";
+
+  const match = window.location.pathname.match(/^\/(en|es|zh)(?:\/|$)/);
+  return match?.[1] || "en";
+})();
+
 const resources = {
   en: { translation: { ...translationEN, ...authorEN } },
   es: { translation: { ...translationES, ...authorES } },
@@ -18,7 +25,7 @@ const resources = {
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: "en",
+  lng: routeLanguage,
   fallbackLng: {
     "zh-CN": ["zh"],
     "zh-TW": ["zh"],
