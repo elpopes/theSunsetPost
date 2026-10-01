@@ -19,9 +19,6 @@ import ymcaSmartEn from "../assets/outreach/YMCA-Smartreach-En.jpg";
 import ymcaSmartEs from "../assets/outreach/YMCA-Smartreach-Es.jpg";
 import ymcaSmartZh from "../assets/outreach/YMCA-Smartreach-Zh.jpg";
 
-import youngDancersSmartEn from "../assets/outreach/YoungDancers-Smartreach-En.png";
-import youngDancersSmartEs from "../assets/outreach/YoungDancers-Smartreach-Es.png";
-import youngDancersSmartZh from "../assets/outreach/YoungDancers-Smartreach-Zh.png";
 
 import useInfoView from "../utils/useInfoView";
 import { logInfoClick } from "../utils/infoEvents";
@@ -35,7 +32,6 @@ const BEYOND_CARE_LINK = "https://beyondcare.coop/";
 
 const YMCA_LINK = "https://ymcanyc.org/join";
 
-const YOUNG_DANCERS_LINK = "https://youngdancersinrep.org/center-for-dance-studies-2/";
 
 const sponsorsSmartreach = [
   {
@@ -44,14 +40,6 @@ const sponsorsSmartreach = [
       en: { image: ymcaSmartEn, alt: "Join the YMCA of Greater New York", link: YMCA_LINK },
       es: { image: ymcaSmartEs, alt: "Únete a la YMCA de Greater New York", link: YMCA_LINK },
       zh: { image: ymcaSmartZh, alt: "加入纽约市基督教青年会 YMCA", link: YMCA_LINK },
-    },
-  },
-  {
-    id: "youngdancers",
-    byLang: {
-      en: { image: youngDancersSmartEn, alt: "Young Dancers in Repertory kids dance classes", link: YOUNG_DANCERS_LINK },
-      es: { image: youngDancersSmartEs, alt: "Clases de danza para niños de Young Dancers in Repertory", link: YOUNG_DANCERS_LINK },
-      zh: { image: youngDancersSmartZh, alt: "Young Dancers in Repertory 儿童舞蹈课程", link: YOUNG_DANCERS_LINK },
     },
   },
   {
