@@ -19,9 +19,6 @@ import ymcaEn from "../assets/outreach/YMCA-Localreach-En.jpg";
 import ymcaEs from "../assets/outreach/YMCA-Localreach-Es.jpg";
 import ymcaZh from "../assets/outreach/YMCA-Localreach-Zh.jpg";
 
-import youngDancersEn from "../assets/outreach/YoungDancers-Localreach-En.png";
-import youngDancersEs from "../assets/outreach/YoungDancers-Localreach-Es.png";
-import youngDancersZh from "../assets/outreach/YoungDancers-Localreach-Zh.png";
 
 import localReachEN from "../assets/outreach/localreach-en.svg";
 import localReachES from "../assets/outreach/localreach-es.svg";
@@ -39,7 +36,6 @@ const BEYOND_CARE_URL = "https://beyondcare.coop/";
 
 const YMCA_URL = "https://ymcanyc.org/join";
 
-const YOUNG_DANCERS_URL = "https://youngdancersinrep.org/center-for-dance-studies-2/";
 
 const placements = [
   {
@@ -65,29 +61,6 @@ const placements = [
         image: ymcaZh,
         alt: "加入纽约市基督教青年会 YMCA",
         href: YMCA_URL,
-        external: true,
-      },
-    },
-  },
-  {
-    id: "youngdancers",
-    byLang: {
-      en: {
-        image: youngDancersEn,
-        alt: "Young Dancers in Repertory kids dance classes",
-        href: YOUNG_DANCERS_URL,
-        external: true,
-      },
-      es: {
-        image: youngDancersEs,
-        alt: "Clases de danza para niños de Young Dancers in Repertory",
-        href: YOUNG_DANCERS_URL,
-        external: true,
-      },
-      zh: {
-        image: youngDancersZh,
-        alt: "Young Dancers in Repertory 儿童舞蹈课程",
-        href: YOUNG_DANCERS_URL,
         external: true,
       },
     },
