@@ -15,10 +15,6 @@ import venmoSmartEn from "../assets/outreach/Venmo-Smartreach-En.png";
 import venmoSmartEs from "../assets/outreach/Venmo-Smartreach-Es.png";
 import venmoSmartZh from "../assets/outreach/Venmo-Smartreach-Zh.png";
 
-import ymcaSmartEn from "../assets/outreach/YMCA-Smartreach-En.jpg";
-import ymcaSmartEs from "../assets/outreach/YMCA-Smartreach-Es.jpg";
-import ymcaSmartZh from "../assets/outreach/YMCA-Smartreach-Zh.jpg";
-
 
 import useInfoView from "../utils/useInfoView";
 import { logInfoClick } from "../utils/infoEvents";
@@ -30,18 +26,8 @@ const VENMO_LINK =
 
 const BEYOND_CARE_LINK = "https://beyondcare.coop/";
 
-const YMCA_LINK = "https://ymcanyc.org/join";
-
 
 const sponsorsSmartreach = [
-  {
-    id: "ymca",
-    byLang: {
-      en: { image: ymcaSmartEn, alt: "Join the YMCA of Greater New York", link: YMCA_LINK },
-      es: { image: ymcaSmartEs, alt: "Únete a la YMCA de Greater New York", link: YMCA_LINK },
-      zh: { image: ymcaSmartZh, alt: "加入纽约市基督教青年会 YMCA", link: YMCA_LINK },
-    },
-  },
   {
     id: "subscription",
     byLang: {
