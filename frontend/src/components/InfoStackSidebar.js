@@ -15,10 +15,6 @@ import venmoEn from "../assets/outreach/Venmo-Localreach-En.png";
 import venmoEs from "../assets/outreach/Venmo-Localreach-Es.png";
 import venmoZh from "../assets/outreach/Venmo-Localreach-Zh.png";
 
-import ymcaEn from "../assets/outreach/YMCA-Localreach-En.jpg";
-import ymcaEs from "../assets/outreach/YMCA-Localreach-Es.jpg";
-import ymcaZh from "../assets/outreach/YMCA-Localreach-Zh.jpg";
-
 
 import localReachEN from "../assets/outreach/localreach-en.svg";
 import localReachES from "../assets/outreach/localreach-es.svg";
@@ -34,36 +30,11 @@ const VENMO_URL =
 
 const BEYOND_CARE_URL = "https://beyondcare.coop/";
 
-const YMCA_URL = "https://ymcanyc.org/join";
-
 
 const placements = [
   {
     id: "newsletter",
     type: "component",
-  },
-  {
-    id: "ymca",
-    byLang: {
-      en: {
-        image: ymcaEn,
-        alt: "Join the YMCA of Greater New York",
-        href: YMCA_URL,
-        external: true,
-      },
-      es: {
-        image: ymcaEs,
-        alt: "Únete a la YMCA de Greater New York",
-        href: YMCA_URL,
-        external: true,
-      },
-      zh: {
-        image: ymcaZh,
-        alt: "加入纽约市基督教青年会 YMCA",
-        href: YMCA_URL,
-        external: true,
-      },
-    },
   },
   {
     id: "subscription",
