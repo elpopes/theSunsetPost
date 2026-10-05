@@ -135,6 +135,14 @@ function routeUrl(lang, routePath = '') {
   return `${SITE_URL}/${lang}${suffix}`;
 }
 
+function homeUrl(lang) {
+  return lang === 'en' ? `${SITE_URL}/` : `${SITE_URL}/${lang}`;
+}
+
+function homeAlternates() {
+  return LANGUAGES.map((lang) => ({ lang, url: homeUrl(lang) }));
+}
+
 function availableStoryLanguages(story) {
   const present = new Set((story.translations || []).map((translation) => translation.language));
   return LANGUAGES.filter((language) => present.has(language));
@@ -298,13 +306,13 @@ async function main() {
   let written = 0;
 
   for (const lang of LANGUAGES) {
-    const homePath = '';
-    writeRoute(lang, renderPage(template, {
+    const homeRoute = lang === 'en' ? '' : lang;
+    writeRoute(homeRoute, renderPage(template, {
       lang,
       title: HOME_COPY[lang].title,
       description: HOME_COPY[lang].description,
-      canonical: routeUrl(lang, homePath),
-      alternates: alternatesForPath(homePath),
+      canonical: homeUrl(lang),
+      alternates: homeAlternates(),
       jsonLd: [ORG_SCHEMA, { '@context': 'https://schema.org', '@type': 'WebSite', name: 'The Sunset Post', url: SITE_URL, inLanguage: LANGUAGES }],
     }, homeBody(lang, stories)));
     written += 1;
@@ -433,7 +441,14 @@ async function main() {
     }
   }
 
-  console.log(`[seo] Wrote ${written} prerendered route files.`);
+  const spaFallback = setTag(
+    template,
+    /<meta\s+[^>]*name=["']robots["'][^>]*>/i,
+    '<meta name="robots" content="noindex,follow" />'
+  );
+  fs.writeFileSync(path.join(BUILD_DIR, 'spa-fallback.html'), spaFallback, 'utf8');
+
+  console.log(`[seo] Wrote ${written} prerendered route files plus a noindex SPA fallback.`);
 }
 
 if (require.main === module) {
@@ -443,4 +458,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { escapeHtml, markdownToText, renderPage, renderHead, storySchema, routeUrl, alternatesForPath };
+module.exports = { escapeHtml, markdownToText, renderPage, renderHead, storySchema, routeUrl, homeUrl, homeAlternates, alternatesForPath };
