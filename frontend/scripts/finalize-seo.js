@@ -43,7 +43,8 @@ const addSlashToInternalHref = (value) => {
 };
 
 const normalizeGeneratedHtml = (html) => {
-  let output = ensureRobots(html, "index,follow");
+  const robotsPattern = /<meta\s+[^>]*name=["']robots["'][^>]*>/i;
+  let output = robotsPattern.test(html) ? html : ensureRobots(html, "index,follow");
 
   output = output.replace(
     /https:\/\/www\.sunsetpost\.org\/(?:en|es|zh)(?:\/[^\s"'<>]*)?/g,
@@ -75,16 +76,19 @@ if (!fs.existsSync(ROOT_INDEX)) {
   throw new Error(`Missing ${ROOT_INDEX}. Run the production build first.`);
 }
 
-const routeIndexes = walk(BUILD_DIR).filter((filePath) => filePath !== ROOT_INDEX);
+const routeIndexes = walk(BUILD_DIR);
 
 for (const filePath of routeIndexes) {
   const html = fs.readFileSync(filePath, "utf8");
   fs.writeFileSync(filePath, normalizeGeneratedHtml(html), "utf8");
 }
 
-const fallbackHtml = fs.readFileSync(ROOT_INDEX, "utf8");
-fs.writeFileSync(ROOT_INDEX, ensureRobots(fallbackHtml, "noindex,follow"), "utf8");
+const spaFallbackPath = path.join(BUILD_DIR, "spa-fallback.html");
+if (fs.existsSync(spaFallbackPath)) {
+  const fallbackHtml = fs.readFileSync(spaFallbackPath, "utf8");
+  fs.writeFileSync(spaFallbackPath, ensureRobots(fallbackHtml, "noindex,follow"), "utf8");
+}
 
 console.log(
-  `[seo] Finalized ${routeIndexes.length} prerendered pages with trailing-slash canonicals; SPA fallback is noindex.`
+  `[seo] Finalized ${routeIndexes.length} prerendered pages with trailing-slash canonicals; separate SPA fallback remains noindex.`
 );
