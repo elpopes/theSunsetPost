@@ -2,6 +2,8 @@ import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import NewsletterSignup from "./NewsletterSignup";
+import bwiSmartreachEn from "../assets/outreach/BWI-Smartreach-En.png";
+import { BWI_NOV_2026, useCampaignActive } from "../utils/adCampaigns";
 
 import beyondCareSmartEn from "../assets/outreach/BeyondCare-Smartreach-En.png";
 import beyondCareSmartEs from "../assets/outreach/BeyondCare-Smartreach-Es.png";
@@ -28,6 +30,17 @@ const BEYOND_CARE_LINK = "https://beyondcare.coop/";
 
 
 const sponsorsSmartreach = [
+  {
+    id: BWI_NOV_2026.id,
+    // The advertiser chose one English file for all three site languages.
+    byLang: {
+      en: {
+        image: bwiSmartreachEn,
+        alt: "Brooklyn Workforce Innovations deckhand recruitment advertisement",
+        link: BWI_NOV_2026.href,
+      },
+    },
+  },
   {
     id: "subscription",
     byLang: {
@@ -101,19 +114,28 @@ const InfoBlockMobile = ({ lang }) => {
   const location = useLocation();
 
   const path = location.pathname + location.search;
+  const bwiIsActive = useCampaignActive(BWI_NOV_2026);
 
   const stablePath = useMemo(() => {
     return location.pathname.replace(/^\/(en|es|zh)(?=\/|$)/, "") || "/";
   }, [location.pathname]);
 
+  const activeSponsors = useMemo(
+    () =>
+      sponsorsSmartreach.filter(
+        (p) => p.id !== BWI_NOV_2026.id || bwiIsActive
+      ),
+    [bwiIsActive]
+  );
+
   // Choose once for each route during render. This avoids painting a default
   // placement and replacing it immediately after mount.
   const pick = useMemo(() => {
-    if (sponsorsSmartreach.length === 0) return null;
-    return sponsorsSmartreach[
-      Math.floor(Math.random() * sponsorsSmartreach.length)
+    if (activeSponsors.length === 0) return null;
+    return activeSponsors[
+      Math.floor(Math.random() * activeSponsors.length)
     ];
-  }, [stablePath]);
+  }, [stablePath, activeSponsors]);
 
   if (!pick) return null;
 

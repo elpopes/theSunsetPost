@@ -2,6 +2,8 @@ import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import NewsletterSignup from "./NewsletterSignup";
+import bwiLocalreachEn from "../assets/outreach/BWI-Localreach-En.png";
+import { BWI_NOV_2026, useCampaignActive } from "../utils/adCampaigns";
 
 import beyondCareEn from "../assets/outreach/BeyondCare-Localreach-En.png";
 import beyondCareEs from "../assets/outreach/BeyondCare-Localreach-Es.png";
@@ -32,6 +34,21 @@ const BEYOND_CARE_URL = "https://beyondcare.coop/";
 
 
 const placements = [
+  {
+    id: BWI_NOV_2026.id,
+    // BWI explicitly declined translation: EN artwork is used by all locales
+    // through the existing byLang.en fallback.
+    byLang: {
+      en: {
+        image: bwiLocalreachEn,
+        alt: "Brooklyn Workforce Innovations deckhand recruitment advertisement",
+        href: BWI_NOV_2026.href,
+        external: true,
+        width: 300,
+        height: 600,
+      },
+    },
+  },
   {
     id: "newsletter",
     type: "component",
@@ -139,8 +156,8 @@ const TrackedInfoTile = ({ variant, id, idx, lang, path }) => {
       src={variant.image}
       alt={variant.alt}
       className="sidebar-image"
-      width="300"
-      height="600"
+      width={variant.width || 300}
+      height={variant.height || 600}
       loading={isAboveFold ? "eager" : "lazy"}
       decoding="async"
     />
@@ -190,12 +207,19 @@ const InfoStackSidebar = ({ lang }) => {
   const location = useLocation();
 
   const path = location.pathname + location.search;
+  const bwiIsActive = useCampaignActive(BWI_NOV_2026);
 
   const stablePath = useMemo(() => {
     return location.pathname.replace(/^\/(en|es|zh)(?=\/|$)/, "") || "/";
   }, [location.pathname]);
 
-  const placementIds = useMemo(() => placements.map((p) => p.id), []);
+  const placementIds = useMemo(
+    () =>
+      placements
+        .filter((p) => p.id !== BWI_NOV_2026.id || bwiIsActive)
+        .map((p) => p.id),
+    [bwiIsActive]
+  );
 
   const placementById = useMemo(() => {
     return Object.fromEntries(placements.map((p) => [p.id, p]));
