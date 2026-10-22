@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 
-// The November 2026 BWI campaign shares one English creative across EN/ES/ZH.
+// BWI October 22–November 30, 2026 campaign shares one English creative across EN/ES/ZH.
 // Dates are explicit Brooklyn-local midnights, with an exclusive Dec 1 cutoff.
 export const BWI_NOV_2026 = {
   id: "bwi_deckhand_202611",
   href: "https://qrco.de/bebvvd",
-  startsAt: "2026-11-01T00:00:00-04:00",
+  startsAt: "2026-10-22T00:00:00-04:00",
   endsAt: "2026-12-01T00:00:00-05:00",
 };
 
