@@ -1,6 +1,10 @@
 {
     "welcome": "Welcome to The Sunset Post",
     "Popular Now": "Popular Now",
+    "Story navigation": "Story navigation",
+    "Continue reading": "Continue reading",
+    "Previous story": "Previous story",
+    "Next story": "Next story",
     "print_qr": {
         "open": "Print QR link",
         "print_language": "Print language",

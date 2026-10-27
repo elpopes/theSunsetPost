@@ -14,6 +14,7 @@ import ImageUpload from "./ImageUpload";
 import PrintQrLinkGenerator from "./PrintQrLinkGenerator";
 import useStoryEngagement from "../utils/useStoryEngagement";
 import SeoHead from "./SeoHead";
+import StoryNavigation from "./StoryNavigation";
 import { Helmet } from "react-helmet";
 import "./StoryDetail.css";
 
@@ -67,8 +68,10 @@ const StoryDetail = () => {
   };
 
   useEffect(() => {
+    const controller = new AbortController();
     const fetchStory = async () => {
       setLoading(true);
+      setError(null);
       try {
         const existingStory = stories.find((s) => {
           if (isNumericIdentifier(id)) return s.id === Number(id);
@@ -79,21 +82,26 @@ const StoryDetail = () => {
           setStory(existingStory);
           setTranslations(existingStory.translations);
         } else {
-          const response = await fetch(`${baseURL}/api/stories/${id}`);
+          const response = await fetch(`${baseURL}/api/stories/${id}`, {
+            signal: controller.signal,
+          });
           if (!response.ok) throw new Error(t("Failed to fetch story data"));
           const data = await response.json();
+          if (controller.signal.aborted) return;
           setStory(data);
           setTranslations(data.translations);
         }
       } catch (err) {
+        if (controller.signal.aborted) return;
         console.error("[StoryDetail] Error fetching story:", err.message);
         setError(err.message);
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
     };
 
     fetchStory();
+    return () => controller.abort();
   }, [id, stories, t]);
 
   const handleDelete = () => {
@@ -453,6 +461,8 @@ const StoryDetail = () => {
           <p>{t("No authors available for this story.")}</p>
         )}
       </div>
+
+      {!editMode && <StoryNavigation storyId={story.id} language={language} />}
 
       {user?.admin && (
         <div className="story-detail__admin-actions">

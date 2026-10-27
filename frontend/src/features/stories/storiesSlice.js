@@ -6,7 +6,10 @@ export const fetchStories = createAsyncThunk(
   "stories/fetchStories",
   async () => {
     const response = await fetch(`${baseURL}/api/stories`);
-    return response.json();
+    if (!response.ok) throw new Error("Failed to fetch stories");
+    const stories = await response.json();
+    if (!Array.isArray(stories)) throw new Error("Invalid stories response");
+    return stories;
   }
 );
 

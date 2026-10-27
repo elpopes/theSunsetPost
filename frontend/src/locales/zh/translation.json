@@ -1,6 +1,10 @@
 {
     "welcome": "欢迎来到 The Sunset Post",
     "Popular Now": "热门文章",
+    "Story navigation": "文章导航",
+    "Continue reading": "继续阅读",
+    "Previous story": "上一篇",
+    "Next story": "下一篇",
     "print_qr": {
         "open": "印刷版二维码链接",
         "print_language": "印刷语言",
