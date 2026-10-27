@@ -2,6 +2,22 @@ class AdCampaign < ApplicationRecord
   CAMPAIGN_TYPES = %w[paid house].freeze
 
   DEFAULTS = {
+    "bwi_deckhand_202611" => {
+      name: "BWI Deckhand Recruitment",
+      advertiser: "Brooklyn Workforce Innovations",
+      campaign_type: "paid",
+      destination_url: "https://qrco.de/bebvvd",
+      starts_on: Date.new(2026, 10, 22),
+      ends_on: Date.new(2026, 11, 30)
+    },
+    "bko_sunset_park_fund_202610" => {
+      name: "Brooklyn Org Sunset Park Fund",
+      advertiser: "Brooklyn Org",
+      campaign_type: "paid",
+      destination_url: "https://www.eventbrite.com/e/sunset-park-community-conversation-tickets-2003520131647",
+      starts_on: Date.new(2026, 10, 27),
+      ends_on: Date.new(2026, 11, 26)
+    },
     "beyondcare" => {
       name: "Beyond Care",
       advertiser: "Beyond Care Childcare Cooperative",
