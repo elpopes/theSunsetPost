@@ -54,8 +54,7 @@
 }
 
 .print-qr-generator__field select,
-.print-qr-generator__field input,
-.print-qr-generator__field output {
+.print-qr-generator__field input {
   box-sizing: border-box;
   width: 100%;
   min-height: 40px;
@@ -66,11 +65,6 @@
   color: #222;
   font: inherit;
   font-weight: 400;
-}
-
-.print-qr-generator__field output {
-  display: flex;
-  align-items: center;
 }
 
 .print-qr-generator__url {

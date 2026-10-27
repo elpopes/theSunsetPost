@@ -92,6 +92,9 @@ const PrintQrLinkGenerator = ({ story, targetLanguage }) => {
     getStoredPrintLanguage
   );
   const [issue, setIssue] = useState(getStoredIssue);
+  const [selectedTargetLanguage, setSelectedTargetLanguage] = useState(
+    normalizedTargetLanguage
+  );
   const [copyStatus, setCopyStatus] = useState("");
 
   const printUrl = useMemo(
@@ -99,11 +102,15 @@ const PrintQrLinkGenerator = ({ story, targetLanguage }) => {
       buildPrintQrUrl({
         storyIdentifier,
         printLanguage,
-        targetLanguage: normalizedTargetLanguage,
+        targetLanguage: selectedTargetLanguage,
         issue,
       }),
-    [storyIdentifier, printLanguage, normalizedTargetLanguage, issue]
+    [storyIdentifier, printLanguage, selectedTargetLanguage, issue]
   );
+
+  useEffect(() => {
+    setSelectedTargetLanguage(normalizedTargetLanguage);
+  }, [normalizedTargetLanguage, story.id]);
 
   useEffect(() => {
     setCopyStatus("");
@@ -191,10 +198,19 @@ const PrintQrLinkGenerator = ({ story, targetLanguage }) => {
             />
           </label>
 
-          <div className="print-qr-generator__field">
+          <label className="print-qr-generator__field">
             <span>{t("print_qr.target_language")}</span>
-            <output>{normalizedTargetLanguage.toUpperCase()}</output>
-          </div>
+            <select
+              value={selectedTargetLanguage}
+              onChange={(event) => setSelectedTargetLanguage(event.target.value)}
+            >
+              {SUPPORTED_LANGUAGES.map((language) => (
+                <option key={language} value={language}>
+                  {language.toUpperCase()}
+                </option>
+              ))}
+            </select>
+          </label>
 
           <label className="print-qr-generator__field print-qr-generator__url">
             <span>{t("print_qr.url")}</span>
