@@ -85,9 +85,7 @@ test.each([
   expect(previous).toHaveAttribute("rel", "prev");
   expect(next).toHaveAttribute("href", `/${language}/stories/story-3/`);
   expect(next).toHaveAttribute("rel", "next");
-  expect(
-    within(previous).getByRole("heading", { name: title })
-  ).toBeInTheDocument();
+  expect(within(previous).queryByText(title)).not.toBeInTheDocument();
   expect(within(previous).getByText(description)).toBeInTheDocument();
   expect(within(previous).getByAltText("")).toHaveAttribute(
     "src", "/hero-1.jpg"
@@ -143,7 +141,8 @@ test("handles missing hero images, descriptions, and slugs without broken previe
       translations: [{ language: "en", title: "Text-only story" }],
     })],
   });
-  const link = screen.getByRole("link", { name: /Text-only story/ });
+  const link = screen.getByRole("link", { name: /Previous story/ });
+  expect(within(link).queryByText("Text-only story")).not.toBeInTheDocument();
   expect(link).toHaveAttribute("href", "/en/stories/1/");
   expect(link.querySelector("img")).toBeNull();
   expect(link.querySelector(".story-navigation__description")).toBeNull();

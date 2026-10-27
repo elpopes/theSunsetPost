@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { deleteStory } from "../features/stories/storiesSlice";
+import { deleteStory, fetchStories } from "../features/stories/storiesSlice";
 import { baseURL } from "../config";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -33,6 +33,7 @@ const StoryDetail = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
   const stories = useSelector((state) => state.stories.items);
+  const storiesStatus = useSelector((state) => state.stories.status);
 
   const [story, setStory] = useState(null);
   const [translations, setTranslations] = useState([]);
@@ -66,6 +67,11 @@ const StoryDetail = () => {
     setRemoveImage(false);
     setEditError("");
   };
+
+  useEffect(() => {
+    // Load navigation alongside the article rather than waiting for it to render.
+    if (storiesStatus === "idle") dispatch(fetchStories());
+  }, [dispatch, storiesStatus]);
 
   useEffect(() => {
     const controller = new AbortController();

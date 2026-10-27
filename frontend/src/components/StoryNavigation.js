@@ -76,9 +76,6 @@ const StoryNavigation = ({ storyId, language }) => {
                   />
                 )}
                 <div className="story-navigation__text">
-                  <h4 className="story-navigation__title">
-                    {story.translation.title}
-                  </h4>
                   {story.translation.meta_description?.trim() && (
                     <p className="story-navigation__description">
                       {story.translation.meta_description}

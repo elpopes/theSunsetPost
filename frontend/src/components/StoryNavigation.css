@@ -39,9 +39,8 @@
   outline-offset: 3px;
 }
 
-.story-navigation__card:hover .story-navigation__title,
-.story-navigation__card:focus-visible .story-navigation__title {
-  color: #771000;
+.story-navigation__card:hover .story-navigation__direction,
+.story-navigation__card:focus-visible .story-navigation__direction {
   text-decoration: underline;
 }
 
@@ -73,20 +72,10 @@
   overflow-wrap: anywhere;
 }
 
-.story-navigation__title {
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.35;
-}
-
 .story-navigation__description {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
-  margin: 6px 0 0;
+  margin: 0;
   color: #666;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   line-height: 1.45;
 }
 
