@@ -35,6 +35,11 @@
   box-sizing: border-box;
 }
 
+.main-layout__sidebar > .info-space {
+  margin-bottom: 20px;
+  border: 1px solid #e8e8e8;
+}
+
 .info-link {
   margin-top: 4px;
   padding: 0 4px;
