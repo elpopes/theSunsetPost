@@ -1,48 +1,12 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { fetchStories } from "../features/stories/storiesSlice";
 import "./StoryNavigation.css";
 
-const StoryNavigation = ({ storyId, language }) => {
-  const dispatch = useDispatch();
+const StoryNavigation = ({ navigation, language }) => {
   const { t } = useTranslation();
-  const { items: stories, status } = useSelector((state) => state.stories);
-
-  useEffect(() => {
-    // Story links can be opened directly without first visiting the homepage.
-    if (status === "idle") dispatch(fetchStories());
-  }, [dispatch, status]);
-
-  if (status !== "succeeded") return null;
-
-  const localizedStories = stories
-    .filter(
-      (story) =>
-        !story.sections?.some(
-          (section) => section.name?.toLowerCase() === "classifieds"
-        )
-    )
-    .map((story) => ({
-      ...story,
-      translation: story.translations?.find(
-        (translation) => translation.language === language
-      ),
-    }))
-    .filter((story) => story.translation?.title?.trim())
-    .sort(
-      (a, b) =>
-        new Date(b.created_at || 0) - new Date(a.created_at || 0) || b.id - a.id
-    );
-
-  const currentIndex = localizedStories.findIndex(
-    (story) => story.id === storyId
-  );
-  if (currentIndex === -1) return null;
-
-  const previous = localizedStories[currentIndex + 1];
-  const next = localizedStories[currentIndex - 1];
+  if (!navigation || navigation.language !== language) return null;
+  const { previous, next } = navigation;
   if (!previous && !next) return null;
 
   return (
@@ -76,9 +40,9 @@ const StoryNavigation = ({ storyId, language }) => {
                   />
                 )}
                 <div className="story-navigation__text">
-                  {story.translation.meta_description?.trim() && (
+                  {story.meta_description?.trim() && (
                     <p className="story-navigation__description">
-                      {story.translation.meta_description}
+                      {story.meta_description}
                     </p>
                   )}
                 </div>

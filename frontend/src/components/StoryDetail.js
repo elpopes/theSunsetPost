@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { deleteStory, fetchStories } from "../features/stories/storiesSlice";
+import { deleteStory } from "../features/stories/storiesSlice";
 import { baseURL } from "../config";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -15,6 +15,7 @@ import PrintQrLinkGenerator from "./PrintQrLinkGenerator";
 import useStoryEngagement from "../utils/useStoryEngagement";
 import SeoHead from "./SeoHead";
 import StoryNavigation from "./StoryNavigation";
+import { getStoryNavigation } from "../utils/storyNavigation";
 import { Helmet } from "react-helmet";
 import "./StoryDetail.css";
 
@@ -69,11 +70,6 @@ const StoryDetail = () => {
   };
 
   useEffect(() => {
-    // Load navigation alongside the article rather than waiting for it to render.
-    if (storiesStatus === "idle") dispatch(fetchStories());
-  }, [dispatch, storiesStatus]);
-
-  useEffect(() => {
     const controller = new AbortController();
     const fetchStory = async () => {
       setLoading(true);
@@ -84,11 +80,14 @@ const StoryDetail = () => {
           return s.slug === id;
         });
 
-        if (existingStory) {
-          setStory(existingStory);
+        if (storiesStatus === "succeeded" && existingStory) {
+          setStory({
+            ...existingStory,
+            navigation: getStoryNavigation(stories, existingStory.id, language),
+          });
           setTranslations(existingStory.translations);
         } else {
-          const response = await fetch(`${baseURL}/api/stories/${id}`, {
+          const response = await fetch(`${baseURL}/api/stories/${id}?navigation_language=${language}`, {
             signal: controller.signal,
           });
           if (!response.ok) throw new Error(t("Failed to fetch story data"));
@@ -108,7 +107,7 @@ const StoryDetail = () => {
 
     fetchStory();
     return () => controller.abort();
-  }, [id, stories, t]);
+  }, [id, stories, storiesStatus, language, t]);
 
   const handleDelete = () => {
     if (user?.token) {
@@ -161,7 +160,7 @@ const StoryDetail = () => {
         );
       }
 
-      setStory(responseBody);
+      setStory((current) => ({ ...responseBody, navigation: current?.navigation }));
       initializeEditForm(responseBody);
       setEditMode(false);
 
@@ -468,7 +467,7 @@ const StoryDetail = () => {
         )}
       </div>
 
-      {!editMode && <StoryNavigation storyId={story.id} language={language} />}
+      {!editMode && <StoryNavigation navigation={story.navigation} language={language} />}
 
       {user?.admin && (
         <div className="story-detail__admin-actions">

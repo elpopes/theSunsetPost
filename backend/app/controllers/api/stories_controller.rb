@@ -35,9 +35,23 @@ class Api::StoriesController < ApplicationController
 
   # GET /api/stories/:id_or_slug
   def show
+    navigation_language = normalized_language(params[:navigation_language]) if params[:navigation_language].present?
+    if navigation_language && !StoryView::LANGUAGES.include?(navigation_language)
+      return render json: { error: "Unsupported language" }, status: :unprocessable_entity
+    end
+
     @story = Story.includes(:story_translations, :authors, :sections).find_by_identifier(params[:id])
     if @story
-      render json: story_json(@story)
+      payload = story_json(@story)
+      if navigation_language
+        neighbors = StoryNavigationQuery.new(story: @story, language: navigation_language).call
+        payload[:navigation] = {
+          language: navigation_language,
+          previous: navigation_preview(neighbors[:previous]),
+          next: navigation_preview(neighbors[:next])
+        }
+      end
+      render json: payload
     else
       render json: { error: "Story not found" }, status: :not_found
     end
@@ -161,6 +175,17 @@ class Api::StoriesController < ApplicationController
   end
 
   private
+
+  def navigation_preview(story)
+    return nil unless story
+
+    {
+      id: story.id,
+      slug: story.slug,
+      image_url: story.image.attached? ? url_for(story.image) : nil,
+      meta_description: story.navigation_meta_description
+    }
+  end
 
   def authenticate_request
     header = request.headers["Authorization"]

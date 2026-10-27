@@ -1,11 +1,9 @@
 import React, { act } from "react";
-import { render, screen, waitFor, within } from "@testing-library/react";
-import { configureStore } from "@reduxjs/toolkit";
-import { Provider } from "react-redux";
+import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { I18nextProvider } from "react-i18next";
 import i18next from "i18next";
-import storiesReducer from "../features/stories/storiesSlice";
+import { getStoryNavigation } from "../utils/storyNavigation";
 import en from "../locales/en/translation.json";
 import es from "../locales/es/translation.json";
 import zh from "../locales/zh/translation.json";
@@ -29,12 +27,7 @@ const renderNavigation = ({
   stories = [makeStory(3), makeStory(1), makeStory(2)],
   storyId = 2,
   language = "en",
-  status = "succeeded",
 } = {}) => {
-  const store = configureStore({
-    reducer: { stories: storiesReducer },
-    preloadedState: { stories: { items: stories, status, error: null } },
-  });
   const i18n = i18next.createInstance();
   i18n.init({
     lng: language,
@@ -47,17 +40,17 @@ const renderNavigation = ({
     },
   });
   render(
-    <Provider store={store}>
-      <I18nextProvider i18n={i18n}>
-        <MemoryRouter
-          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-        >
-          <StoryNavigation storyId={storyId} language={language} />
-        </MemoryRouter>
-      </I18nextProvider>
-    </Provider>
+    <I18nextProvider i18n={i18n}>
+      <MemoryRouter
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
+        <StoryNavigation
+          navigation={getStoryNavigation(stories, storyId, language)}
+          language={language}
+        />
+      </MemoryRouter>
+    </I18nextProvider>
   );
-  return { store };
 };
 
 const originalFetch = global.fetch;
@@ -163,27 +156,11 @@ test("orders stories sharing a publication date consistently by ID", () => {
   );
 });
 
-test("loads navigation when opening a story directly with an empty store", async () => {
-  global.fetch = jest.fn().mockResolvedValue({
-    ok: true,
-    json: async () => [makeStory(1), makeStory(2), makeStory(3)],
-  });
-  renderNavigation({ stories: [], status: "idle" });
-  expect(await screen.findByRole("link", { name: /Previous story/ })).toHaveAttribute(
-    "href", "/en/stories/story-1/"
-  );
-  expect(global.fetch).toHaveBeenCalledTimes(1);
-});
-
-test.each([
-  { ok: false, json: async () => ({ error: "Unavailable" }) },
-  { ok: true, json: async () => ({ error: "Unexpected response" }) },
-])("keeps a failed story-list request from breaking the article", async (response) => {
-  global.fetch = jest.fn().mockResolvedValue(response);
-  const { store } = renderNavigation({ stories: [], status: "idle" });
-  await waitFor(() => expect(store.getState().stories.status).toBe("failed"));
-  expect(store.getState().stories.items).toEqual([]);
+test("does not request the archive when navigation data is unavailable", () => {
+  global.fetch = jest.fn();
+  renderNavigation({ stories: [] });
   expect(screen.queryByRole("navigation")).not.toBeInTheDocument();
+  expect(global.fetch).not.toHaveBeenCalled();
 });
 
 test("updates neighbors and descriptions when the reader switches languages", async () => {
@@ -194,26 +171,20 @@ test("updates neighbors and descriptions when the reader switches languages", as
     initImmediate: false,
     resources: { en: { translation: en }, es: { translation: es } },
   });
-  const store = configureStore({
-    reducer: { stories: storiesReducer },
-    preloadedState: { stories: {
-      items: [makeStory(1), makeStory(2), makeStory(3, {
-        translations: [{ language: "en", title: "English only" }],
-      })],
-      status: "succeeded",
-      error: null,
-    } },
-  });
+  const stories = [makeStory(1), makeStory(2), makeStory(3, {
+    translations: [{ language: "en", title: "English only" }],
+  })];
   const view = (language) => (
-    <Provider store={store}>
-      <I18nextProvider i18n={i18n}>
-        <MemoryRouter
-          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-        >
-          <StoryNavigation storyId={2} language={language} />
-        </MemoryRouter>
-      </I18nextProvider>
-    </Provider>
+    <I18nextProvider i18n={i18n}>
+      <MemoryRouter
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
+        <StoryNavigation
+          navigation={getStoryNavigation(stories, 2, language)}
+          language={language}
+        />
+      </MemoryRouter>
+    </I18nextProvider>
   );
   const { rerender } = render(view("en"));
   expect(screen.getByRole("link", { name: /Next story/ })).toBeInTheDocument();
