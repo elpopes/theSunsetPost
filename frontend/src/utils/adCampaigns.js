@@ -9,6 +9,16 @@ export const BWI_NOV_2026 = {
   endsAt: "2026-12-01T00:00:00-05:00",
 };
 
+// Brooklyn Org's event-specific creative must not advertise registration after Nov 5.
+// The paid one-month term continues through Nov 26; replace the creative with
+// the promised general Sunset Park Fund advertisement for the remaining days.
+export const BKO_SUNSET_PARK_FUND_202610 = {
+  id: "bko_sunset_park_fund_202610",
+  href: "https://www.eventbrite.com/e/sunset-park-community-conversation-tickets-2003520131647",
+  startsAt: "2026-10-27T00:00:00-04:00",
+  endsAt: "2026-11-06T00:00:00-05:00",
+};
+
 export const useCampaignActive = ({ startsAt, endsAt }) => {
   const [now, setNow] = useState(() => Date.now());
 

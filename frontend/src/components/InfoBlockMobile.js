@@ -3,7 +3,10 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import NewsletterSignup from "./NewsletterSignup";
 import bwiSmartreachEn from "../assets/outreach/BWI-Smartreach-En.png";
-import { BWI_NOV_2026, useCampaignActive } from "../utils/adCampaigns";
+import bkoSmartreachEn from "../assets/outreach/BKO-Smartreach-En.webp";
+import bkoSmartreachEs from "../assets/outreach/BKO-Smartreach-Es.webp";
+import bkoSmartreachZh from "../assets/outreach/BKO-Smartreach-Zh.webp";
+import { BWI_NOV_2026, BKO_SUNSET_PARK_FUND_202610, useCampaignActive } from "../utils/adCampaigns";
 
 import beyondCareSmartEn from "../assets/outreach/BeyondCare-Smartreach-En.png";
 import beyondCareSmartEs from "../assets/outreach/BeyondCare-Smartreach-Es.png";
@@ -30,6 +33,14 @@ const BEYOND_CARE_LINK = "https://beyondcare.coop/";
 
 
 const sponsorsSmartreach = [
+  {
+    id: BKO_SUNSET_PARK_FUND_202610.id,
+    byLang: {
+      en: { image: bkoSmartreachEn, alt: "Brooklyn Org Sunset Park Fund community conversation advertisement", link: BKO_SUNSET_PARK_FUND_202610.href },
+      es: { image: bkoSmartreachEs, alt: "Anuncio de Brooklyn Org sobre la conversación comunitaria del Fondo de Sunset Park", link: BKO_SUNSET_PARK_FUND_202610.href },
+      zh: { image: bkoSmartreachZh, alt: "Brooklyn Org 日落公园基金社区对话活动广告", link: BKO_SUNSET_PARK_FUND_202610.href },
+    },
+  },
   {
     id: BWI_NOV_2026.id,
     // The advertiser chose one English file for all three site languages.
@@ -115,6 +126,7 @@ const InfoBlockMobile = ({ lang }) => {
 
   const path = location.pathname + location.search;
   const bwiIsActive = useCampaignActive(BWI_NOV_2026);
+  const bkoIsActive = useCampaignActive(BKO_SUNSET_PARK_FUND_202610);
 
   const stablePath = useMemo(() => {
     return location.pathname.replace(/^\/(en|es|zh)(?=\/|$)/, "") || "/";
@@ -123,9 +135,11 @@ const InfoBlockMobile = ({ lang }) => {
   const activeSponsors = useMemo(
     () =>
       sponsorsSmartreach.filter(
-        (p) => p.id !== BWI_NOV_2026.id || bwiIsActive
+        (p) =>
+          (p.id !== BWI_NOV_2026.id || bwiIsActive) &&
+          (p.id !== BKO_SUNSET_PARK_FUND_202610.id || bkoIsActive)
       ),
-    [bwiIsActive]
+    [bwiIsActive, bkoIsActive]
   );
 
   // Choose once for each route during render. This avoids painting a default

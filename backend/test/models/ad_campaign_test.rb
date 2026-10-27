@@ -1,6 +1,25 @@
 require "test_helper"
 
 class AdCampaignTest < ActiveSupport::TestCase
+  test "recognizes and date-limits BWI internal analytics" do
+    campaign = AdCampaign.resolve_default("bwi_deckhand_202611")
+
+    assert_equal "paid", campaign.campaign_type
+    assert_equal "Brooklyn Workforce Innovations", campaign.advertiser
+    assert campaign.running_on?(Date.new(2026, 10, 27))
+    assert_not campaign.running_on?(Date.new(2026, 12, 1))
+  end
+
+  test "recognizes BKO internal analytics for the full contracted month" do
+    campaign = AdCampaign.resolve_default("bko_sunset_park_fund_202610")
+
+    assert_equal "paid", campaign.campaign_type
+    assert_equal "Brooklyn Org", campaign.advertiser
+    assert campaign.running_on?(Date.new(2026, 11, 5))
+    assert campaign.running_on?(Date.new(2026, 11, 26))
+    assert_not campaign.running_on?(Date.new(2026, 11, 27))
+  end
+
   test "resolves known frontend campaign keys" do
     campaign = AdCampaign.resolve_default("beyondcare")
 
