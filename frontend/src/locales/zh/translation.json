@@ -5,6 +5,20 @@
     "Continue reading": "继续阅读",
     "Previous story": "上一篇",
     "Next story": "下一篇",
+    "image_preview": {
+        "region": "图片预览",
+        "featured_image": "主图（用于社交分享）：",
+        "original": "完整图片",
+        "dimensions": "原图：{{width}} × {{height}} 像素",
+        "homepage": "首页／文章列表 — 3:2",
+        "homepage_crop": "首页裁切预览",
+        "story_note": "首页卡片使用顶部对齐的 3:2 画框（例如 600 × 400）。竖图底部的内容可能被裁切。文章页面显示完整图片。",
+        "byline": "文章作者栏 — 50 × 50 像素",
+        "author_crop": "作者头像裁切预览",
+        "author_name": "作者姓名",
+        "author_note": "按实际大小显示：50 × 50 像素的圆形头像，从图片中心裁切。",
+        "load_error": "浏览器无法预览此图片。请尝试使用 JPEG、PNG 或 WebP 文件。"
+    },
     "print_qr": {
         "open": "印刷版二维码链接",
         "print_language": "印刷语言",

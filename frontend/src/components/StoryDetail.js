@@ -296,14 +296,7 @@ const StoryDetail = () => {
 
             <h3>{t("Featured Image")}</h3>
             {story.image_url && !image && !removeImage && (
-              <div style={{ marginBottom: 12 }}>
-                <p>{t("Current featured image")}</p>
-                <img
-                  src={story.image_url}
-                  alt={title}
-                  style={{ maxWidth: "100%", maxHeight: "240px" }}
-                />
-              </div>
+              <p>{t("Current featured image")}</p>
             )}
             {story.image_url && !image && (
               <label>
@@ -317,7 +310,11 @@ const StoryDetail = () => {
               </label>
             )}
             {image && <p>{t("New featured image selected.")}</p>}
-            <ImageUpload image={image} setImage={handleImageChange} />
+            <ImageUpload
+              image={image}
+              setImage={handleImageChange}
+              existingImageUrl={removeImage ? "" : story.image_url}
+            />
           </section>
 
           {translations.map((translation, idx) => (

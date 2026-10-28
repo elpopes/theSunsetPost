@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { baseURL } from "../config";
 import SeoHead from "./SeoHead";
+import ImagePlacementPreview from "./ImagePlacementPreview";
 import "./AuthorDetail.css";
 
 const LANGUAGES = ["en", "es", "zh"];
@@ -349,14 +350,6 @@ const AuthorDetail = () => {
                 </label>
               ))}
 
-              {author.image_url && !image && !removeImage && (
-                <img
-                  src={author.image_url}
-                  alt={author.name}
-                  className="author-detail__image-preview"
-                />
-              )}
-
               {author.image_url && !image && (
                 <label className="author-detail__checkbox-label">
                   <input
@@ -374,6 +367,14 @@ const AuthorDetail = () => {
               </label>
 
               {image && <p>New image selected: {image.name}</p>}
+
+              <ImagePlacementPreview
+                image={image}
+                imageUrl={removeImage ? "" : author.image_url}
+                variant="author"
+                authorName={name}
+                authorBio={translations[language]?.bio || translations.en?.bio}
+              />
 
               {editError && <p className="author-detail__error">{editError}</p>}
 

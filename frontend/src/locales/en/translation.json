@@ -5,6 +5,20 @@
     "Continue reading": "Continue reading",
     "Previous story": "Previous story",
     "Next story": "Next story",
+    "image_preview": {
+        "region": "Image previews",
+        "featured_image": "Featured Image (used for social sharing):",
+        "original": "Full image",
+        "dimensions": "Original: {{width}} × {{height}} pixels",
+        "homepage": "Homepage / story list — 3:2",
+        "homepage_crop": "Homepage crop preview",
+        "story_note": "Homepage cards use a 3:2 frame (for example, 600 × 400), aligned to the top. Tall images can lose content at the bottom. Story pages show the full image.",
+        "byline": "Story byline — 50 × 50 pixels",
+        "author_crop": "Author byline crop preview",
+        "author_name": "Author name",
+        "author_note": "Shown at actual size: a 50 × 50 pixel circle, cropped from the center.",
+        "load_error": "This image could not be previewed in your browser. Try a JPEG, PNG, or WebP file."
+    },
     "print_qr": {
         "open": "Print QR link",
         "print_language": "Print language",

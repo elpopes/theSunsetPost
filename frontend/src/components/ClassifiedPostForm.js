@@ -240,7 +240,7 @@ const ClassifiedPostForm = () => {
 
         <div style={{ marginTop: 10 }}>
           <label>Photo (optional):</label>
-          <ImageUpload image={photo} setImage={setPhoto} />
+          <ImageUpload image={photo} setImage={setPhoto} previewVariant="original" />
         </div>
 
         <button type="submit" disabled={!canSubmit} style={{ marginTop: 12 }}>

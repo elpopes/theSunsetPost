@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useId } from "react";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { baseURL } from "../config";
+import ImagePlacementPreview from "./ImagePlacementPreview";
 
 const AuthorsForm = ({ selectedAuthors, setSelectedAuthors }) => {
+  const imageInputId = useId();
+  const { i18n } = useTranslation();
+  const language = (i18n.resolvedLanguage || i18n.language || "en").split("-")[0];
   const user = useSelector((state) => state.auth.user); // Get user from Redux
   const [authors, setAuthors] = useState([]);
   const [newAuthor, setNewAuthor] = useState({
@@ -122,12 +127,20 @@ const AuthorsForm = ({ selectedAuthors, setSelectedAuthors }) => {
           </div>
         ))}
         <div>
-          <label>Author Image:</label>
+          <label htmlFor={imageInputId}>Author Image:</label>
           <input
+            id={imageInputId}
             type="file"
+            accept="image/*"
             onChange={(e) =>
               setNewAuthor((prev) => ({ ...prev, image: e.target.files[0] }))
             }
+          />
+          <ImagePlacementPreview
+            image={newAuthor.image}
+            variant="author"
+            authorName={newAuthor.name}
+            authorBio={newAuthor.bios[language] || newAuthor.bios.en}
           />
         </div>
         <button type="button" onClick={handleAddAuthor}>

@@ -5,6 +5,20 @@
     "Continue reading": "Sigue leyendo",
     "Previous story": "Historia anterior",
     "Next story": "Historia siguiente",
+    "image_preview": {
+        "region": "Vistas previas de imágenes",
+        "featured_image": "Imagen destacada (para compartir en redes):",
+        "original": "Imagen completa",
+        "dimensions": "Original: {{width}} × {{height}} píxeles",
+        "homepage": "Inicio / lista de historias — 3:2",
+        "homepage_crop": "Vista previa del recorte en inicio",
+        "story_note": "Las tarjetas de inicio usan un marco 3:2 (por ejemplo, 600 × 400), alineado arriba. Las imágenes altas pueden perder contenido en la parte inferior. Las páginas de historias muestran la imagen completa.",
+        "byline": "Autoría de la historia — 50 × 50 píxeles",
+        "author_crop": "Vista previa del recorte del autor",
+        "author_name": "Nombre del autor",
+        "author_note": "Se muestra al tamaño real: un círculo de 50 × 50 píxeles, recortado desde el centro.",
+        "load_error": "No se pudo mostrar esta imagen en tu navegador. Prueba con un archivo JPEG, PNG o WebP."
+    },
     "print_qr": {
         "open": "Enlace QR para impresión",
         "print_language": "Idioma de impresión",
