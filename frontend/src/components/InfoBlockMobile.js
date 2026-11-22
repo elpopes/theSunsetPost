@@ -3,10 +3,10 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import NewsletterSignup from "./NewsletterSignup";
 import bwiSmartreachEn from "../assets/outreach/BWI-Smartreach-En.png";
-import bkoSmartreachEn from "../assets/outreach/BKO-Smartreach-En.webp";
-import bkoSmartreachEs from "../assets/outreach/BKO-Smartreach-Es.webp";
-import bkoSmartreachZh from "../assets/outreach/BKO-Smartreach-Zh.webp";
-import { BWI_NOV_2026, BKO_SUNSET_PARK_FUND_202610, useCampaignActive } from "../utils/adCampaigns";
+import bkoAdvisoryMobileEn from "../assets/outreach/BKO-SunsetFund-Advisory-202611-Mobile-En.png";
+import bkoAdvisoryMobileEs from "../assets/outreach/BKO-SunsetFund-Advisory-202611-Mobile-Es.png";
+import bkoAdvisoryMobileZh from "../assets/outreach/BKO-SunsetFund-Advisory-202611-Mobile-Zh.png";
+import { BWI_NOV_2026, BKO_SUNSET_PARK_FUND_ADVISORY_202611, useCampaignActive } from "../utils/adCampaigns";
 
 import beyondCareSmartEn from "../assets/outreach/BeyondCare-Smartreach-En.png";
 import beyondCareSmartEs from "../assets/outreach/BeyondCare-Smartreach-Es.png";
@@ -34,11 +34,11 @@ const BEYOND_CARE_LINK = "https://beyondcare.coop/";
 
 const sponsorsSmartreach = [
   {
-    id: BKO_SUNSET_PARK_FUND_202610.id,
+    id: BKO_SUNSET_PARK_FUND_ADVISORY_202611.id,
     byLang: {
-      en: { image: bkoSmartreachEn, alt: "Brooklyn Org Sunset Park Fund community conversation advertisement", link: BKO_SUNSET_PARK_FUND_202610.href },
-      es: { image: bkoSmartreachEs, alt: "Anuncio de Brooklyn Org sobre la conversación comunitaria del Fondo de Sunset Park", link: BKO_SUNSET_PARK_FUND_202610.href },
-      zh: { image: bkoSmartreachZh, alt: "Brooklyn Org 日落公园基金社区对话活动广告", link: BKO_SUNSET_PARK_FUND_202610.href },
+      en: { image: bkoAdvisoryMobileEn, alt: "Brooklyn Org Sunset Park Fund advisory council applications, deadline December 21", link: BKO_SUNSET_PARK_FUND_ADVISORY_202611.hrefByLang.en },
+      es: { image: bkoAdvisoryMobileEs, alt: "Anuncio de Brooklyn Org para solicitar ingreso al consejo asesor del Fondo de Sunset Park, plazo 21 de diciembre", link: BKO_SUNSET_PARK_FUND_ADVISORY_202611.hrefByLang.es },
+      zh: { image: bkoAdvisoryMobileZh, alt: "Brooklyn Org 日落公园基金社区咨询委员会申请广告，12月21日截止", link: BKO_SUNSET_PARK_FUND_ADVISORY_202611.hrefByLang.zh },
     },
   },
   {
@@ -126,7 +126,7 @@ const InfoBlockMobile = ({ lang }) => {
 
   const path = location.pathname + location.search;
   const bwiIsActive = useCampaignActive(BWI_NOV_2026);
-  const bkoIsActive = useCampaignActive(BKO_SUNSET_PARK_FUND_202610);
+  const bkoIsActive = useCampaignActive(BKO_SUNSET_PARK_FUND_ADVISORY_202611);
 
   const stablePath = useMemo(() => {
     return location.pathname.replace(/^\/(en|es|zh)(?=\/|$)/, "") || "/";
@@ -137,7 +137,7 @@ const InfoBlockMobile = ({ lang }) => {
       sponsorsSmartreach.filter(
         (p) =>
           (p.id !== BWI_NOV_2026.id || bwiIsActive) &&
-          (p.id !== BKO_SUNSET_PARK_FUND_202610.id || bkoIsActive)
+          (p.id !== BKO_SUNSET_PARK_FUND_ADVISORY_202611.id || bkoIsActive)
       ),
     [bwiIsActive, bkoIsActive]
   );

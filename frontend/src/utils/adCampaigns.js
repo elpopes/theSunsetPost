@@ -19,6 +19,22 @@ export const BKO_SUNSET_PARK_FUND_202610 = {
   endsAt: "2026-11-06T00:00:00-05:00",
 };
 
+
+// Brooklyn Org advisory council recruitment, Nov 22–Dec 21, 2026.
+// Nov 22–26 honors the unfinished original placement; the separately billed
+// one-month renewal is Nov 27–Dec 26. Current art names a Dec 21 deadline,
+// so stop this creative on Dec 22; request neutral replacement art for Dec 22–26.
+export const BKO_SUNSET_PARK_FUND_ADVISORY_202611 = {
+  id: "bko_sunset_park_fund_advisory_202611",
+  hrefByLang: {
+    en: "https://bcf.tfaforms.net/4946866",
+    es: "https://bcf.tfaforms.net/4946876",
+    zh: "https://bcf.tfaforms.net/4946877",
+  },
+  startsAt: "2026-11-22T00:00:00-05:00",
+  endsAt: "2026-12-22T00:00:00-05:00",
+};
+
 export const useCampaignActive = ({ startsAt, endsAt }) => {
   const [now, setNow] = useState(() => Date.now());
 
