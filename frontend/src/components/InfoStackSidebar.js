@@ -3,10 +3,10 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import NewsletterSignup from "./NewsletterSignup";
 import bwiLocalreachEn from "../assets/outreach/BWI-Localreach-En.png";
-import bkoLocalreachEn from "../assets/outreach/BKO-Localreach-En.webp";
-import bkoLocalreachEs from "../assets/outreach/BKO-Localreach-Es.webp";
-import bkoLocalreachZh from "../assets/outreach/BKO-Localreach-Zh.webp";
-import { BWI_NOV_2026, BKO_SUNSET_PARK_FUND_202610, useCampaignActive } from "../utils/adCampaigns";
+import bkoAdvisoryDesktopEn from "../assets/outreach/BKO-SunsetFund-Advisory-202611-Desktop-En.png";
+import bkoAdvisoryDesktopEs from "../assets/outreach/BKO-SunsetFund-Advisory-202611-Desktop-Es.png";
+import bkoAdvisoryDesktopZh from "../assets/outreach/BKO-SunsetFund-Advisory-202611-Desktop-Zh.png";
+import { BWI_NOV_2026, BKO_SUNSET_PARK_FUND_ADVISORY_202611, useCampaignActive } from "../utils/adCampaigns";
 
 import beyondCareEn from "../assets/outreach/BeyondCare-Localreach-En.png";
 import beyondCareEs from "../assets/outreach/BeyondCare-Localreach-Es.png";
@@ -38,28 +38,28 @@ const BEYOND_CARE_URL = "https://beyondcare.coop/";
 
 const placements = [
   {
-    id: BKO_SUNSET_PARK_FUND_202610.id,
+    id: BKO_SUNSET_PARK_FUND_ADVISORY_202611.id,
     byLang: {
       en: {
-        image: bkoLocalreachEn,
-        alt: "Brooklyn Org Sunset Park Fund community conversation advertisement",
-        href: BKO_SUNSET_PARK_FUND_202610.href,
+        image: bkoAdvisoryDesktopEn,
+        alt: "Brooklyn Org Sunset Park Fund advisory council applications, deadline December 21",
+        href: BKO_SUNSET_PARK_FUND_ADVISORY_202611.hrefByLang.en,
         external: true,
         width: 300,
         height: 600,
       },
       es: {
-        image: bkoLocalreachEs,
-        alt: "Anuncio de Brooklyn Org sobre la conversación comunitaria del Fondo de Sunset Park",
-        href: BKO_SUNSET_PARK_FUND_202610.href,
+        image: bkoAdvisoryDesktopEs,
+        alt: "Anuncio de Brooklyn Org para solicitar ingreso al consejo asesor del Fondo de Sunset Park, plazo 21 de diciembre",
+        href: BKO_SUNSET_PARK_FUND_ADVISORY_202611.hrefByLang.es,
         external: true,
         width: 300,
         height: 600,
       },
       zh: {
-        image: bkoLocalreachZh,
-        alt: "Brooklyn Org 日落公园基金社区对话活动广告",
-        href: BKO_SUNSET_PARK_FUND_202610.href,
+        image: bkoAdvisoryDesktopZh,
+        alt: "Brooklyn Org 日落公园基金社区咨询委员会申请广告，12月21日截止",
+        href: BKO_SUNSET_PARK_FUND_ADVISORY_202611.hrefByLang.zh,
         external: true,
         width: 300,
         height: 600,
@@ -240,7 +240,7 @@ const InfoStackSidebar = ({ lang }) => {
 
   const path = location.pathname + location.search;
   const bwiIsActive = useCampaignActive(BWI_NOV_2026);
-  const bkoIsActive = useCampaignActive(BKO_SUNSET_PARK_FUND_202610);
+  const bkoIsActive = useCampaignActive(BKO_SUNSET_PARK_FUND_ADVISORY_202611);
 
   const stablePath = useMemo(() => {
     return location.pathname.replace(/^\/(en|es|zh)(?=\/|$)/, "") || "/";
@@ -251,7 +251,7 @@ const InfoStackSidebar = ({ lang }) => {
       placements
         .filter((p) =>
           (p.id !== BWI_NOV_2026.id || bwiIsActive) &&
-          (p.id !== BKO_SUNSET_PARK_FUND_202610.id || bkoIsActive)
+          (p.id !== BKO_SUNSET_PARK_FUND_ADVISORY_202611.id || bkoIsActive)
         )
         .map((p) => p.id),
     [bwiIsActive, bkoIsActive]

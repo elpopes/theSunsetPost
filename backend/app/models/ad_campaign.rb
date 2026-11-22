@@ -18,6 +18,14 @@ class AdCampaign < ApplicationRecord
       starts_on: Date.new(2026, 10, 27),
       ends_on: Date.new(2026, 11, 26)
     },
+    "bko_sunset_park_fund_advisory_202611" => {
+      name: "Brooklyn Org Sunset Park Fund Advisory Council Applications",
+      advertiser: "Brooklyn Org",
+      campaign_type: "paid",
+      destination_url: "https://bcf.tfaforms.net/4946866",
+      starts_on: Date.new(2026, 11, 22),
+      ends_on: Date.new(2026, 12, 21)
+    },
     "beyondcare" => {
       name: "Beyond Care",
       advertiser: "Beyond Care Childcare Cooperative",
